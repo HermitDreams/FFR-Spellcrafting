@@ -32,7 +32,7 @@ Commands are /spell, /wmag, and /bmag
    - Heal Helm/Staff: AoE Healing in White Magic. Starts seeking at Level 3.
    - Mage Staff: AoE Damage in Black Magic. Starts seeking at Level 3. Yields to Thor/Zeus and Bane Sword.
    - Defense: Single Target Defensive Buff. Starts seeking at Level 3 in White and Level 5 in Black.
-   - Wizard Staff: AoE Ailment in Black Magic. Starts seeking at Level 5.
+   - Wizard Staff: AoE Ailment/Debuff in Black Magic. Starts seeking at Level 5.
    - Thor Hammer / Zeus Gauntlet: AoE Lightning in Black Magic. Starts seeking at Level 3.
    - Bane Sword: AoE Poison in Black Magic. Starts seeking at Level 5.
    - White Shirt: AoE Defensive Buff in White Magic. Starts seeking at Level 3.
