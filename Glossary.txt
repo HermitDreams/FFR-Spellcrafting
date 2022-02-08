@@ -191,7 +191,7 @@ FullHeal|    CUR4|    HEL4|    RGN4
      Lit| RIP/RIP| NEG/NEG
    Earth|PIRC/PIR|DRAN/DRA
    White|XFER/XFR|XPOS/XPO
-   Black|VULN/VUL|XPOS/XPO
+   Black|VULN/VUL|PURG/PRG
 
 
 
