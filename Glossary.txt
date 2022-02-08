@@ -1,0 +1,480 @@
+               DAMAGE               (Roughly only 1 in 50 White spells will be Damage)
+ Element| Single |  Party |Lv8Party (White only gets Status, Stone, Time, Earth, and White. Black won't roll any of them)
+--------+--------+--------+-------- (Undead is a separate category locked to White)
+  Status|HURT/HRT|PAIN/PAN|    ACHE
+  Poison|VENM/VNM|FUME/FUM|    BILE
+   Stone|LAZR/LAZ|BEAM/BEM|    WAIL (Stone is just the White variant of Poison, and as such is fairly rare)
+    Time|SQEZ/SQZ|TIME/TIM|    KOMP
+   Death| ROT/ROT|NECR/NEC|    DOOM (Roughly 1 in 3 Death spells instead roll to be Antipode, because it's Shadow element in Chrono Trigger)
+    Fire|BURN/BRN|FIRE/FIR|    BOIL
+     Ice|SNOW/SNO| ICE/ICE|    HAIL
+     Lit|SHOK/SHK| LIT/LIT|    VOLT
+   Earth|LAND/LND| GEO/GEO|    GAIA
+Antipode|HYDR/HYD|PODE/POD|    ATOM (Credit to nic0lette for the idea. Antipode is both Fire and Ice elements together)
+  Plasma|ENRG/NRG|PLAZ/PLZ|    NOVA (Fire + Lightning dual-tech)
+   Storm| ARC/ARC| AIR/AIR|    GALE (Ice + Lightning dual-tech)
+   Magma| ASH/ASH|LAVA/LAV|    RUPT (Fire + Earth dual-tech)
+ Kinetic| KIN/KIN|WAVE/WAV|    YANK (Lightning + Status dual-tech)
+   Black|GYSR/GYS|BOMB/BOM|    NUKE
+   White| SUN/SUN|RAZE/RAZ|    FADE
+  Undead|JUDG/JUG|HARM/HRM|    VANQ (Undead gets a colour change when it's the tier above its vanilla assignment)
+                                    (Under option "b", at least 6 AoEs will be in Black Magic. "b2" ensures all damage slots remain damage)
+
+        INSTA-KILLS & STONES                 (These are only available to Black Magic. Fire, Ice, and Lit are rare, None is rarer)
+ Element| Single |  Party |  Power |  White 
+--------+--------+--------+--------+--------
+  Poison|CHOK/CHO|BANE/BAN|        |
+    Time|BYE!/BYE|ZAP!/ZAP|        |
+   Death| RUB/RUB|ERAD/ERA|    XXXX|    FROG (FROG is Status+Poison+Earth, message "Stopped")
+    Fire|MELT/MLT|EVAP/VAP|        |         "Erased" 
+     Lit|SMIT/SMT|BZZT/BZZ|        |         "Exile to 4th dimension"
+   Earth|SWAL/SWA|QAKE/QAK|        |
+    None|FALL/FAL| END/END|        |         (No extra message. Saves frames!)
+   Stone|BRAK/BRK|WREK/REK|    PETR|    CAST (CAST is what White Magic gets if it tries to roll Power Word: Petrify)
+     Ice|CRYO/CRY|FREZ/FRZ|        |         (Inflicts Stone status)
+
+
+*** Note about Poison Status ***
+
+Black Magic can inflict Poisons but they have no effect on enemies
+To make them useful to players, a secondary debuff is always added on top
+Poisons come in 4 different elements: Poison, Time, Death, and Fire
+They will pretend to be a Poison-element variant of the secondary debuff
+
+
+     BLINDS & DARKNESS
+ Element| Single |  Party |  Power
+--------+--------+--------+--------
+  Status| DIM/DIM|DARK/DRK|    BLND (White DARK is GLOW/GLO)
+  Poison|SMOG/SMG|HAZE/HAZ|
+    Time|BLUR/BLR|VOID/VOD|
+   Earth|SAND/SAN| TAR/TAR|
+    None|VEIL/VEL|COVR/CVR|
+
+
+     STUNS & PARALYSIS
+ Element| Single |  Party |  Power 
+--------+--------+--------+--------
+  Status|HOLD/HLD|BIND/BND|    STUN
+  Poison|SICK/SIK| RIG/RIG|
+    Time|PAUS/PAU|STOP/STO|
+     Ice|ZERO/ZER|SQAL/SQL|
+     Lit| FRY/FRY| EMP/EMP|
+   Earth|SNAR/SNA|VINE/VIN|
+    None| PIN/PIN|HALT/HLT|         (Potentially going to be increased in rarity?)
+
+
+        SLEEPYTIMES
+ Element| Single |  Party |  Power
+--------+--------+--------+--------
+  Status| HYP/HYP|LULL/LUL|    ZZZZ (Power Word ZZZZ is for White Magic)
+  Poison|K.O./ KO| GAS/GAS|
+    Time|SKIP/SKP|JUMP/JMP|
+   Death|PASS/PAS|DEPR/DEP|    COMA (Power Word COMA also Mutes)
+    Fire|COZY/COZ|SOOT/SOT|CAMP/CMP (White Magic can roll CAMP but will cast it on its own party instead. In the future, this will work like shelters out of battle)
+     Ice|CHIL/CHL| HIB/HIB|
+   Earth| BED/BED|WAFT/WFT|
+    None| NAP/NAP|SLEP/SLP|
+
+
+       MUTES & JINXES
+ Element| Single |  Party |  Power
+--------+--------+--------+--------
+  Status|MUFF/MUF|MUTE/MUT|    JINX (Power Word JINX is for White Magic)
+  Poison|COGH/CGH| FLU/FLU|
+    Time|ECHO/ECH|VACU/VAC|
+     Ice|BREZ/BRZ|HOWL/HWL|
+   Earth|MUDL/MUD|FUNL/FUN|
+    None|HUSH/HSH|QIET/QIT|    COMA (Power Word COMA also Sleeps)
+
+
+        CONFUSIONS                  (Under option "e", enemies won't get Confuse spells aside from Decay and Virus)
+ Element| Single |  Party |  Power  (Under option "C", Black Slot 1-1 will never be a buff to ensure the Confusion status is bad)
+--------+--------+--------+--------
+  Status|TRIK/TRK|CONF/CNF|    FOOL (Power Word FOOL is for White Magic)
+  Poison| POX/POX| VIR/VIR|    DCAY (Power Word DCAY also Poisons)
+    Time|FLIP/FLP|SPIN/SPN|
+    Fire|TORC/TOR|PYRO/PYR|
+     Lit| RAY/RAY|RAVE/RAV|
+   Earth|SEED/SED|MAZE/MAZ|
+    None|TURN/TUR|HAVC/HAV|
+
+
+       DEBILITATION                 (This inflicts Dark, Sleep, Stun, and Mute all at once. I would rather it roll them all individually, though.)
+Element?| Single |  Party |  Power  (The element is unknown until casted, but won't be Poison)
+--------+--------+--------+--------
+   Black|CURS/CRS| HEX/HEX|    WEAK
+
+
+      HIT # REDUCTION
+ Element| Single |  Party
+--------+--------+--------
+  Status|HMPR/HPR|DULL/DUL
+  Poison|NUMB/NUM|MIST/MIS
+    Time| AGE/AGE|BACK/BAK
+   Death|ATRO/ATR|MIAS/MIA
+     Ice|BRRR/BRR|COLD/CLD
+   Earth| SAP/SAP| BOG/BOG
+    None|TIRE/TIR|SLOW/SLO
+
+
+     MORALE REDUCTION      (Under option "e", enemies can't get Fear spells because the player doesn't have a Morale stat)
+ Element| Single |  Party
+--------+--------+--------
+  Status| ANX/ANX|FEAR/FER
+    Time|SIZE/SIZ|GROW/GRO
+   Death|HANT/HNT|PESS/PES
+    Fire|STAV/STV|IGNI/IGN
+   Earth|TERR/TER|GAPE/GAP
+    None|PUSH/PSH|REPL/RPL
+
+
+           CURES & HEALS
+  Type  | Single |  Party |  Self   (REST, WASH, and BATH won't generate under most conservative rules)
+--------+--------+--------+-------- (Credit to nic0lette for the idea of ending all party-wide cures with A)
+    Heal|CURE/CUR|HEAL/HEL|RGEN/RGN
+  Revive|    LIFE|    LIFa|    UNDO (UNDO does not exist yet, but I want it to revive the enemy if it targets an empty slot)
+  Soften|    SOFT|    SOFa|
+Antidote|    PURE|    PURa|    REST (These restore Confusion for enemies as well, and Paralysis in conservative rules)
+CureDark|    LAMP|    LMPa|    WASH
+CureStun|    MEND|    MNDa|         (PURE does this outside of option "x")
+CureSlep|    WAKE|    WAKa|         
+CureMute|     VOX|    VOXa|
+ CureAll|    CLER|    CLRa|    BATH 
+FullHeal|    CUR4|    HEL4|    RGN4
+
+
+        ELEMENTAL RESISTANCE        (White Magic starts with Single Target & Element, then targets the Party)
+ Element| Single |  Party |  Self   (As it increases, it stacks elements until it reaches WALL and rarely SANC)
+--------+--------+--------+-------- (Black Magic can't target the whole party)
+  Status|    BRAC|    AWEK|    GRAC "Defend hindrance/weak/psi"
+  Poison|    VCIN|    ABAN|    IMUN "Defend poisonous/bane/gas"
+    Time|    XCEP|    AZAP|    PHAS "Defend dimension/time/age"
+   Death|    SAFE|    ANEC|    AURA "Defend necrotic /evil/rub"
+    Fire|    DOUS|    AFIR|    COOL "Defend burning  /fire/hot"
+     Ice|    COAT|    AICE|    WARM "Defend freezing /cold/ice"
+     Lit|     OHM|    ALIT|    SURG "Defend lightning/volt/ion"
+   Earth|    LIFT|    AQAK|    FLOT "Defend tectonic /land/geo"
+  Dragon|        |    ADMG|    PRSM (Protects against Fire, Ice, and Lit) "Defend elemental/wyrm/spell/wiz"
+ "Magic"|        |    ARUB|    PROT (Protects against Status, Death, and Earth) "Defend mortality/life/magic/bio"
+   Decay|        |    ATOX|    STAG (Protects against Poison, Time, and Death) "Defend futility /doom/waste/rot"
+     All|    WALL|    SANC|    BARR (Black Magic can only target stacked elements at the caster)
+
+
+             STAT BUFFS
+  Stat  | Single |  Party |  Self   (White is better at Evade and Armor, Black is better at Hits and Damage) 
+--------+--------+--------+--------
+   Armor| ARM/ARM| FOG/FOG|BUKL/BUK
+    Hits|    FAST|    FURY|    BSRK (Only Black can cast these, except...) / (...White self is HAST)
+  Damage|TMPR/TMP|RALY/RAL|SABR/SAB (Experimental: Black only boosts damage, but by a lot)
+ Enchant|BLES/BLS|VIGR/VIG|FOCS/FOC (Experimental: White tries to boost hit rate, but barely boosts damage)
+   Evade|HIDE/HID|INVS/INV|RUSE/RUS
+
+
+      EVADE REDUCTION
+ Element| Single |  Party  (Under option "S", Black Slot 3-4 will always be one of these)
+--------+--------+--------
+  Status|CAGE/CAG| NET/NET
+    Time|WELL/WEL|GRAV/GRV
+     Ice|FLOE/FLO|GLAC/GLC
+     Lit|BOLT/BOL|WIRE/WIR
+   Earth| PIT/PIT|OUBL/OUB
+    None|LOCK/LOK|SEAL/SEL
+
+
+  REMOVE ALL RESISTANCES
+ Element| Single |  Party 
+--------+--------+--------
+  Status|NFIL/NFL|NEUT/NUT
+    Time| SET/SET|NULL/NUL
+   Death|DSPL/DSP|WIPE/WIP
+     Lit| RIP/RIP| NEG/NEG
+   Earth|PIRC/PIR|DRAN/DRA
+   White|XFER/XFR|XPOS/XPO
+   Black|VULN/VUL|XPOS/XPO
+
+
+
+// Below is outdated musing and balance formulas
+
+Cool names I might use somewhere:
+
+FUSE
+ELEC
+DUST
+ROCK
+BEND
+GIFT
+FORM
+GRIM
+
+Recent Changes:
+
+- Rebalanced accuracy mods to align debuff spells with vanilla
+- Tweaked Instadeath, Earth, and Poison to buff the elements and nerf the instadeath
+- Renamed XALL to XPOS and PURG
+- Renamed FRGD to BRRR
+- Renamed RINK to FLOE
+- Renamed GROU to OHM
+- Added Power Word "FROG" to White Magic
+- Flagstring now recognizes "r". Does nothing yet.
+- Flagstring prepped to recognize "L". Will output a log file (barely started).
+
+- HRM4 at 8 (or 100 damage) is now VANQ
+- Extended accuracy cap
+- Changed accuracy range from 0-107 to 0-255 (only affects No Level Balancing)
+
+- Elemental damage spell accuracy nerfed (Levels 1 and 2 fall in line with vanilla, Level 8 doesn't exceed NUKE)
+- DUAL, ELEM, and FLAR are now HYDR, ATOM, and GYSR respectively
+- Antipode damage buffed (was x1.1, now x1.5)
+- Non-Toxic Poison debuffs now use the White palette like Stone does
+- Option "x" is under construction (removes level balancing, uses first prototype's random ranges, tiers based on heirarchy)
+
+Possible changes:
+
+- Buff accuracy of single-target damage spells?
+- Greatly buff accuracy of elemental non-damaging spells?
+ - Exclude LOCK/SLEP/SLOW, meaning they get the huge buff even when non-elemental
+
+Should I invest time in a new assignment method?
+- Would be based on selecting entire families
+- Accuracy would be based on family instead of slot level
+
+A "mystery" variant where the spells have non-descript names
+- "W1-2", "B3-4", etc. Figure out what they do by having them used against you or test buying
+- Some slots aren't used by any enemies at all and are always gambles
+- Would only use Accuracy Scaled By Slot Level, so a Level 1 is probably not worth the purchase
+
+
+NAMING CONVENTIONS
+
+=Level Balanced= (Default)
+
+A spell will shorten and get its tier tacked on at the end if it has a changing Power Value.
+However, anything without one will not label its tier, and thus only the lowest level can exist.
+
+Example: TMPR and TMP2 can coexist in different tiers, one at Lv1 and another at Lv3
+Example: BRAK will not become BRK3 if it rolls vanilla Level 7, and cannot create a copy if it first rolled at Lv2.
+Example: FIRE at Level 5 will be FIR3, regardless of whether FIRE and FIR2 exist or not.
+
+=Unbalanced=
+
+Spells will get tiered based on how many of that type exist.
+Power takes precedence over Accuracy.
+Furthermore, damage spells of at least 80 Power and 64 Accuracy will get their Lv8 name. The highest damage gets the name and the others become regularly tiered names.
+
+Example: FIRE, ICE, and ICE2 roll. FIRE can be 70 Damage and 45 Accuracy, while ICE2 can be 30 Damage and 10 Accuracy as ICE is 25 Damage and 60 Accuracy.
+Example: BRK2 exists because the Single-Target Poison Stone rolled twice, and BRK2 has higher Accuracy than BRAK.
+Example: While NECR has 85 Damage and 100 Accuracy, DOOM takes the name because it has 100 Damage and 85 Accuracy.
+
+
+FORMULAS
+
+=Accuracy=
+
+Accuracy is tiered based on the accuracies used across spells and skills in vanilla.
+A spell's accuracy is altered based on its starting level, effect, target, and element.
+Outside of level balancing, a spell simply keeps its "starting roll" value between 0 and 255.
+
+Tiers: 0, 5, 8, 16, 24, 32, 40, 48, 64, 107, 128, 152, 175, 210
+- Any tier above 107 was made up by finding good benchmarks.
+- A spell's "starting roll" of 0, 1, or 148 will set it to 255 in default settings
+ - Instakill, Stone, and Paralyze will not get this effect.
+
+Starting Levels:
+- Level 1: 16
+- Level 2 (Raw Damage): 16
+- Level 2 to Level 4 (anything else): 24
+- Level 5 to Level 7: 40
+- Level 8: 64
+
+Accuracy Mods (in Tiers):
+
+Single Target: +1
+Sleep: +1 at Level 1, +3 afterward
+Lock, Mute, Confuse: +4
+Stun: +3 if elemental (except Time), -2 if non-elemental
+Slow: +4 if elemental, only +1 if non-elemental
+Xfer: +1 if under Level 8, and +2 if elemental
+Cross-Class Debuff: -2 penalty
+Earth and Poison: +2
+Non-elemental or Species-targetting Damage: +1
+Instakill: -2
+Stone: -1
+Time and Death: -1
+
+Example: ERAD at Lv1 goes from 16 down to 0 (-3 Tiers)
+Example: LOCK at Lv8 Black goes from 64 to 152 (+3 Tiers)
+Example: QAKE at Lv6 stays at 40 (+1, -1), BANE at Level 5 is the same, BRAK at 7 goes from 40 to 64 (Stone is not Dead)
+
+These maintain a few key vanilla values. Others fall on the wayside and need to be addressed later.
+
+
+=Damage=
+Power: MagicLevel*10. Level 8 is 100, single target boosts to 120 to compensate for maxed accuracy
+- ROT4 didn't overflow accuracy so it doesn't get an extra boost
+Tiers: Tier 2 starts at L3, Tier 3 starts at L5
+Rules:
+- Black gets access to (order of rarity)
+-- Fire, Ice, Lit
+-- Poison
+-- Death
+-- Antipode, Plasma, Storm, Magma, Kinetic
+- White gets access to Status, Stone, Time, Earth
+- Pure Black/White are explicitly chosen less often
+- All White Damage gets 20% power penalty
+- Harm Undead gets +1 to Level (Lv7 is still 80) and voids the White penalty
+- Antipode, Magma, and Kinetic get a 25% damage boost for being resisted by a lot
+-- Any resistance to Fire or Ice cuts the damage in half
+-- A weakness will boost it up to 75% total
+-- In Improved Vanilla, this can be observed on WzVamps after they cast AFIR
+-- Tier 4 Single Target caps at 150 damage
+-- Plasma and Storm only get a 10% boost because Lightning isn't resisted often
+--- Might drop Kinetic to 10% boost for the same reason
+
+=Healing=
+CURE Line: 2^(3.5 + MagicLevel/2) + (MagicLevel - 1)/2
+HEAL Line: 6 * 2^(MagicLevel/2 - 0.5)
+RGEN Line: rand(1.8,2.2)^(rand(2.5,4.0) + MagicLevel/2) + (MagicLevel - 1)/2
+** Need to get more data on RGEN's formula
+Tiers: Cure's Tiers 2 & 3 are at L3 and L5, Heal's Tiers 2 & 3 are at L5 and L7
+
+=Armor Up=
+Self Tiers: 16 -> 24 -> 32 -> 64
+Gift Tiers:  8 -> 12 -> 16 -> 24
+
+=Evade Up=
+Self Tiers: 60 -> 80 -> 120 -> 240
+Gift Tiers: 30 -> 40 -> 60 -> 80
+
+=Weapons Stronger=
+TMPR: MagicLevel*3 + rand(3,5)
+SABR: 2^(1.5 + MagicLevel/2) + (9 - MagicLevel) + MagicLevel/2
+RALY: TMPR/((rand(10.0,12.0) - MagicLevel)/2) + 5
+** Needs tweaking. TMPR too strong
+** The +5 in RALY and the (9-MagicLevel) in SABR need more testing
+
+=Weapon Enchant=
+Vanilla SABR shows up at Lv8. Is that too late?
+
+=Evade Down=
+Level*20, White gets +0, +40, or +80 at Lv8.
+Black gets a random number between 160 and 240 at Lv8
+
+=Morale Down=
+(Level+1)*5, modified Lv8 goes up to 64
+
+=General Rules=
+- Death gets +20% Power to Damage and Fear
+- White uses Status, Time, Earth, and None for everything
+- Black's selection depends on the effect itself
+
+- White prefers Buffs and Healing over Debuffs
+- Black prefers Debuffs over Buffs
+- Only 5 different resist types can occupy a single spell list
+-- Furthermore, their total message length can't exceed 60 chars
+
+- WARP and EXIT are never replaced
+
+=Sanity Checks=
+
+These are all optional quality of life toggles
+
+b: Black Spellbombs
+Ensures that at least 6 Black AoE Damage spells exist in the list
+
+b2: Damage Preservation
+Ensures all original damage spells are still damage spells with that target
+Exceptions:
+- Extra damage spells can still be added
+- NUKE's slot doesn't have to be AoE
+
+C: Confusion
+Ensures that the FIRE slot is a detrimental effect
+
+e: Enemy Spells
+Ensures all spell slots used by enemies will not be occupied by:
+- JUDG or HARM
+- LIFE or SOFT
+- Lower Morale
+- Confusion (except Poison)
+
+h: Healing Out of Battle
+Does not replace nor attempt to duplicate the following spells:
+- CURE and HEAL families
+- PURE
+- LIFE
+- SOFT
+- LIF2
+
+i: Item Magic
+Ensures that the following spell types exist to assign each item:
+- 2 Black AoE Damages that aren't already assigned (Mage Staff, Black Shirt)
+- 1 White AoE Damage (Light Axe)
+- 1 White AoE Healing (Heal Helm/Staff)
+- 1 AoE Lightning (Thor/Zeus)
+- 1 AoE Poison (Bane Sword)
+- 1 Single Target Armor, Evade, or Resist (Defense)
+- 1 Whole Party Armor, Evade, or Resist (White Shirt)
+- 1 Speed Up, Power Up, or Enchant (Power Glove)
+- 1 Black AoE Debuff (Wizard Staff)
+
+Mage Staff starts seeking at Level 3
+Black Shirt starts seeking at Level 4
+Light Axe starts seeking at Level 3
+Heal Helm/Staff start seeking at Level 3
+Thor/Zeus start seeking at Level 3
+Bane Sword starts seeking at Level 5
+Defense starts seeking at Level 3
+White Shirt starts seeking at Level 3
+Power Glove starts seeking at Level 6
+Wizard Staff starts seeking at Level 5
+
+All start seeking forward first, then backward.
+
+L: Fixed Lock Spells
+Ensures that the LOK2 slot stays in the Evade Down family
+
+x: Lawless Power
+Uses single-spell damage and accuracy values with no regard for level
+- In the future, spells will be tiered based on heirarchy, not innate strength
+- This is under a lot of construction and scrutiny
+
+(To Do) r: Reassign Permissions
+Extrapolates from vanilla's permissions to balance out Red Mages
+- Knight and Ninja get the same permissions as Red Wizard
+-- Without Magic Shop Shuffle on, Knight caps at Level 3 and Ninja caps at Level 4
+-- With Magic Shop Shuffle on, they simply lose out on anything tiered 3 or higher.
+--- They also gain access to Travel spells
+- Red Mage CAN access
+-- Fire, Ice, Lightning, Status
+-- Time, if Single Target
+-- Per-level scaled families up to Level 5
+-- Per-tier scaled families up to Level 4
+- Red Mage can NOT access
+-- Poison, Stone, Death, Earth, Dual-Elemental, Non-Elemental
+-- Time, if AoE
+-- Instakill, Undead, Lower Morale, and Power words
+-- Buff Self/Party at Level 3 and beyond (except Resist)
+-- Revive, Soften, CureAll, Max Health
+-- Heal, if AoE
+-- Resist, if Stacked
+-- Anything Level 6 through 8
+- Red WIZARD alleviates restrictions
+-- Access to Level 6 and 7
+-- Poison, Time, Earth, and Dual-Elemental
+-- Non-Elemental, if Single Target
+-- CHOK and BANE
+-- Buff Self/Party up to Level 4
+-- Buff Single Tier 3
+-- Revive and CureAll, if Tier 1
+-- Stacked Resists
+- White Mage can NOT access
+-- Tier 4 Spells
+-- CLRa, SANC, LIF2, RUS3, BUK3
+-- Level 8 Magic
+- Black Mage can NOT access
+-- Tier 4 Spells
+-- BRAK and WREK at Level 5 and beyond
+-- PETR, XXXX, SAB3, FURY
+-- Level 8 Magic
