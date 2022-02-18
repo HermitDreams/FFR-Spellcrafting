@@ -48,6 +48,7 @@ They will pretend to be a Poison-element variant of the secondary debuff
   Status| DIM/DIM|DARK/DRK|    BLND (White DARK is GLOW/GLO)
   Poison|SMOG/SMG|HAZE/HAZ|
     Time|BLUR/BLR|VOID/VOD|
+    Fire}PEPR/PEP|HUMD/HMD|
    Earth|SAND/SAN| TAR/TAR|
     None|VEIL/VEL|COVR/CVR|
 
