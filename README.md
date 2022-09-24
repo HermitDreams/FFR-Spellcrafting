@@ -1,5 +1,7 @@
 # Final Fantasy Randomizer: Spellbinder
 This program is to be used by mIRC, in tandem with FFHackster2017 and Final Fantasy Randomizer. Designed by Linkshot, 2018-2022.
+### NOTE
+This is currently incompatible with Final Fantasy Randomizer, as it does not ensure the New Consumables logic will pass.
 
 # 1. Setup
 Put whole repository in mIRC's scripts folder, located in your AppData -> Roaming
