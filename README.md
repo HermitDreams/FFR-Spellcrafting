@@ -2,6 +2,7 @@
 This program is to be used by mIRC, in tandem with FFHackster2017 and Final Fantasy Randomizer. Designed by Linkshot, 2018-2022.
 ### NOTE
 This is currently incompatible with Final Fantasy Randomizer, as it does not ensure the New Consumables logic will pass.
+However, recently uploaded spellbook patch files were confirmed to work before being posted publicly.
 
 # 1. Setup
 Put whole repository in mIRC's scripts folder, located in your AppData -> Roaming
