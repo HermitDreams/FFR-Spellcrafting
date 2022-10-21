@@ -8,7 +8,7 @@
    Death| ROT/ROT|NECR/NEC|    DOOM (Roughly 1 in 3 Death spells instead roll to be Antipode, because it's Shadow element in Chrono Trigger)
     Fire|BURN/BRN|FIRE/FIR|    BOIL
      Ice|SNOW/SNO| ICE/ICE|    HAIL
-     Lit|SHOK/SHK| LIT/LIT|    VOLT
+     Lit| ION/ION| LIT/LIT|    VOLT
    Earth|LAND/LND| GEO/GEO|    GAIA
 Antipode|HYDR/HYD|PODE/POD|    ATOM (Credit to nic0lette for the idea. Antipode is both Fire and Ice elements together)
   Plasma|ENRG/NRG|PLAZ/PLZ|    NOVA (Fire + Lightning dual-tech)
