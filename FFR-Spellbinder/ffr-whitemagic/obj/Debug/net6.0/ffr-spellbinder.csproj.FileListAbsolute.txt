@@ -1,0 +1,15 @@
+C:\Users\Linkshot\Utilities\FFR-Spellbinder\FFR-Spellbinder\ffr-whitemagic\obj\Debug\net6.0\ffr-spellbinder.csproj.AssemblyReference.cache
+C:\Users\Linkshot\Utilities\FFR-Spellbinder\FFR-Spellbinder\ffr-whitemagic\obj\Debug\net6.0\ffr-spellbinder.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Linkshot\Utilities\FFR-Spellbinder\FFR-Spellbinder\ffr-whitemagic\obj\Debug\net6.0\ffr-spellbinder.AssemblyInfoInputs.cache
+C:\Users\Linkshot\Utilities\FFR-Spellbinder\FFR-Spellbinder\ffr-whitemagic\obj\Debug\net6.0\ffr-spellbinder.AssemblyInfo.cs
+C:\Users\Linkshot\Utilities\FFR-Spellbinder\FFR-Spellbinder\ffr-whitemagic\obj\Debug\net6.0\ffr-spellbinder.csproj.CoreCompileInputs.cache
+C:\Users\Linkshot\Utilities\FFR-Spellbinder\FFR-Spellbinder\ffr-whitemagic\bin\Debug\net6.0\ffr-spellbinder.exe
+C:\Users\Linkshot\Utilities\FFR-Spellbinder\FFR-Spellbinder\ffr-whitemagic\bin\Debug\net6.0\ffr-spellbinder.deps.json
+C:\Users\Linkshot\Utilities\FFR-Spellbinder\FFR-Spellbinder\ffr-whitemagic\bin\Debug\net6.0\ffr-spellbinder.runtimeconfig.json
+C:\Users\Linkshot\Utilities\FFR-Spellbinder\FFR-Spellbinder\ffr-whitemagic\bin\Debug\net6.0\ffr-spellbinder.dll
+C:\Users\Linkshot\Utilities\FFR-Spellbinder\FFR-Spellbinder\ffr-whitemagic\bin\Debug\net6.0\ffr-spellbinder.pdb
+C:\Users\Linkshot\Utilities\FFR-Spellbinder\FFR-Spellbinder\ffr-whitemagic\obj\Debug\net6.0\ffr-spellbinder.dll
+C:\Users\Linkshot\Utilities\FFR-Spellbinder\FFR-Spellbinder\ffr-whitemagic\obj\Debug\net6.0\refint\ffr-spellbinder.dll
+C:\Users\Linkshot\Utilities\FFR-Spellbinder\FFR-Spellbinder\ffr-whitemagic\obj\Debug\net6.0\ffr-spellbinder.pdb
+C:\Users\Linkshot\Utilities\FFR-Spellbinder\FFR-Spellbinder\ffr-whitemagic\obj\Debug\net6.0\ffr-spellbinder.genruntimeconfig.cache
+C:\Users\Linkshot\Utilities\FFR-Spellbinder\FFR-Spellbinder\ffr-whitemagic\obj\Debug\net6.0\ref\ffr-spellbinder.dll
