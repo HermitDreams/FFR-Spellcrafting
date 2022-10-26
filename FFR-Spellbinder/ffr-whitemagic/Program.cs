@@ -8,6 +8,8 @@ namespace ffr_spellbinder
         static void Main()
         {
             ffr_whitemagic.WMag();
+            Console.WriteLine("=");
+            ffr_blackmagic.BMag();
         }
     }
 }
