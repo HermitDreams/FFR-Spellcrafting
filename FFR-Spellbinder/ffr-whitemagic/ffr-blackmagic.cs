@@ -223,7 +223,6 @@ namespace ffr_spellbinder
                             case 3: break;
                             case 4: break;
                             case 5: break;
-                            case 8: break;
                             default: ffrbmElemByte = 2; break;
                         }
                         // Poisons come in Time, Death, and Fire flavours
