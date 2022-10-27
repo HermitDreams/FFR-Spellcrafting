@@ -10,29 +10,13 @@ namespace ffr_spellbinder
 {
     internal class ffr_blackmagic
     {
+        public static string ffrBlackSpell = "";
+        public static int ffrbmtier = 0;
         public static string BMag()
         {
             // Final Fantasy Randomizer Black Magic Generator. IRC Script by Linkshot. C# Port.
             var blackDice = new Random();
-            // Placeholder vars; remove later!!
-            bool ffrspellbinding = true;
-            double ffrsplevel = blackDice.Next(1, 9);
-            int ffrspslot = blackDice.Next(1, 5);
-            string ffrspflags = "ekS";
-            int ffrspreroll = 0;
-            int ffrspresist = 0;
-            bool ffrspwall = false;
-            bool ffrspantiweak = false;
-            bool ffrspantibane = false;
-            bool ffrspantizap = false;
-            bool ffrspantinecro = false;
-            bool ffrspantifire = false;
-            bool ffrspantiice = false;
-            bool ffrspantilightning = false;
-            bool ffrspantiquake = false;
-            bool ffrspantimagic = false;
-            bool ffrspantitoxin = false;
-            bool ffrspantidamage = false;
+
         // Black Spell Initiation
         blackmagic:
             // write -c BlackSpell.txt <-- Create txt file here
@@ -54,15 +38,14 @@ namespace ffr_spellbinder
             int ffrbmacchigh = Math.Max(ffrbmaccmath1, ffrbmaccmath2);
             int ffrbmaccuracy = blackDice.Next(ffrbmacclow, ffrbmacchigh);
             double ffrbmstrength;
-            if (ffrspellbinding == true)
+            if (Program.ffrspellbinding == true)
             {
-                if (ffrsplevel == 8) { ffrbmstrength = 100; }
-                else { ffrbmstrength = ffrsplevel * 10; }
+                if (Program.ffrsplevel == 8) { ffrbmstrength = 100; }
+                else { ffrbmstrength = Program.ffrsplevel * 10; }
             }
             else { ffrbmstrength = blackDice.Next(10, 101); }
 
             string ffrbmaccsay = "";
-            int ffrbmtier = 0;
             bool ffrbmb2 = false;
             string ffrbmresist = "";
             bool ffrbmDualDenial = true;
@@ -102,20 +85,20 @@ namespace ffr_spellbinder
             {
                 if ((ffrbmeffect == 1) && (ffrbmohko < 4)) { colors.echo(11, $"Debug: Rejected Auto-Hit on Insta-Kill"); goto blackmagic; }
                 else { ffrbmaccsay = "Auto-Hit"; }
-                // if (L isincs % ffrspflags) { write - i SpellLog.txt Accuracy Change: 3 / 256 succeeded.Spell is slated to get 255 Hit Bonus. | write - i SpellLog.txt - }
+                // if (L isincs % Program.ffrspflags) { write - i SpellLog.txt Accuracy Change: 3 / 256 succeeded.Spell is slated to get 255 Hit Bonus. | write - i SpellLog.txt - }
             }
-            else if (ffrspellbinding == true)
+            else if (Program.ffrspellbinding == true)
             {
-                if (ffrsplevel < 5) { ffrbmaccuracy = 5; ffrbmtier = 2; }
-                if (ffrsplevel > 4) { ffrbmaccuracy = 7; ffrbmtier = 3; }
-                if (ffrsplevel == 1) { ffrbmaccuracy = 4; ffrbmtier = 1; }
-                if (ffrsplevel == 8) { ffrbmaccuracy = 9; ffrbmtier = 4; }
-                // if (L isincs % ffrspflags) { write - i SpellLog.txt Accuracy Change: Spellbinder has set the Accuracy Tier to % ffrbmaccuracy to match Level % ffrsplevel | write - i SpellLog.txt - }
+                if (Program.ffrsplevel < 5) { ffrbmaccuracy = 5; ffrbmtier = 2; }
+                if (Program.ffrsplevel > 4) { ffrbmaccuracy = 7; ffrbmtier = 3; }
+                if (Program.ffrsplevel == 1) { ffrbmaccuracy = 4; ffrbmtier = 1; }
+                if (Program.ffrsplevel == 8) { ffrbmaccuracy = 9; ffrbmtier = 4; }
+                // if (L isincs % Program.ffrspflags) { write - i SpellLog.txt Accuracy Change: Spellbinder has set the Accuracy Tier to % ffrbmaccuracy to match Level % Program.ffrsplevel | write - i SpellLog.txt - }
             }
             else
             {
                 ffrbmaccsay = ffrbmaccuracy.ToString();
-                // if (L isincs % ffrspflags) { write - i SpellLog.txt Accuracy Output has been set to % ffrbmaccsay | write - i SpellLog.txt - }
+                // if (L isincs % Program.ffrspflags) { write - i SpellLog.txt Accuracy Output has been set to % ffrbmaccsay | write - i SpellLog.txt - }
             }
 
             #endregion AccInit
@@ -123,7 +106,7 @@ namespace ffr_spellbinder
             // Spellbinding Slot Permissions
             #region LOK2Fix
             // Compatibility with LOK2 fix
-            if ((ffrspflags.IndexOf("S") != -1) && (ffrsplevel == 3) && (ffrspslot == 4) && (ffrspreroll < 5))
+            if ((Program.ffrspflags.IndexOf("S") != -1) && (Program.ffrsplevel == 3) && (Program.ffrspslot == 4) && (Program.ffrspreroll < 5))
             {
                 ffrbmeffect = 2;
                 ffrbmalter = 1;
@@ -132,9 +115,9 @@ namespace ffr_spellbinder
             #endregion LOK2Fix
             #region KeepDmg
             // -b2: Preserves all slots with damage spells
-            if ((ffrspflags.IndexOf("b2") != -1) && (ffrspreroll < 5))
+            if ((Program.ffrspflags.IndexOf("b2") != -1) && (Program.ffrspreroll < 5))
             {
-                if (((ffrsplevel != 4) && (ffrspslot == 1)) || ((ffrsplevel == 1) && (ffrspslot == 4)) || ((ffrsplevel == 3) && (ffrspslot == 3)) || ((ffrsplevel == 4) && (ffrspslot == 4)))
+                if (((Program.ffrsplevel != 4) && (Program.ffrspslot == 1)) || ((Program.ffrsplevel == 1) && (Program.ffrspslot == 4)) || ((Program.ffrsplevel == 3) && (Program.ffrspslot == 3)) || ((Program.ffrsplevel == 4) && (Program.ffrspslot == 4)))
                 {
                     ffrbmeffect = 1;
                     ffrbmohko = blackDice.Next(4, 9);
@@ -143,7 +126,7 @@ namespace ffr_spellbinder
             }
             #endregion KeepDmg
             #region ConfuseBad
-            if ((ffrspflags.IndexOf("C") != -1) && (ffrsplevel == 1) && (ffrspslot == 1) && (ffrbmeffect == 2) && (ffrbmalter == 2) && (ffrspreroll < 5))
+            if ((Program.ffrspflags.IndexOf("C") != -1) && (Program.ffrsplevel == 1) && (Program.ffrspslot == 1) && (ffrbmeffect == 2) && (ffrbmalter == 2) && (Program.ffrspreroll < 5))
             {
                 colors.echo(11, $"Debug: Bounced Buff {ffrbmbuff} from FIRE slot");
                 goto blackmagic;
@@ -155,17 +138,6 @@ namespace ffr_spellbinder
             // Spell-building
             #region ElemAssign
             if (ffrbmelement != 0) { ffrbmElemByte = (int)(Math.Pow(2, (ffrbmelement - 1))); }
-            if (ffrspellbinding == true)
-            {
-                switch (ffrbmelement) // Set accuracy penalties and bonuses
-                {
-                    case 2: ffrbmaccuracy += 2; break;
-                    case 3: ffrbmaccuracy--; break;
-                    case 4: ffrbmaccuracy--; break;
-                    case 8: ffrbmaccuracy += 2; break;
-                    default: break;
-                }
-            }
             // 0: Non-Elemental
             // 1: Status
             // 2: Poison / Stone
@@ -185,9 +157,9 @@ namespace ffr_spellbinder
             // However, Damage Spells have a boosted chance
             if (ffrbmeffect == 1)
             {
-                if ((ffrbmohko < 4) && ((ffrspflags.IndexOf("k") == -1) || (ffrsplevel > 4)))
+                if ((ffrbmohko < 4) && ((Program.ffrspflags.IndexOf("k") == -1) || (Program.ffrsplevel > 4)))
                 {
-                    if (ffrspellbinding == true) { ffrbmaccuracy -= 2; }
+                    if (Program.ffrspellbinding == true) { ffrbmaccuracy -= 2; }
                     ffrbmstrskip = true;
                     ffrbmtarget -= blackDice.Next(0, 2);
                     // write - al2 BlackSpell.txt Type: Insta-Kill
@@ -197,9 +169,9 @@ namespace ffr_spellbinder
                 else {
                     ffrbmTypeByte = 1;
                     ffrbmtarget += blackDice.Next(0, 2);
-                    if (ffrspellbinding == true) {
-                        if (ffrsplevel < 3) { ffrbmaccuracy = 3; }
-                        else if (ffrsplevel < 8) { ffrbmaccuracy = 5; }
+                    if (Program.ffrspellbinding == true) {
+                        if (Program.ffrsplevel < 3) { ffrbmaccuracy = 3; }
+                        else if (Program.ffrsplevel < 8) { ffrbmaccuracy = 5; }
                     }
                     else { if (ffrbmtarget == 1) { ffrbmstrength = ffrbmstrength * blackDice.Next(100, 151) / 100; } }
                     if (Enumerable.Range(30, 20).Contains((int)ffrbmstrength)) { ffrbmtier = 2; }
@@ -227,32 +199,31 @@ namespace ffr_spellbinder
                 #region Debuffs
                 if (ffrbmalter == 1)
                 {
-                    if ((ffrspellbinding == true) && (ffrbmaccsay == "Auto-Hit") && (ffrbmdebuff < 8)) { ffrbmdebuff = 12; }
+                    if ((Program.ffrspellbinding == true) && (ffrbmaccsay == "Auto-Hit") && (ffrbmdebuff < 8)) { ffrbmdebuff = 12; }
                     // Debug: echo 8 - s Debug: Passing through Debuff(Debuff: % ffrbmdebuff $+ , Element: % ffrbmelement $+ , Affliction: % ffrbmafflict $+ , Allies: % ffrbmallies $+ )
                     if (!Enumerable.Range(9, 2).Contains(ffrbmdebuff)) { ffrbmstrskip = true; }
                     if (ffrbmdebuff < 8) { ffrbmTypeByte = 3; }
                     #region Poison
                     if (ffrbmdebuff == 1)
                     {
-                        if (ffrspellbinding == true)
+                        if (Program.ffrspellbinding == true)
                         {
                             ffrbmaccuracy += 2;
                             if (ffrbmpoison > 2) { ffrbmaccuracy++; }
-                            if ((ffrbmpoison == 3) && (ffrsplevel > 1)) { ffrbmaccuracy += 2; }
+                            if ((ffrbmpoison == 3) && (Program.ffrsplevel > 1)) { ffrbmaccuracy += 2; }
                             if (ffrbmpoison > 3) { ffrbmaccuracy++; }
                             if (ffrbmpoison > 4) { ffrbmaccuracy += 2; }
                         }
                         ffrbmEffByte = (int)(4 + Math.Pow(2, (ffrbmpoison + 2)));
                         // Poison Debuff is always stacked on top
                         // So that the spell is useful to players
-                        switch (ffrbmelement) // Correct accuracy for Poisons
+                        switch (ffrbmelement)
                         {
                             case 0: break;
-                            case 2: if (ffrspellbinding == true) ffrbmaccuracy -= 2; break;
-                            case 3: if (ffrspellbinding == true) ffrbmaccuracy++; break;
-                            case 4: if (ffrspellbinding == true) ffrbmaccuracy++; break;
+                            case 3: break;
+                            case 4: break;
                             case 5: break;
-                            case 8: if (ffrspellbinding == true) ffrbmaccuracy -= 2; break;
+                            case 8: break;
                             default: ffrbmElemByte = 2; break;
                         }
                         // Poisons come in Time, Death, and Fire flavours
@@ -277,11 +248,11 @@ namespace ffr_spellbinder
                     #region Stun
                     else if (ffrbmdebuff == 3)
                     {
-                        if (ffrspellbinding == true) { ffrbmaccuracy += 3; }
+                        if (Program.ffrspellbinding == true) { ffrbmaccuracy += 3; }
                         switch (ffrbmelement)
                         {
-                            case 0: if (ffrspellbinding == true) ffrbmaccuracy -= 8; break; // PIN that could hit Chaos at the same rate as XFER was Bad, Actually
-                            case 3: if (ffrspellbinding == true) ffrbmaccuracy -= 6; break; // adjusts STOP to vanilla acc
+                            case 0: if (Program.ffrspellbinding == true) ffrbmaccuracy -= 8; break; // PIN that could hit Chaos at the same rate as XFER was Bad, Actually
+                            case 3: if (Program.ffrspellbinding == true) ffrbmaccuracy -= 6; break; // adjusts STOP to vanilla acc
                             case 6: break;
                             case 7: break;
                             default: ffrbmElemByte = 1; break;
@@ -293,10 +264,10 @@ namespace ffr_spellbinder
                     #region Sleep
                     else if (ffrbmdebuff == 4)
                     {
-                        if (ffrspellbinding == true)
+                        if (Program.ffrspellbinding == true)
                         {
                             ffrbmaccuracy++;
-                            if (ffrsplevel > 1) { ffrbmaccuracy += 2; }
+                            if (Program.ffrsplevel > 1) { ffrbmaccuracy += 2; }
                         }
                         switch (ffrbmelement)
                         {
@@ -313,7 +284,7 @@ namespace ffr_spellbinder
                     #region Mute
                     else if (ffrbmdebuff == 5)
                     {
-                        if (ffrspellbinding == true) { ffrbmaccuracy += 2; }
+                        if (Program.ffrspellbinding == true) { ffrbmaccuracy += 2; }
                         switch (ffrbmelement)
                         {
                             case 0: break;
@@ -329,7 +300,7 @@ namespace ffr_spellbinder
                     #region Confuse
                     else if (ffrbmdebuff == 6)
                     {
-                        if (ffrspellbinding == true) { ffrbmaccuracy += 4; }
+                        if (Program.ffrspellbinding == true) { ffrbmaccuracy += 4; }
                         switch (ffrbmelement)
                         {
                             case 0: break;
@@ -345,7 +316,7 @@ namespace ffr_spellbinder
                     #region Cocktail
                     else if (ffrbmdebuff == 7)
                     {
-                        if (ffrspellbinding == true) { ffrbmaccuracy -= 2; }
+                        if (Program.ffrspellbinding == true) { ffrbmaccuracy -= 2; }
                         switch (ffrbmelement)
                         {
                             case 0: break;
@@ -365,10 +336,10 @@ namespace ffr_spellbinder
                     #region Slow
                     else if (ffrbmdebuff == 8)
                     {
-                        if (ffrspellbinding == true) { ffrbmaccuracy += 4; }
+                        if (Program.ffrspellbinding == true) { ffrbmaccuracy += 4; }
                         switch (ffrbmelement)
                         {
-                            case 0: if (ffrspellbinding == true) ffrbmaccuracy -= 3; break;
+                            case 0: if (Program.ffrspellbinding == true) ffrbmaccuracy -= 3; break;
                             case 1: break;
                             case 2: break;
                             case 4: break;
@@ -381,13 +352,13 @@ namespace ffr_spellbinder
                     #region Fear
                     else if (ffrbmdebuff == 9)
                     {
-                        if (ffrspellbinding == true)
+                        if (Program.ffrspellbinding == true)
                         {
                             ffrbmaccuracy -= 2;
-                            if (ffrsplevel > 6) { ffrbmstrength = 40 + (blackDice.Next(0, 4) * 8); ffrbmtier = 4; }
+                            if (Program.ffrsplevel > 6) { ffrbmstrength = 40 + (blackDice.Next(0, 4) * 8); ffrbmtier = 4; }
                             else
                             {
-                                ffrbmstrength = (int)(ffrsplevel + 1) * 5;
+                                ffrbmstrength = (int)(Program.ffrsplevel + 1) * 5;
                                 if (ffrbmstrength < 40) { ffrbmtier = 3; }
                                 if (ffrbmstrength < 30) { ffrbmtier = 2; }
                                 if (ffrbmstrength < 20) { ffrbmtier = 1; }
@@ -408,11 +379,11 @@ namespace ffr_spellbinder
                     #region Locked
                     else if (ffrbmdebuff == 10)
                     {
-                        if (ffrspellbinding == true)
+                        if (Program.ffrspellbinding == true)
                         {
                             ffrbmaccuracy += 4;
-                            if (ffrsplevel == 8) { ffrbmstrength = 160 + (blackDice.Next(0, 3) * 40); ffrbmtier = 4; }
-                            else { ffrbmstrength = (int)ffrsplevel * 20; }
+                            if (Program.ffrsplevel == 8) { ffrbmstrength = 160 + (blackDice.Next(0, 3) * 40); ffrbmtier = 4; }
+                            else { ffrbmstrength = (int)Program.ffrsplevel * 20; }
                             if (ffrbmstrength < 160) { ffrbmtier = 3; }
                             if (ffrbmstrength < 100) { ffrbmtier = 2; }
                             if (ffrbmstrength < 60) { ffrbmtier = 1; }
@@ -432,14 +403,14 @@ namespace ffr_spellbinder
                     #region Dispel
                     else if (ffrbmdebuff == 11)
                     {
-                        if ((ffrspellbinding == true) && (ffrsplevel < 8)) { ffrbmaccuracy++; }
+                        if ((Program.ffrspellbinding == true) && (Program.ffrsplevel < 8)) { ffrbmaccuracy++; }
                         switch (ffrbmelement)
                         {
                             case 1: break;
                             case 3: break;
                             case 4: break;
                             case 7: break;
-                            default: if (ffrspellbinding == true) ffrbmaccuracy -= 2; ffrbmElemByte = 0; break;
+                            default: if (Program.ffrspellbinding == true) ffrbmaccuracy -= 2; ffrbmElemByte = 0; break;
                         }
                         // write - al3 BlackSpell.txt Effect: Dispel
                         ffrbmTypeByte = 15;
@@ -451,8 +422,9 @@ namespace ffr_spellbinder
                     else if (ffrbmdebuff == 12)
                     {
                         ffrbmTypeByte = 16;
+                        ffrbmTargByte = 3;
                         ffrbmaccskip = true;
-                        if ((ffrspellbinding == true) && (ffrsplevel < 6)) { colors.echo(13, $"Debug: Bounced a Power Word before Level 6"); goto blackmagic; }
+                        if ((Program.ffrspellbinding == true) && (Program.ffrsplevel < 6)) { colors.echo(13, $"Debug: Bounced a Power Word before Level 6"); goto blackmagic; }
                         if (ffrbmafflict == 9) // Power Word "Weaken"
                         {
                             switch (ffrbmelement)
@@ -557,12 +529,12 @@ namespace ffr_spellbinder
                     {
                         ffrbmtarget = 2;
                         ffrbmTypeByte = 8;
-                        if (ffrspellbinding == true)
+                        if (Program.ffrspellbinding == true)
                         {
-                            if (ffrsplevel == 8) { ffrbmstrength = 24; ffrbmtier = 4; }
-                            if (ffrsplevel < 8) { ffrbmstrength = 16; ffrbmtier = 3; }
-                            if (ffrsplevel < 5) { ffrbmstrength = 12; ffrbmtier = 2; }
-                            if (ffrsplevel < 3) { ffrbmstrength = 8; ffrbmtier = 1; }
+                            if (Program.ffrsplevel == 8) { ffrbmstrength = 24; ffrbmtier = 4; }
+                            if (Program.ffrsplevel < 8) { ffrbmstrength = 16; ffrbmtier = 3; }
+                            if (Program.ffrsplevel < 5) { ffrbmstrength = 12; ffrbmtier = 2; }
+                            if (Program.ffrsplevel < 3) { ffrbmstrength = 8; ffrbmtier = 1; }
                         }
                         else { ffrbmstrength = (int)Math.Ceiling(ffrbmstrength * blackDice.Next(8, 12) / 10); }
                     }
@@ -571,20 +543,20 @@ namespace ffr_spellbinder
                     {
                         ffrbmstrskip = true;
                         ffrbmTypeByte = 9;
-                        if (((ffrspellbinding == true) && (Enumerable.Range(2, 3).Contains((int)ffrsplevel))) || ((ffrspellbinding == false) && (Enumerable.Range(10, 15).Contains((int)ffrbmstrength)))) { ffrbmtarget = 2; }
+                        if (((Program.ffrspellbinding == true) && (Enumerable.Range(2, 3).Contains((int)Program.ffrsplevel))) || ((Program.ffrspellbinding == false) && (Enumerable.Range(10, 15).Contains((int)ffrbmstrength)))) { ffrbmtarget = 2; }
                         else { ffrbmtarget = 1; }
-                        if (((ffrspellbinding == true) && (ffrsplevel == 8)) || ((ffrspellbinding == false) && (blackDice.Next(1, 9) == 8)))
+                        if (((Program.ffrspellbinding == true) && (Program.ffrsplevel == 8)) || ((Program.ffrspellbinding == false) && (blackDice.Next(1, 9) == 8)))
                         {
-                            if (ffrspwall == false)
+                            if (Program.ffrspwall == false)
                             {
-                                if (ffrspresist > 4)
+                                if (Program.ffrspresist > 4)
                                 {
                                     colors.echo(4, $"Resists already capped! Rerolling.");
                                     goto blackmagic;
                                 }
-                                // set % ffrspresmsg $+ $calc(% ffrspresist + 1) Defend all
-                                ffrspwall = true;
-                                ffrspresist++;
+                                // set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend all
+                                Program.ffrspwall = true;
+                                Program.ffrspresist++;
                             }
                             // write - a13 BlackSpell.txt Effect: Resist All
                             ffrbmEffByte = 255;
@@ -593,173 +565,173 @@ namespace ffr_spellbinder
                         else if (ffrbmelement == 1)
                         {
                             ffrbmresist = "Status";
-                            if (((ffrspellbinding == true) && (ffrsplevel > 4)) || ((ffrspellbinding == false) && (ffrbmstrength > 24))) { ffrbmresmagic = true; }
+                            if (((Program.ffrspellbinding == true) && (Program.ffrsplevel > 4)) || ((Program.ffrspellbinding == false) && (ffrbmstrength > 24))) { ffrbmresmagic = true; }
                             else
                             {
-                                if (ffrspantiweak == false)
+                                if (Program.ffrspantiweak == false)
                                 {
-                                    if (ffrspresist > 4)
+                                    if (Program.ffrspresist > 4)
                                     {
                                         colors.echo(4, $"Resists already capped! Rerolling.");
                                         goto blackmagic;
                                     }
-                                    // else if (ffrspresist == 0) { set % ffrspresmsg $+ $calc(% ffrspresist + 1) Defend hindrance }
-                                    // else if (ffrspresist < 3) { set % ffrspresmsg $+ $calc(% ffrspresist + 1) Defend weak }
-                                    // else if (ffrspresist == 4) { "Defend malus" }
-                                    // else { set % ffrspresmsg $+ $calc(% ffrspresist + 1) Defend psi }
-                                    ffrspantiweak = true;
-                                    ffrspresist++;
+                                    // else if (Program.ffrspresist == 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend hindrance }
+                                    // else if (Program.ffrspresist < 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend weak }
+                                    // else if (Program.ffrspresist == 4) { "Defend malus" }
+                                    // else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend psi }
+                                    Program.ffrspantiweak = true;
+                                    Program.ffrspresist++;
                                 }
                             }
                         }
                         else if (ffrbmelement == 2)
                         {
                             ffrbmresist = "Poison/Stone";
-                            if (((ffrspellbinding == true) && (ffrsplevel > 4)) || ((ffrspellbinding == false) && (ffrbmstrength > 24))) { ffrbmresdecay = true; }
+                            if (((Program.ffrspellbinding == true) && (Program.ffrsplevel > 4)) || ((Program.ffrspellbinding == false) && (ffrbmstrength > 24))) { ffrbmresdecay = true; }
                             else
                             {
-                                if (ffrspantibane == false)
+                                if (Program.ffrspantibane == false)
                                 {
-                                    if (ffrspresist > 4)
+                                    if (Program.ffrspresist > 4)
                                     {
                                         colors.echo(4, $"Resists already capped! Rerolling.");
                                         goto blackmagic;
                                     }
-                                    // n585 = elseif(% ffrspresist = 0) { set % ffrspresmsg $+ $calc(% ffrspresist + 1) Defend poisonous }
-                                    // n586 = elseif(% ffrspresist isnum 1 - 3) { set % ffrspresmsg $+ $calc(% ffrspresist + 1) Defend bane }
-                                    // n587 =            else { set % ffrspresmsg $+ $calc(% ffrspresist + 1) Defend gas }
-                                    ffrspantibane = true;
-                                    ffrspresist++;
+                                    // n585 = elseif(% Program.ffrspresist = 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend poisonous }
+                                    // n586 = elseif(% Program.ffrspresist isnum 1 - 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend bane }
+                                    // n587 =            else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend gas }
+                                    Program.ffrspantibane = true;
+                                    Program.ffrspresist++;
                                 }
                             }
                         }
                         else if (ffrbmelement == 3)
                         {
                             ffrbmresist = "Time";
-                            if (((ffrspellbinding == true) && (ffrsplevel > 4)) || ((ffrspellbinding == false) && (ffrbmstrength > 24))) { ffrbmresdecay = true; }
+                            if (((Program.ffrspellbinding == true) && (Program.ffrsplevel > 4)) || ((Program.ffrspellbinding == false) && (ffrbmstrength > 24))) { ffrbmresdecay = true; }
                             else
                             {
-                                if (ffrspantizap == false)
+                                if (Program.ffrspantizap == false)
                                 {
-                                    if (ffrspresist > 4)
+                                    if (Program.ffrspresist > 4)
                                     {
                                         colors.echo(4, $"Resists already capped! Rerolling.");
                                         goto blackmagic;
                                     }
-                                    //n603 = elseif(% ffrspresist = 0) { set % ffrspresmsg $+ $calc(% ffrspresist + 1) Defend dimension }
-                                    //n604 = elseif(% ffrspresist isnum 1 - 3) { set % ffrspresmsg $+ $calc(% ffrspresist + 1) Defend time }
-                                    //n605 =            else { set % ffrspresmsg $+ $calc(% ffrspresist + 1) Defend age }
-                                    ffrspantizap = true;
-                                    ffrspresist++;
+                                    //n603 = elseif(% Program.ffrspresist = 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend dimension }
+                                    //n604 = elseif(% Program.ffrspresist isnum 1 - 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend time }
+                                    //n605 =            else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend age }
+                                    Program.ffrspantizap = true;
+                                    Program.ffrspresist++;
                                 }
                             }
                         }
                         else if (ffrbmelement == 4)
                         {
                             ffrbmresist = "Death";
-                            if (((ffrspellbinding == true) && (ffrsplevel > 4)) || ((ffrspellbinding == false) && (ffrbmstrength > 24)))
+                            if (((Program.ffrspellbinding == true) && (Program.ffrsplevel > 4)) || ((Program.ffrspellbinding == false) && (ffrbmstrength > 24)))
                             {
                                 if (ffrbmdebuff < 7) { ffrbmresmagic = true; }
                                 else { ffrbmresdecay = true; }
                             }
                             else
                             {
-                                if (ffrspantinecro == false)
+                                if (Program.ffrspantinecro == false)
                                 {
-                                    if (ffrspresist > 4)
+                                    if (Program.ffrspresist > 4)
                                     {
                                         colors.echo(4, $"Resists already capped! Rerolling.");
                                         goto blackmagic;
                                     }
-                                    //n621 = elseif(% ffrspresist = 0) { set % ffrspresmsg $+ $calc(% ffrspresist + 1) Defend necrotic }
-                                    //n622 = elseif(% ffrspresist isnum 1 - 3) { set % ffrspresmsg $+ $calc(% ffrspresist + 1) Defend evil }
-                                    //n623 =            else { set % ffrspresmsg $+ $calc(% ffrspresist + 1) Defend rub }
-                                    ffrspantinecro = true;
-                                    ffrspresist++;
+                                    //n621 = elseif(% Program.ffrspresist = 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend necrotic }
+                                    //n622 = elseif(% Program.ffrspresist isnum 1 - 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend evil }
+                                    //n623 =            else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend rub }
+                                    Program.ffrspantinecro = true;
+                                    Program.ffrspresist++;
                                 }
                             }
                         }
                         else if (ffrbmelement == 5)
                         {
                             ffrbmresist = "Fire";
-                            if (((ffrspellbinding == true) && (ffrsplevel > 4)) || ((ffrspellbinding == false) && (ffrbmstrength > 24))) { ffrbmresdragon = true; }
+                            if (((Program.ffrspellbinding == true) && (Program.ffrsplevel > 4)) || ((Program.ffrspellbinding == false) && (ffrbmstrength > 24))) { ffrbmresdragon = true; }
                             else
                             {
-                                if (ffrspantifire == false)
+                                if (Program.ffrspantifire == false)
                                 {
-                                    if (ffrspresist > 4)
+                                    if (Program.ffrspresist > 4)
                                     {
                                         colors.echo(4, $"Resists already capped! Rerolling.");
                                         goto blackmagic;
                                     }
-                                    //n642 = elseif(% ffrspresist = 0) { set % ffrspresmsg $+ $calc(% ffrspresist + 1) Defend burning }
-                                    //n643 = elseif(% ffrspresist isnum 1 - 3) { set % ffrspresmsg $+ $calc(% ffrspresist + 1) Defend fire }
-                                    //n644 =            else { set % ffrspresmsg $+ $calc(% ffrspresist + 1) Defend hot }
-                                    ffrspantifire = true;
-                                    ffrspresist++;
+                                    //n642 = elseif(% Program.ffrspresist = 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend burning }
+                                    //n643 = elseif(% Program.ffrspresist isnum 1 - 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend fire }
+                                    //n644 =            else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend hot }
+                                    Program.ffrspantifire = true;
+                                    Program.ffrspresist++;
                                 }
                             }
                         }
                         else if (ffrbmelement == 6)
                         {
                             ffrbmresist = "Ice";
-                            if (((ffrspellbinding == true) && (ffrsplevel > 4)) || ((ffrspellbinding == false) && (ffrbmstrength > 24))) { ffrbmresdragon = true; }
+                            if (((Program.ffrspellbinding == true) && (Program.ffrsplevel > 4)) || ((Program.ffrspellbinding == false) && (ffrbmstrength > 24))) { ffrbmresdragon = true; }
                             else
                             {
-                                if (ffrspantiice == false)
+                                if (Program.ffrspantiice == false)
                                 {
-                                    if (ffrspresist > 4)
+                                    if (Program.ffrspresist > 4)
                                     {
                                         colors.echo(4, $"Resists already capped! Rerolling.");
                                         goto blackmagic;
                                     }
-                                    //n660 = elseif(% ffrspresist = 0) { set % ffrspresmsg $+ $calc(% ffrspresist + 1) Defend freezing }
-                                    //n661 = elseif(% ffrspresist isnum 1 - 3) { set % ffrspresmsg $+ $calc(% ffrspresist + 1) Defend cold }
-                                    //n662 =            else { set % ffrspresmsg $+ $calc(% ffrspresist + 1) Defend ice }
-                                    ffrspantiice = true;
-                                    ffrspresist++;
+                                    //n660 = elseif(% Program.ffrspresist = 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend freezing }
+                                    //n661 = elseif(% Program.ffrspresist isnum 1 - 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend cold }
+                                    //n662 =            else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend ice }
+                                    Program.ffrspantiice = true;
+                                    Program.ffrspresist++;
                                 }
                             }
                         }
                         else if (ffrbmelement == 7)
                         {
                             ffrbmresist = "Lit";
-                            if (((ffrspellbinding == true) && (ffrsplevel > 4)) || ((ffrspellbinding == false) && (ffrbmstrength > 24))) { ffrbmresdragon = true; }
+                            if (((Program.ffrspellbinding == true) && (Program.ffrsplevel > 4)) || ((Program.ffrspellbinding == false) && (ffrbmstrength > 24))) { ffrbmresdragon = true; }
                             else
                             {
-                                if (ffrspantilightning == false)
+                                if (Program.ffrspantilightning == false)
                                 {
-                                    if (ffrspresist > 4)
+                                    if (Program.ffrspresist > 4)
                                     {
                                         colors.echo(4, $"Resists already capped! Rerolling.");
                                         goto blackmagic;
                                     }
-                                    //n678 = elseif(% ffrspresist = 0) { set % ffrspresmsg $+ $calc(% ffrspresist + 1) Defend lightning }
-                                    //n679 = elseif(% ffrspresist isnum 1 - 3) { set % ffrspresmsg $+ $calc(% ffrspresist + 1) Defend volt }
-                                    //n680 =            else { set % ffrspresmsg $+ $calc(% ffrspresist + 1) Defend ion }
-                                    ffrspantilightning = true;
-                                    ffrspresist++;
+                                    //n678 = elseif(% Program.ffrspresist = 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend lightning }
+                                    //n679 = elseif(% Program.ffrspresist isnum 1 - 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend volt }
+                                    //n680 =            else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend ion }
+                                    Program.ffrspantilightning = true;
+                                    Program.ffrspresist++;
                                 }
                             }
                         }
                         else if (ffrbmelement == 8)
                         {
                             ffrbmresist = "Earth";
-                            if (((ffrspellbinding == true) && (ffrsplevel > 4)) || ((ffrspellbinding == false) && (ffrbmstrength > 24))) { ffrbmresmagic = true; }
+                            if (((Program.ffrspellbinding == true) && (Program.ffrsplevel > 4)) || ((Program.ffrspellbinding == false) && (ffrbmstrength > 24))) { ffrbmresmagic = true; }
                             else
                             {
-                                if (ffrspantiquake == false)
+                                if (Program.ffrspantiquake == false)
                                 {
-                                    if (ffrspresist > 4)
+                                    if (Program.ffrspresist > 4)
                                     {
                                         colors.echo(4, $"Resists already capped! Rerolling.");
                                         goto blackmagic;
                                     }
-                                    //n696 = elseif(% ffrspresist = 0) { set % ffrspresmsg $+ $calc(% ffrspresist + 1) Defend tectonic }
-                                    // n697 = elseif(% ffrspresist isnum 1 - 3) { set % ffrspresmsg $+ $calc(% ffrspresist + 1) Defend land }
-                                    //n698 =            else { set % ffrspresmsg $+ $calc(% ffrspresist + 1) Defend geo }
-                                    ffrspantiquake = true;
-                                    ffrspresist++;
+                                    //n696 = elseif(% Program.ffrspresist = 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend tectonic }
+                                    // n697 = elseif(% Program.ffrspresist isnum 1 - 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend land }
+                                    //n698 =            else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend geo }
+                                    Program.ffrspantiquake = true;
+                                    Program.ffrspresist++;
                                 }
                             }
                         }
@@ -768,16 +740,16 @@ namespace ffr_spellbinder
                             ffrbmstrskip = false;
                             ffrbmTypeByte = 6;
                             double ffrbmregmod = ffrbmstrength / 6;
-                            if (ffrspellbinding == true)
+                            if (Program.ffrspellbinding == true)
                             {
-                                ffrbmregmod = ffrsplevel;
-                                if (ffrsplevel < 7) { ffrbmtier = 3; }
+                                ffrbmregmod = Program.ffrsplevel;
+                                if (Program.ffrsplevel < 7) { ffrbmtier = 3; }
                                 else { ffrbmTypeByte = 13; }
-                                if (ffrsplevel < 5) { ffrbmtier = 2; }
-                                if (ffrsplevel < 3) { ffrbmtier = 1; }
+                                if (Program.ffrsplevel < 5) { ffrbmtier = 2; }
+                                if (Program.ffrsplevel < 3) { ffrbmtier = 1; }
                             }
                             ffrbmstrength = (double)Math.Floor((double)Math.Pow(blackDice.Next(18, 23) / 10, (blackDice.Next(25, 41) / 10 + ffrbmregmod / 2)) + (ffrbmregmod - 1) / 2);
-                            if (ffrspellbinding == false)
+                            if (Program.ffrspellbinding == false)
                             {
                                 ffrbmtier = (int)Math.Ceiling(ffrbmstrength / blackDice.Next(32, 65));
                                 if (ffrbmtier > 3) { colors.echo(7, $"Regen Power: {ffrbmstrength}"); }
@@ -786,55 +758,55 @@ namespace ffr_spellbinder
                         if (ffrbmresmagic == true)
                         {
                             ffrbmresist = "Magic";
-                            if (ffrspantimagic == false)
+                            if (Program.ffrspantimagic == false)
                             {
-                                if (ffrspresist > 4)
+                                if (Program.ffrspresist > 4)
                                 {
                                     colors.echo(4, $"Resists already capped! Rerolling.");
                                     goto blackmagic;
                                 }
-                                //n712 = elseif(% ffrspresist = 0) { set % ffrspresmsg $+ $calc(% ffrspresist + 1) Defend mortality }
-                                //n713 = elseif(% ffrspresist isnum 1 - 2) { set % ffrspresmsg $+ $calc(% ffrspresist + 1) Defend life }
-                                //n714 = elseif(% ffrspresist = 3) { set % ffrspresmsg $+ $calc(% ffrspresist + 1) Defend magic }
-                                //n715 =          else { set % ffrspresmsg $+ $calc(% ffrspresist + 1) Defend bio }
-                                ffrspantimagic = true;
-                                ffrspresist++;
+                                //n712 = elseif(% Program.ffrspresist = 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend mortality }
+                                //n713 = elseif(% Program.ffrspresist isnum 1 - 2) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend life }
+                                //n714 = elseif(% Program.ffrspresist = 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend magic }
+                                //n715 =          else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend bio }
+                                Program.ffrspantimagic = true;
+                                Program.ffrspresist++;
                             }
                         }
                         else if (ffrbmresdecay == true)
                         {
                             ffrbmresist = "Decay";
-                            if (ffrspantitoxin == false)
+                            if (Program.ffrspantitoxin == false)
                             {
-                                if (ffrspresist > 4)
+                                if (Program.ffrspresist > 4)
                                 {
                                     colors.echo(4, $"Resists already capped! Rerolling.");
                                     goto blackmagic;
                                 }
-                                //n727 = elseif(% ffrspresist = 0) { set % ffrspresmsg $+ $calc(% ffrspresist + 1) Defend futility }
-                                //n728 = elseif(% ffrspresist isnum 1 - 2) { set % ffrspresmsg $+ $calc(% ffrspresist + 1) Defend doom }
-                                //n729 = elseif(% ffrspresist = 3) { set % ffrspresmsg $+ $calc(% ffrspresist + 1) Defend waste }
-                                //n730 =          else { set % ffrspresmsg $+ $calc(% ffrspresist + 1) Defend rot }
-                                ffrspantitoxin = true;
-                                ffrspresist++;
+                                //n727 = elseif(% Program.ffrspresist = 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend futility }
+                                //n728 = elseif(% Program.ffrspresist isnum 1 - 2) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend doom }
+                                //n729 = elseif(% Program.ffrspresist = 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend waste }
+                                //n730 =          else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend rot }
+                                Program.ffrspantitoxin = true;
+                                Program.ffrspresist++;
                             }
                         }
                         else if (ffrbmresdragon == true)
                         {
                             ffrbmresist = "Dragon";
-                            if (ffrspantidamage == false)
+                            if (Program.ffrspantidamage == false)
                             {
-                                if (ffrspresist > 4)
+                                if (Program.ffrspresist > 4)
                                 {
                                     colors.echo(4, $"Resists already capped! Rerolling.");
                                     goto blackmagic;
                                 }
-                                //n742 = elseif(% ffrspresist = 0) { set % ffrspresmsg $+ $calc(% ffrspresist + 1) Defend elemental }
-                                //n743 = elseif(% ffrspresist isnum 1 - 2) { set % ffrspresmsg $+ $calc(% ffrspresist + 1) Defend wyrm }
-                                //n744 = elseif(% ffrspresist = 3) { set % ffrspresmsg $+ $calc(% ffrspresist + 1) Defend spell }
-                                //n745 =          else { set % ffrspresmsg $+ $calc(% ffrspresist + 1) Defend wiz }
-                                ffrspantidamage = true;
-                                ffrspresist++;
+                                //n742 = elseif(% Program.ffrspresist = 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend elemental }
+                                //n743 = elseif(% Program.ffrspresist isnum 1 - 2) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend wyrm }
+                                //n744 = elseif(% Program.ffrspresist = 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend spell }
+                                //n745 =          else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend wiz }
+                                Program.ffrspantidamage = true;
+                                Program.ffrspresist++;
                             }
                         }
                         //n750 = write - al3 WhiteSpell.txt Effect: Resist % ffrbmresist
@@ -860,8 +832,8 @@ namespace ffr_spellbinder
                     #endregion
                     else if (ffrbmbuff == 3) // Double Hits
                     {
-                        if (((ffrspellbinding == true) && (ffrsplevel < 4)) || ((ffrspellbinding == false) && (ffrbmstrength < 25))) { ffrbmtarget = 1; }
-                        else if (((ffrspellbinding == true) && (ffrsplevel > 7)) || ((ffrspellbinding == false) && (ffrbmstrength >= 40))) { ffrbmtarget = 3; }
+                        if (((Program.ffrspellbinding == true) && (Program.ffrsplevel < 4)) || ((Program.ffrspellbinding == false) && (ffrbmstrength < 25))) { ffrbmtarget = 1; }
+                        else if (((Program.ffrspellbinding == true) && (Program.ffrsplevel > 7)) || ((Program.ffrspellbinding == false) && (ffrbmstrength >= 40))) { ffrbmtarget = 3; }
                         else { ffrbmtarget = 2; }
                         ffrbmstrskip = true;
                         ffrbmTypeByte = 10;
@@ -873,9 +845,9 @@ namespace ffr_spellbinder
                         ffrbmTypeByte = 11;
                         if (ffrbmtarget > 1)
                         {
-                            if (ffrspellbinding == true)
+                            if (Program.ffrspellbinding == true)
                             {
-                                ffrbmstrength = (int)Math.Floor(ffrsplevel * 3 + blackDice.Next(3, 6));
+                                ffrbmstrength = (int)Math.Floor(Program.ffrsplevel * 3 + blackDice.Next(3, 6));
                                 if (ffrbmstrength < 27) { ffrbmtier = 3; }
                                 else { ffrbmtier = 4; }
                                 if (ffrbmstrength < 18) { ffrbmtier = 2; }
@@ -885,7 +857,7 @@ namespace ffr_spellbinder
                             if (blackDice.Next(1, 21) > blackDice.Next(1, 51))
                             {
                                 ffrbmtarget = 3;
-                                if (ffrspellbinding == true) { ffrbmstrength = (int)Math.Floor(ffrbmstrength / ((blackDice.Next(100, 121) / 10 - ffrsplevel) / 2) + 5); }
+                                if (Program.ffrspellbinding == true) { ffrbmstrength = (int)Math.Floor(ffrbmstrength / ((blackDice.Next(100, 121) / 10 - Program.ffrsplevel) / 2) + 5); }
                                 else { ffrbmstrength = (int)Math.Ceiling(ffrbmstrength * (blackDice.Next(75, 101) / 100)); }
                             }
                             else { colors.echo(7, $"Debug: Failed RALY attempt"); }
@@ -895,9 +867,9 @@ namespace ffr_spellbinder
                         // The final range ends up at 6 to 29
                         else
                         {
-                            if (ffrspellbinding == true)
+                            if (Program.ffrspellbinding == true)
                             {
-                                ffrbmstrength = (int)Math.Floor(Math.Pow(2, (1.5 + ffrsplevel / 2)) + (9 - ffrsplevel) + ffrsplevel / 2);
+                                ffrbmstrength = (int)Math.Floor(Math.Pow(2, (1.5 + Program.ffrsplevel / 2)) + (9 - Program.ffrsplevel) + Program.ffrsplevel / 2);
                                 if (ffrbmstrength < 50) { ffrbmtier = 3; }
                                 else { ffrbmtier = 4; }
                                 if (ffrbmstrength < 22) { ffrbmtier = 2; }
@@ -912,12 +884,12 @@ namespace ffr_spellbinder
                     {
                         ffrbmtarget = 2;
                         ffrbmTypeByte = 14;
-                        if (ffrspellbinding == true)
+                        if (Program.ffrspellbinding == true)
                         {
-                            if (ffrsplevel == 8) { ffrbmstrength = 80; ffrbmtier = 4; }
-                            if (ffrsplevel < 8) { ffrbmstrength = 60; ffrbmtier = 3; }
-                            if (ffrsplevel < 5) { ffrbmstrength = 40; ffrbmtier = 2; }
-                            if (ffrsplevel < 3) { ffrbmstrength = 30; ffrbmtier = 1; }
+                            if (Program.ffrsplevel == 8) { ffrbmstrength = 80; ffrbmtier = 4; }
+                            if (Program.ffrsplevel < 8) { ffrbmstrength = 60; ffrbmtier = 3; }
+                            if (Program.ffrsplevel < 5) { ffrbmstrength = 40; ffrbmtier = 2; }
+                            if (Program.ffrsplevel < 3) { ffrbmstrength = 30; ffrbmtier = 1; }
                         }
                         else { ffrbmstrength = (int)Math.Floor(ffrbmstrength * blackDice.Next(10, 19) / 10); }
                     }
@@ -945,11 +917,11 @@ namespace ffr_spellbinder
                     blackohko:
                     switch (ffrbmelement)
                     {
-                        case 0: if (blackDice.Next(1, 11) < 10) { ffrbmElemByte = 128; if (ffrspellbinding == true) ffrbmaccuracy += 2; } break;
-                        case 1: ffrbmElemByte = 2; ffrbmEffByte = 2; if (ffrspellbinding == true) ffrbmaccuracy++; break;
-                        case 5: if (blackDice.Next(1, 5) < 4) { ffrbmElemByte = 8; if (ffrspellbinding == true) ffrbmaccuracy -= 2; } break;
-                        case 6: if (blackDice.Next(1, 5) < 4) { ffrbmelement = blackDice.Next(1,3); goto blackohko; }; if (ffrspellbinding == true) ffrbmaccuracy++; ffrbmEffByte = 2; break;
-                        case 7: if (blackDice.Next(1, 5) < 4) { ffrbmElemByte = 4; if (ffrspellbinding == true) ffrbmaccuracy--; }; break;
+                        case 0: if (blackDice.Next(1, 11) < 10) ffrbmElemByte = 128; break;
+                        case 1: ffrbmElemByte = 2; ffrbmEffByte = 2; if (Program.ffrspellbinding == true) ffrbmaccuracy++; break;
+                        case 5: if (blackDice.Next(1, 5) < 4) ffrbmElemByte = 8; break;
+                        case 6: if (blackDice.Next(1, 5) < 4) { ffrbmelement = blackDice.Next(1,3); goto blackohko; }; if (Program.ffrspellbinding == true) ffrbmaccuracy++; ffrbmEffByte = 2; break;
+                        case 7: if (blackDice.Next(1, 5) < 4) ffrbmElemByte = 4; break;
                         default: break;
                     }
                 }
@@ -961,17 +933,23 @@ namespace ffr_spellbinder
                         colors.echo(11, $"Debug: Forcing element to Fire, Ice, or Lightning");
                         goto bmbase;
                     }
-                    if (blackDice.Next(1, 21) > blackDice.Next(1, 61)) { ffrbmDualDenial = false; colors.echo(7, "Debug: Dual Tech passed"); }
+                    if (blackDice.Next(1, 21) > blackDice.Next(1, 61))
+                    {
+                        ffrbmDualDenial = false;
+                        Console.ForegroundColor = ConsoleColor.DarkYellow;
+                        Console.Write("Debug: Dual Tech passed");
+                        if (Enumerable.Range(5, 3).Contains(ffrbmelement) || ffrbmelement == 0) { colors.echo(11, $"...but it didn't matter."); }
+                    }
                     if (ffrbmDualDenial == true)
                     {
-                        colors.echo(13, "Debug: Dual Tech did not pass");
+                        colors.echo(11, "Debug: Dual Tech did not pass");
                         switch (ffrbmelement)
                         {
-                            case 0: if (ffrspellbinding == true) ffrbmaccuracy++; break;
+                            case 0: if (Program.ffrspellbinding == true) ffrbmaccuracy++; break;
                             case 1: ffrbmElemByte = 64; ffrbmelement = 7; break;
-                            case 3: ffrbmElemByte = 32; ffrbmelement = 6; if (ffrspellbinding == true) ffrbmaccuracy++; break;
+                            case 3: ffrbmElemByte = 32; ffrbmelement = 6; break;
                             case 4: ffrbmstrength = ffrbmstrength * 1.2; break;
-                            case 8: ffrbmElemByte = 16; ffrbmelement = 5; if (ffrspellbinding == true) ffrbmaccuracy -= 2; break;
+                            case 8: ffrbmElemByte = 16; ffrbmelement = 5; break;
                             default: break;
                         }
                     }
@@ -979,12 +957,12 @@ namespace ffr_spellbinder
                     {
                         switch (ffrbmelement)
                         {
-                            case 0: if (ffrspellbinding == true) ffrbmaccuracy++; break;
+                            case 0: if (Program.ffrspellbinding == true) ffrbmaccuracy++; break;
                             case 1: ffrbmElemByte = 65; ffrbmstrength = (int)Math.Floor(ffrbmstrength * 1.25); break; // Kinetic
-                            case 2: ffrbmElemByte = 96; ffrbmstrength = (int)Math.Floor(ffrbmstrength * 1.1); if (ffrspellbinding == true) ffrbmaccuracy -= 2; break; // Storm
-                            case 3: ffrbmElemByte = 80; ffrbmstrength = (int)Math.Floor(ffrbmstrength * 1.1); if (ffrspellbinding == true) ffrbmaccuracy++; break; // Plasma
-                            case 4: ffrbmElemByte = 48; ffrbmstrength = (int)Math.Floor(ffrbmstrength * 1.25); if (ffrspellbinding == true) ffrbmaccuracy++; break; // Antipode
-                            case 8: ffrbmElemByte = 144; ffrbmstrength = (int)Math.Floor(ffrbmstrength * 1.25); if (ffrspellbinding == true) ffrbmaccuracy -= 2; break; // Magma
+                            case 2: ffrbmElemByte = 96; ffrbmstrength = (int)Math.Floor(ffrbmstrength * 1.1); break; // Storm
+                            case 3: ffrbmElemByte = 80; ffrbmstrength = (int)Math.Floor(ffrbmstrength * 1.1); break; // Plasma
+                            case 4: ffrbmElemByte = 48; ffrbmstrength = (int)Math.Floor(ffrbmstrength * 1.25); break; // Antipode
+                            case 8: ffrbmElemByte = 144; ffrbmstrength = (int)Math.Floor(ffrbmstrength * 1.25); break; // Magma
                             default: break;
                         }
                     }
@@ -996,8 +974,8 @@ namespace ffr_spellbinder
 
             if (ffrbmb2 == true)
             {
-                if (ffrsplevel < 8) { ffrbmtarget = 2; }
-                else if (ffrsplevel < 3) { ffrbmtarget = 1; }
+                if (Program.ffrsplevel < 8) { ffrbmtarget = 2; }
+                else if (Program.ffrsplevel < 3) { ffrbmtarget = 1; }
             }
 
             // Assigns the target byte
@@ -1014,7 +992,10 @@ namespace ffr_spellbinder
                 if (ffrbmtarget < 2)
                 {
                     ffrbmTargByte = 3;
-                    if (ffrspellbinding == true) { ffrbmaccuracy++; }
+                    if (Program.ffrspellbinding == true) { 
+                        if (ffrbmTypeByte == 1) { ffrbmaccuracy++; }
+                        ffrbmaccuracy++;
+                    }
                 }
                 else { ffrbmTargByte = 4; }
             }
@@ -1026,7 +1007,18 @@ namespace ffr_spellbinder
             // Accuracy Balance
             // Defines the appropriate tiers of Accuracy for Spellbooks
             // Accuracy no longer caps
-            if (ffrspellbinding == true)
+            if (Program.ffrspellbinding == true && (ffrbmTypeByte != 3 || PowerOf2.Divide(ffrbmEffByte-4) == false))
+            {
+                switch (ffrbmElemByte) // Set element penalties and bonuses
+                {
+                    case 2: ffrbmaccuracy += 2; break;
+                    case 4: ffrbmaccuracy--; break;
+                    case 8: ffrbmaccuracy--; break;
+                    case 128: ffrbmaccuracy += 2; break;
+                    default: break;
+                }
+            }
+            if (Program.ffrspellbinding == true)
             {
                 if (ffrbmaccuracy < 1) { ffrbmaccuracy = 1; }
                 switch (ffrbmaccuracy)
@@ -1062,25 +1054,25 @@ namespace ffr_spellbinder
 
             #region EnemyCheck
             // Prevents Confusion and Fear from landing in slots enemies use
-            if ((ffrspflags.IndexOf("e") != -1) && (ffrspreroll < 5))
+            if ((Program.ffrspflags.IndexOf("e") != -1) && (Program.ffrspreroll < 5))
             {
-                // if (L isincs % ffrspflags) { write - i SpellLog.txt Flag "e" is evaluating this spell.Reroll counter is at % ffrspreroll of 5 }
+                // if (L isincs % Program.ffrspflags) { write - i SpellLog.txt Flag "e" is evaluating this spell.Reroll counter is at % Program.ffrspreroll of 5 }
                 if ((ffrbmeffect == 2) && (ffrbmalter == 1) && ((ffrbmdebuff == 6) || (ffrbmdebuff == 9)))
                 {
                     string ffrbmEnemyReject = "Debug: Bounced CONF or FEAR during spellbinding";
-                    if ((ffrsplevel == 1) || (ffrsplevel == 5) || (ffrsplevel == 8)) { colors.echo(11, ffrbmEnemyReject); goto blackmagic; }
-                    else if (((ffrsplevel == 4) || (ffrsplevel == 6) || (ffrsplevel == 7)) && (ffrspslot != 3)) { colors.echo(11, ffrbmEnemyReject); goto blackmagic; }
-                    else if ((ffrsplevel == 2) && ((ffrspslot == 2) || (ffrspslot == 4))) { colors.echo(11, ffrbmEnemyReject); goto blackmagic; }
-                    else if ((ffrsplevel == 3) && (ffrspslot != 4)) { colors.echo(11, ffrbmEnemyReject); goto blackmagic; }
+                    if ((Program.ffrsplevel == 1) || (Program.ffrsplevel == 5) || (Program.ffrsplevel == 8)) { colors.echo(11, ffrbmEnemyReject); goto blackmagic; }
+                    else if (((Program.ffrsplevel == 4) || (Program.ffrsplevel == 6) || (Program.ffrsplevel == 7)) && (Program.ffrspslot != 3)) { colors.echo(11, ffrbmEnemyReject); goto blackmagic; }
+                    else if ((Program.ffrsplevel == 2) && ((Program.ffrspslot == 2) || (Program.ffrspslot == 4))) { colors.echo(11, ffrbmEnemyReject); goto blackmagic; }
+                    else if ((Program.ffrsplevel == 3) && (Program.ffrspslot != 4)) { colors.echo(11, ffrbmEnemyReject); goto blackmagic; }
                 }
-                // if (L isincs % ffrspflags) { write - i SpellLog.txt Flag "e" has finished evaluating this spell. | write - i SpellLog.txt - }
+                // if (L isincs % Program.ffrspflags) { write - i SpellLog.txt Flag "e" has finished evaluating this spell. | write - i SpellLog.txt - }
             }
             #endregion EnemyCheck
             // Doesn't open the file when Spellbinding
             // because that would open 64 files
-            // Debug: if (% ffrspellbinding = 1) && (% ffrbmbuff = 14) { / run WhiteSpell.txt | halt }
+            // Debug: if (% Program.ffrspellbinding = 1) && (% ffrbmbuff = 14) { / run WhiteSpell.txt | halt }
             //  if ($read(WhiteSpell.txt, w, *resist *)) { echo 8 - s Resist ID: % ffrbmbuff }
-            //  if (% ffrbmaccsay > 64) { set % ffrspredharm 1 }
+            //  if (% ffrbmaccsay > 64) { set % Program.ffrspredharm 1 }
             //  if (% ffrnowrite != 1) { / run WhiteSpell.txt | unset % ffr * }
 
             Console.WriteLine();
@@ -1091,13 +1083,14 @@ namespace ffr_spellbinder
             if (ffrbmaccskip == false) { colors.echo(9, $"Accuracy Byte: {ffrbmAccByte}"); }
 
             Console.WriteLine();
-            colors.echo(12, $"Magic Level: {ffrsplevel}");
-            colors.echo(12, $"Spell Slot: {ffrspslot}");
+            colors.echo(12, $"Magic Level: {Program.ffrsplevel}");
+            colors.echo(12, $"Spell Slot: {Program.ffrspslot}");
             colors.echo(12, $"Tier {ffrbmtier} Power");
             string ffrBlackSpell = $"{ffrbmTypeByte}_{ffrbmEffByte}_{ffrbmTargByte}_{ffrbmElemByte}_{ffrbmAccByte}";
 
             Console.WriteLine();
             colors.echo(0, $"Returned {ffrBlackSpell} to ffr-spellbinder");
+            Console.WriteLine();
             return ffrBlackSpell;
         }
     }
