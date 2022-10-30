@@ -11,7 +11,6 @@ namespace ffr_spellbinder
     internal class ffr_blackmagic
     {
         public static string ffrBlackSpell = "";
-        public static int ffrbmtier = 0;
         public static string BMag()
         {
             // Final Fantasy Randomizer Black Magic Generator. IRC Script by Linkshot. C# Port.
@@ -89,10 +88,10 @@ namespace ffr_spellbinder
             }
             else if (Program.ffrspellbinding == true)
             {
-                if (Program.ffrsplevel < 5) { ffrbmaccuracy = 5; ffrbmtier = 2; }
-                if (Program.ffrsplevel > 4) { ffrbmaccuracy = 7; ffrbmtier = 3; }
-                if (Program.ffrsplevel == 1) { ffrbmaccuracy = 4; ffrbmtier = 1; }
-                if (Program.ffrsplevel == 8) { ffrbmaccuracy = 9; ffrbmtier = 4; }
+                if (Program.ffrsplevel < 5) { ffrbmaccuracy = 5; Program.ffrsptier = 2; }
+                if (Program.ffrsplevel > 4) { ffrbmaccuracy = 7; Program.ffrsptier = 3; }
+                if (Program.ffrsplevel == 1) { ffrbmaccuracy = 4; Program.ffrsptier = 1; }
+                if (Program.ffrsplevel == 8) { ffrbmaccuracy = 9; Program.ffrsptier = 4; }
                 // if (L isincs % Program.ffrspflags) { write - i SpellLog.txt Accuracy Change: Spellbinder has set the Accuracy Tier to % ffrbmaccuracy to match Level % Program.ffrsplevel | write - i SpellLog.txt - }
             }
             else
@@ -174,10 +173,10 @@ namespace ffr_spellbinder
                         else if (Program.ffrsplevel < 8) { ffrbmaccuracy = 5; }
                     }
                     else { if (ffrbmtarget == 1) { ffrbmstrength = ffrbmstrength * blackDice.Next(100, 151) / 100; } }
-                    if (Enumerable.Range(30, 20).Contains((int)ffrbmstrength)) { ffrbmtier = 2; }
-                    else if (Enumerable.Range(50, 50).Contains((int)ffrbmstrength)) { ffrbmtier = 3; }
-                    else if (ffrbmstrength >= 100) { ffrbmtier = 4; }
-                    else { ffrbmtier = 1; }
+                    if (Enumerable.Range(30, 20).Contains((int)ffrbmstrength)) { Program.ffrsptier = 2; }
+                    else if (Enumerable.Range(50, 50).Contains((int)ffrbmstrength)) { Program.ffrsptier = 3; }
+                    else if (ffrbmstrength >= 100) { Program.ffrsptier = 4; }
+                    else { Program.ffrsptier = 1; }
                 }
             }
             #endregion Violence
@@ -354,19 +353,19 @@ namespace ffr_spellbinder
                         if (Program.ffrspellbinding == true)
                         {
                             ffrbmaccuracy -= 2;
-                            if (Program.ffrsplevel > 6) { ffrbmstrength = 40 + (blackDice.Next(0, 4) * 8); ffrbmtier = 4; }
+                            if (Program.ffrsplevel > 6) { ffrbmstrength = 40 + (blackDice.Next(0, 4) * 8); Program.ffrsptier = 4; }
                             else
                             {
                                 ffrbmstrength = (int)(Program.ffrsplevel + 1) * 5;
-                                if (ffrbmstrength < 40) { ffrbmtier = 3; }
-                                if (ffrbmstrength < 30) { ffrbmtier = 2; }
-                                if (ffrbmstrength < 20) { ffrbmtier = 1; }
+                                if (ffrbmstrength < 40) { Program.ffrsptier = 3; }
+                                if (ffrbmstrength < 30) { Program.ffrsptier = 2; }
+                                if (ffrbmstrength < 20) { Program.ffrsptier = 1; }
                             }
                         }
                         switch (ffrbmelement)
                         {
                             case 1: break;
-                            case 4: ffrbmstrength = (int)Math.Floor(ffrbmstrength * 1.2); break;
+                            case 4: break;
                             case 5: break;
                             case 8: break;
                             default: ffrbmElemByte = 0; break;
@@ -381,11 +380,11 @@ namespace ffr_spellbinder
                         if (Program.ffrspellbinding == true)
                         {
                             ffrbmaccuracy += 4;
-                            if (Program.ffrsplevel == 8) { ffrbmstrength = 160 + (blackDice.Next(0, 3) * 40); ffrbmtier = 4; }
+                            if (Program.ffrsplevel == 8) { ffrbmstrength = 160 + (blackDice.Next(0, 3) * 40); Program.ffrsptier = 4; }
                             else { ffrbmstrength = (int)Program.ffrsplevel * 20; }
-                            if (ffrbmstrength < 160) { ffrbmtier = 3; }
-                            if (ffrbmstrength < 100) { ffrbmtier = 2; }
-                            if (ffrbmstrength < 60) { ffrbmtier = 1; }
+                            if (ffrbmstrength < 160) { Program.ffrsptier = 3; }
+                            if (ffrbmstrength < 100) { Program.ffrsptier = 2; }
+                            if (ffrbmstrength < 60) { Program.ffrsptier = 1; }
                         }
                         switch (ffrbmelement)
                         {
@@ -396,7 +395,7 @@ namespace ffr_spellbinder
                             default: ffrbmElemByte = 0; break;
                         }
                         // write - al3 BlackSpell.txt Effect: Locked
-                        ffrbmTypeByte = 12;
+                        ffrbmTypeByte = 14;
                     }
                     #endregion Locked
                     #region Dispel
@@ -412,7 +411,7 @@ namespace ffr_spellbinder
                             default: if (Program.ffrspellbinding == true) ffrbmaccuracy -= 2; ffrbmElemByte = 0; break;
                         }
                         // write - al3 BlackSpell.txt Effect: Dispel
-                        ffrbmTypeByte = 15;
+                        ffrbmTypeByte = 17;
                     }
                     #endregion Dispel
 
@@ -420,10 +419,10 @@ namespace ffr_spellbinder
                     // Power Word Processing
                     else if (ffrbmdebuff == 12)
                     {
-                        ffrbmTypeByte = 16;
-                        ffrbmTargByte = 3;
+                        ffrbmTypeByte = 18;
+                        ffrbmTargByte = 2;
                         ffrbmaccskip = true;
-                        if ((Program.ffrspellbinding == true) && (Program.ffrsplevel < 6)) { colors.echo(13, $"Debug: Bounced a Power Word before Level 6"); goto blackmagic; }
+                        if ((Program.ffrspellbinding == true) && (Program.ffrsplevel < 6)) { colors.echo(11, $"Debug: Bounced a Power Word before Level 6"); goto blackmagic; }
                         if (ffrbmafflict == 9) // Power Word "Weaken"
                         {
                             switch (ffrbmelement)
@@ -507,6 +506,7 @@ namespace ffr_spellbinder
                         {
                             colors.echo(4, $"Value {ffrbmafflict} out of range for Power Words"); return "Spell Failed";
                         }
+                        goto targetjump;
                     }
                     #endregion PowerWords
                     else
@@ -527,13 +527,13 @@ namespace ffr_spellbinder
                     if (ffrbmbuff == 1) // "Absorb Up"
                     {
                         ffrbmtarget = 2;
-                        ffrbmTypeByte = 8;
+                        ffrbmTypeByte = 9;
                         if (Program.ffrspellbinding == true)
                         {
-                            if (Program.ffrsplevel == 8) { ffrbmstrength = 24; ffrbmtier = 4; }
-                            if (Program.ffrsplevel < 8) { ffrbmstrength = 16; ffrbmtier = 3; }
-                            if (Program.ffrsplevel < 5) { ffrbmstrength = 12; ffrbmtier = 2; }
-                            if (Program.ffrsplevel < 3) { ffrbmstrength = 8; ffrbmtier = 1; }
+                            if (Program.ffrsplevel == 8) { ffrbmstrength = 24; Program.ffrsptier = 4; }
+                            if (Program.ffrsplevel < 8) { ffrbmstrength = 16; Program.ffrsptier = 3; }
+                            if (Program.ffrsplevel < 5) { ffrbmstrength = 12; Program.ffrsptier = 2; }
+                            if (Program.ffrsplevel < 3) { ffrbmstrength = 8; Program.ffrsptier = 1; }
                         }
                         else { ffrbmstrength = (int)Math.Ceiling(ffrbmstrength * blackDice.Next(8, 12) / 10); }
                     }
@@ -541,7 +541,7 @@ namespace ffr_spellbinder
                     else if (ffrbmbuff == 2)
                     {
                         ffrbmstrskip = true;
-                        ffrbmTypeByte = 9;
+                        ffrbmTypeByte = 10;
                         if (((Program.ffrspellbinding == true) && (Enumerable.Range(2, 3).Contains((int)Program.ffrsplevel))) || ((Program.ffrspellbinding == false) && (Enumerable.Range(10, 15).Contains((int)ffrbmstrength)))) { ffrbmtarget = 2; }
                         else { ffrbmtarget = 1; }
                         if (((Program.ffrspellbinding == true) && (Program.ffrsplevel == 8)) || ((Program.ffrspellbinding == false) && (blackDice.Next(1, 9) == 8)))
@@ -742,16 +742,16 @@ namespace ffr_spellbinder
                             if (Program.ffrspellbinding == true)
                             {
                                 ffrbmregmod = Program.ffrsplevel;
-                                if (Program.ffrsplevel < 7) { ffrbmtier = 3; }
-                                else { ffrbmTypeByte = 13; }
-                                if (Program.ffrsplevel < 5) { ffrbmtier = 2; }
-                                if (Program.ffrsplevel < 3) { ffrbmtier = 1; }
+                                if (Program.ffrsplevel < 7) { Program.ffrsptier = 3; }
+                                else { ffrbmTypeByte = 15; }
+                                if (Program.ffrsplevel < 5) { Program.ffrsptier = 2; }
+                                if (Program.ffrsplevel < 3) { Program.ffrsptier = 1; }
                             }
                             ffrbmstrength = (double)Math.Floor((double)Math.Pow(blackDice.Next(18, 23) / 10, (blackDice.Next(25, 41) / 10 + ffrbmregmod / 2)) + (ffrbmregmod - 1) / 2);
                             if (Program.ffrspellbinding == false)
                             {
-                                ffrbmtier = (int)Math.Ceiling(ffrbmstrength / blackDice.Next(32, 65));
-                                if (ffrbmtier > 3) { colors.echo(7, $"Regen Power: {ffrbmstrength}"); }
+                                Program.ffrsptier = (int)Math.Ceiling(ffrbmstrength / blackDice.Next(32, 65));
+                                if (Program.ffrsptier > 3) { colors.echo(7, $"Regen Power: {ffrbmstrength}"); }
                             }
                         }
                         if (ffrbmresmagic == true)
@@ -814,7 +814,7 @@ namespace ffr_spellbinder
                             switch (ffrbmresist)
                             {
                                 case "Status": ffrbmEffByte = 1; break;
-                                case "Poison / Stone": ffrbmEffByte = 2; break;
+                                case "Poison/Stone": ffrbmEffByte = 2; break;
                                 case "Time": ffrbmEffByte = 4; break;
                                 case "Death": ffrbmEffByte = 8; break;
                                 case "Fire": ffrbmEffByte = 16; break;
@@ -835,22 +835,22 @@ namespace ffr_spellbinder
                         else if (((Program.ffrspellbinding == true) && (Program.ffrsplevel > 7)) || ((Program.ffrspellbinding == false) && (ffrbmstrength >= 40))) { ffrbmtarget = 3; }
                         else { ffrbmtarget = 2; }
                         ffrbmstrskip = true;
-                        ffrbmTypeByte = 10;
+                        ffrbmTypeByte = 12;
                         // However, Black Magic likes to hurt things
                         // FAST hurts things. A lot.
                     }
                     else if (ffrbmbuff == 4) // Attack Up
                     {
-                        ffrbmTypeByte = 11;
+                        ffrbmTypeByte = 13;
                         if (ffrbmtarget > 1)
                         {
                             if (Program.ffrspellbinding == true)
                             {
                                 ffrbmstrength = (int)Math.Floor(Program.ffrsplevel * 3 + blackDice.Next(3, 6));
-                                if (ffrbmstrength < 27) { ffrbmtier = 3; }
-                                else { ffrbmtier = 4; }
-                                if (ffrbmstrength < 18) { ffrbmtier = 2; }
-                                if (ffrbmstrength < 12) { ffrbmtier = 1; }
+                                if (ffrbmstrength < 27) { Program.ffrsptier = 3; }
+                                else { Program.ffrsptier = 4; }
+                                if (ffrbmstrength < 18) { Program.ffrsptier = 2; }
+                                if (ffrbmstrength < 12) { Program.ffrsptier = 1; }
                             }
                             else { ffrbmstrength = blackDice.Next(5, 20) + blackDice.Next(1, 11); }
                             if (blackDice.Next(1, 21) > blackDice.Next(1, 51))
@@ -869,10 +869,10 @@ namespace ffr_spellbinder
                             if (Program.ffrspellbinding == true)
                             {
                                 ffrbmstrength = (int)Math.Floor(Math.Pow(2, (1.5 + Program.ffrsplevel / 2)) + (9 - Program.ffrsplevel) + Program.ffrsplevel / 2);
-                                if (ffrbmstrength < 50) { ffrbmtier = 3; }
-                                else { ffrbmtier = 4; }
-                                if (ffrbmstrength < 22) { ffrbmtier = 2; }
-                                if (ffrbmstrength < 15) { ffrbmtier = 1; }
+                                if (ffrbmstrength < 50) { Program.ffrsptier = 3; }
+                                else { Program.ffrsptier = 4; }
+                                if (ffrbmstrength < 22) { Program.ffrsptier = 2; }
+                                if (ffrbmstrength < 15) { Program.ffrsptier = 1; }
                             }
                             else { ffrbmstrength = blackDice.Next(5, 50); }
                         }
@@ -882,13 +882,13 @@ namespace ffr_spellbinder
                     else if (ffrbmbuff == 5) // Evade Up
                     {
                         ffrbmtarget = 2;
-                        ffrbmTypeByte = 14;
+                        ffrbmTypeByte = 16;
                         if (Program.ffrspellbinding == true)
                         {
-                            if (Program.ffrsplevel == 8) { ffrbmstrength = 80; ffrbmtier = 4; }
-                            if (Program.ffrsplevel < 8) { ffrbmstrength = 60; ffrbmtier = 3; }
-                            if (Program.ffrsplevel < 5) { ffrbmstrength = 40; ffrbmtier = 2; }
-                            if (Program.ffrsplevel < 3) { ffrbmstrength = 30; ffrbmtier = 1; }
+                            if (Program.ffrsplevel == 8) { ffrbmstrength = 80; Program.ffrsptier = 4; }
+                            if (Program.ffrsplevel < 8) { ffrbmstrength = 60; Program.ffrsptier = 3; }
+                            if (Program.ffrsplevel < 5) { ffrbmstrength = 40; Program.ffrsptier = 2; }
+                            if (Program.ffrsplevel < 3) { ffrbmstrength = 30; Program.ffrsptier = 1; }
                         }
                         else { ffrbmstrength = (int)Math.Floor(ffrbmstrength * blackDice.Next(10, 19) / 10); }
                     }
@@ -913,16 +913,21 @@ namespace ffr_spellbinder
             {
                 if (ffrbmohko < 4)
                 {
-                    blackohko:
-                    switch (ffrbmelement)
+                    if (Program.ffrspflags.IndexOf("k") == -1 || ffrbmstrength >= 50) // should allow rejected instakills to hold onto their element
                     {
-                        case 0: if (blackDice.Next(1, 11) < 10) ffrbmElemByte = 128; break;
-                        case 1: ffrbmElemByte = 2; ffrbmEffByte = 2; if (Program.ffrspellbinding == true) ffrbmaccuracy++; break;
-                        case 5: if (blackDice.Next(1, 5) < 4) ffrbmElemByte = 8; break;
-                        case 6: if (blackDice.Next(1, 5) < 4) { ffrbmelement = blackDice.Next(1,3); goto blackohko; }; if (Program.ffrspellbinding == true) ffrbmaccuracy++; ffrbmEffByte = 2; break;
-                        case 7: if (blackDice.Next(1, 5) < 4) ffrbmElemByte = 4; break;
-                        default: break;
+                    blackohko:
+                        switch (ffrbmelement)
+                        {
+                            case 0: if (blackDice.Next(1, 11) < 10) ffrbmElemByte = 128; break;
+                            case 1: ffrbmElemByte = 2; ffrbmEffByte = 2; if (Program.ffrspellbinding == true) ffrbmaccuracy++; break;
+                            case 2: ffrbmElemByte = 2; break;
+                            case 5: if (blackDice.Next(1, 5) < 4) ffrbmElemByte = 8; break;
+                            case 6: if (blackDice.Next(1, 5) < 4) { ffrbmelement = blackDice.Next(1, 3); goto blackohko; }; if (Program.ffrspellbinding == true) ffrbmaccuracy++; ffrbmEffByte = 2; break;
+                            case 7: if (blackDice.Next(1, 5) < 4) ffrbmElemByte = 4; break;
+                            default: break;
+                        }
                     }
+                    else { colors.echo(11, $"Debug: Changed Instakill at Level {Program.ffrsplevel} to Damage"); }
                 }
                 else
                 {
@@ -947,7 +952,6 @@ namespace ffr_spellbinder
                             case 0: if (Program.ffrspellbinding == true) ffrbmaccuracy++; break;
                             case 1: ffrbmElemByte = 64; ffrbmelement = 7; break;
                             case 3: ffrbmElemByte = 32; ffrbmelement = 6; break;
-                            case 4: ffrbmstrength = ffrbmstrength * 1.2; break;
                             case 8: ffrbmElemByte = 16; ffrbmelement = 5; break;
                             default: break;
                         }
@@ -973,8 +977,11 @@ namespace ffr_spellbinder
 
             if (ffrbmb2 == true)
             {
-                if (Program.ffrsplevel < 8) { ffrbmtarget = 2; }
-                else if (Program.ffrsplevel < 3) { ffrbmtarget = 1; }
+                switch ((int)Program.ffrsplevel, Program.ffrspslot)
+                {
+                    case (1, 1 or 4) or (2 , 1) or (3 , 1 or 3) or (4 , 4): ffrbmtarget = 1; break;
+                    case (5 or 6 or 7, 1): ffrbmtarget = 2; break;
+                }
             }
 
             // Assigns the target byte
@@ -983,22 +990,22 @@ namespace ffr_spellbinder
             // Because only TMPR and FAST and target all allies
         barrskip:
             if ((ffrbmeffect == 2) && (ffrbmtarget == 3)) {
-                ffrbmTargByte = 2;
+                ffrbmTargByte = 8;
                 goto targetjump;
             }
         if ((ffrbmeffect == 1) || (ffrbmalter == 1))
             {
                 if (ffrbmtarget < 2)
                 {
-                    ffrbmTargByte = 3;
+                    ffrbmTargByte = 2;
                     if (Program.ffrspellbinding == true) { 
                         if (ffrbmTypeByte == 1) { ffrbmaccuracy++; }
                         ffrbmaccuracy++;
                     }
                 }
-                else { ffrbmTargByte = 4; }
+                else { ffrbmTargByte = 1; }
             }
-        else { ffrbmTargByte = (ffrbmtarget == 1) ? 0 : 1; }
+        else { ffrbmTargByte = (ffrbmtarget == 1) ? 4 : 16; }
             #endregion Target
             #region Accuracy
         targetjump: // Just making sure All Allies doesn't get erased
@@ -1012,7 +1019,7 @@ namespace ffr_spellbinder
                 {
                     case 2: ffrbmaccuracy += 2; break;
                     case 4: ffrbmaccuracy--; break;
-                    case 8: ffrbmaccuracy--; break;
+                    case 8: ffrbmaccuracy--; ffrbmstrength = (int)Math.Floor(ffrbmstrength * 1.2); break;
                     case 128: ffrbmaccuracy += 2; break;
                     default: break;
                 }
@@ -1075,17 +1082,17 @@ namespace ffr_spellbinder
             //  if (% ffrnowrite != 1) { / run WhiteSpell.txt | unset % ffr * }
 
             Console.WriteLine();
-            colors.echo(9, $"Type Byte: {ffrbmTypeByte}");
-            if (ffrbmEffByte != 0) { colors.echo(9, $"Effect Byte: {ffrbmEffByte}"); }
-            colors.echo(9, $"Target Byte: {ffrbmTargByte}");
-            colors.echo(9, $"Element Byte: {ffrbmElemByte}");
             if (ffrbmaccskip == false) { colors.echo(9, $"Accuracy Byte: {ffrbmAccByte}"); }
+            if (ffrbmEffByte != 0) { colors.echo(9, $"Effect Byte: {ffrbmEffByte}"); }
+            colors.echo(9, $"Element Byte: {ffrbmElemByte}");
+            colors.echo(9, $"Target Byte: {ffrbmTargByte}");
+            colors.echo(9, $"Type Byte: {ffrbmTypeByte}");
 
             Console.WriteLine();
             colors.echo(12, $"Magic Level: {Program.ffrsplevel}");
             colors.echo(12, $"Spell Slot: {Program.ffrspslot}");
-            colors.echo(12, $"Tier {ffrbmtier} Power");
-            string ffrBlackSpell = $"{ffrbmTypeByte}_{ffrbmEffByte}_{ffrbmTargByte}_{ffrbmElemByte}_{ffrbmAccByte}";
+            colors.echo(12, $"Tier {Program.ffrsptier} Power");
+            string ffrBlackSpell = $"{ffrbmAccByte}.{ffrbmEffByte}_{ffrbmElemByte}-{ffrbmTargByte}~{ffrbmTypeByte}";
 
             Console.WriteLine();
             colors.echo(0, $"Returned {ffrBlackSpell} to ffr-spellbinder");

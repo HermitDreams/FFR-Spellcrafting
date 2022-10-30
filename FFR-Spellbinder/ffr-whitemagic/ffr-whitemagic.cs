@@ -8,7 +8,6 @@ namespace ffr_spellbinder
     internal class ffr_whitemagic
     {
         public static string ffrWhiteSpell = "";
-        public static int ffrwmtier = 0;
         public static string WMag()
         {
             // Final Fantasy Randomizer White Magic Generator. IRC Script by Linkshot. C# Port.
@@ -75,10 +74,10 @@ namespace ffr_spellbinder
             }
             else if (Program.ffrspellbinding == true)
             {
-                if (Program.ffrsplevel < 5) { ffrwmaccuracy = 5; ffrwmtier = 2; }
-                if (Program.ffrsplevel > 4) { ffrwmaccuracy = 7; ffrwmtier = 3; }
-                if (Program.ffrsplevel == 1) { ffrwmaccuracy = 4; ffrwmtier = 1; }
-                if (Program.ffrsplevel == 8) { ffrwmaccuracy = 9; ffrwmtier = 4; }
+                if (Program.ffrsplevel < 5) { ffrwmaccuracy = 5; Program.ffrsptier = 2; }
+                if (Program.ffrsplevel > 4) { ffrwmaccuracy = 7; Program.ffrsptier = 3; }
+                if (Program.ffrsplevel == 1) { ffrwmaccuracy = 4; Program.ffrsptier = 1; }
+                if (Program.ffrsplevel == 8) { ffrwmaccuracy = 9; Program.ffrsptier = 4; }
                 // if (L isincs % Program.ffrspflags) { write - i SpellLog.txt Accuracy Change: Spellbinder has set the Accuracy Tier to % ffrwmaccuracy to match Level % Program.ffrsplevel | write - i SpellLog.txt - }
             }
             else
@@ -252,10 +251,10 @@ namespace ffr_spellbinder
                 else { if (ffrwmenemies == 1) { ffrwmstrength = ffrwmstrength * whiteDice.Next(100, 151) / 100; } }
                 ffrwmstrength = Convert.ToInt32(Math.Floor(ffrwmstrength * 0.8));
                 if (ffrwmstrength == 96) { ffrwmstrength += 4; }
-                if (Enumerable.Range(24, 16).Contains((int)ffrwmstrength)) { ffrwmtier = 2; }
-                else if (Enumerable.Range(40, 40).Contains((int)ffrwmstrength)) { ffrwmtier = 3; }
-                else if (ffrwmstrength >= 80) { ffrwmtier = 4; }
-                else { ffrwmtier = 1; }
+                if (Enumerable.Range(24, 16).Contains((int)ffrwmstrength)) { Program.ffrsptier = 2; }
+                else if (Enumerable.Range(40, 40).Contains((int)ffrwmstrength)) { Program.ffrsptier = 3; }
+                else if (ffrwmstrength >= 80) { Program.ffrsptier = 4; }
+                else { Program.ffrsptier = 1; }
             }
             #endregion
             #region Prejudice
@@ -270,10 +269,10 @@ namespace ffr_spellbinder
                     if (Program.ffrsplevel == 8) { ffrwmstrength = 100; }
                     else { ffrwmstrength = (int)(Program.ffrsplevel + 1) * 10; }
                 }
-                if (ffrwmstrength > 30) { ffrwmtier = 2; }
-                else { ffrwmtier = 1; }
-                if (ffrwmstrength > 50) { ffrwmtier = 3; }
-                if (ffrwmstrength > 70) { ffrwmtier = 4; }
+                if (ffrwmstrength > 30) { Program.ffrsptier = 2; }
+                else { Program.ffrsptier = 1; }
+                if (ffrwmstrength > 50) { Program.ffrsptier = 3; }
+                if (ffrwmstrength > 70) { Program.ffrsptier = 4; }
             }
             #endregion
             #region EffectNameCleanup
@@ -371,13 +370,13 @@ namespace ffr_spellbinder
                 {
                     if (Program.ffrspellbinding == true)
                     {
-                        if (Program.ffrsplevel > 6) { ffrwmstrength = 40 + (whiteDice.Next(0, 4) * 8); ffrwmtier = 4; }
+                        if (Program.ffrsplevel > 6) { ffrwmstrength = 40 + (whiteDice.Next(0, 4) * 8); Program.ffrsptier = 4; }
                         else
                         {
                             ffrwmstrength = (int)(Program.ffrsplevel + 1) * 5;
-                            if (ffrwmstrength < 40) { ffrwmtier = 3; }
-                            if (ffrwmstrength < 30) { ffrwmtier = 2; }
-                            if (ffrwmstrength < 20) { ffrwmtier = 1; }
+                            if (ffrwmstrength < 40) { Program.ffrsptier = 3; }
+                            if (ffrwmstrength < 30) { Program.ffrsptier = 2; }
+                            if (ffrwmstrength < 20) { Program.ffrsptier = 1; }
                         }
                     }
                     // write - al3 WhiteSpell.txt Effect: Fear
@@ -388,14 +387,14 @@ namespace ffr_spellbinder
                     if (Program.ffrspellbinding == true)
                     {
                         ffrwmaccuracy += 2;
-                        if (Program.ffrsplevel == 8) { ffrwmstrength = 160 + (whiteDice.Next(0, 3) * 40); ffrwmtier = 4; }
+                        if (Program.ffrsplevel == 8) { ffrwmstrength = 160 + (whiteDice.Next(0, 3) * 40); Program.ffrsptier = 4; }
                         else { ffrwmstrength = (int)Program.ffrsplevel * 20; }
-                        if (ffrwmstrength < 160) { ffrwmtier = 3; }
-                        if (ffrwmstrength < 100) { ffrwmtier = 2; }
-                        if (ffrwmstrength < 60) { ffrwmtier = 1; }
+                        if (ffrwmstrength < 160) { Program.ffrsptier = 3; }
+                        if (ffrwmstrength < 100) { Program.ffrsptier = 2; }
+                        if (ffrwmstrength < 60) { Program.ffrsptier = 1; }
                     }
                     // write - al3 WhiteSpell.txt Effect: Locked
-                    ffrwmTypeByte = 12;
+                    ffrwmTypeByte = 14;
                 }
                 else if (ffrwmdebuff == 9)
                 {
@@ -406,14 +405,14 @@ namespace ffr_spellbinder
                         if (ffrwmelement != 0) { ffrwmaccuracy += 2; }
                     }
                     // write - al3 WhiteSpell.txt Effect: Stripped
-                    ffrwmTypeByte = 15;
+                    ffrwmTypeByte = 17;
                 }
                 #region PowerWords
                 // Power Word Processing
                 else if (ffrwmdebuff == 10)
                 {
-                    ffrwmTypeByte = 16;
-                    ffrwmTargByte = 3;
+                    ffrwmTypeByte = 18;
+                    ffrwmTargByte = 2;
                     ffrwmaccskip = true;
                 wmpword:
                     if ((Program.ffrspellbinding == true) && (Program.ffrsplevel < 6)) { colors.echo(13, $"Debug: Bounced a Power Word before Level 6"); goto whitemagic; }
@@ -427,7 +426,7 @@ namespace ffr_spellbinder
                             //write - al5 WhiteSpell.txt Target: Single Enemy
                             ffrwmEffByte = 1;
                             ffrwmElemByte = 131;
-                            ffrwmTargByte = 3;
+                            ffrwmTargByte = 2;
                             ffrwmspecial = true;
                         }
                         else { colors.echo(13, $"Debug: FROG failed... Making a new spell."); goto whitemagic; }
@@ -442,7 +441,7 @@ namespace ffr_spellbinder
                             //write - al5 WhiteSpell.txt Target: Single Ally
                             ffrwmEffByte = 2;
                             ffrwmElemByte = 2;
-                            ffrwmTargByte = 1;
+                            ffrwmTargByte = 16;
                             ffrwmspecial = true;
                         }
                         else { colors.echo(13, $"Debug: CAST failed... Making a new spell."); goto whitemagic; }
@@ -493,7 +492,7 @@ namespace ffr_spellbinder
                     // write - al5 WhiteSpell.txt Target: All Allies
                     ffrwmEffByte = 32;
                     ffrwmElemByte = 16;
-                    ffrwmTargByte = 2;
+                    ffrwmTargByte = 8;
                     ffrwmspecial = true;
                 }
                 else if ((ffrwmdebuff == 10) && (ffrwmafflict < 3)) { colors.echo(13, $"Debug: Element already set by Power Word"); }
@@ -548,7 +547,7 @@ namespace ffr_spellbinder
                     #region RemoveNegativeConditionEffect
                     if (ffrwmheal != 10)
                     {
-                        ffrwmTypeByte = 7;
+                        ffrwmTypeByte = 8;
                         if (Program.ffrspellbinding == true)
                         {
                             if ((Program.ffrsplevel > 6) && (ffrwmafflict > 2)) { ffrwmafflict = 0; }
@@ -608,6 +607,7 @@ namespace ffr_spellbinder
                             else
                             {
                                 // write - al3 WhiteSpell.txt Effect: Soften
+                                ffrwmEffByte = 2;
                                 if (Program.ffrsplevel < 7) { ffrwmallies = 2; }
                             }
                         }
@@ -686,7 +686,7 @@ namespace ffr_spellbinder
                             if ((Program.ffrsplevel == 8) && (whiteDice.Next(1, 21) >= whiteDice.Next(1, 81))) { ffrwmallies = 3; }
                         }
                         // write to file: "Effect: Full Restore"
-                        ffrwmTypeByte = 13;
+                        ffrwmTypeByte = 15;
                     }
                     #endregion
                 }
@@ -706,7 +706,7 @@ namespace ffr_spellbinder
                 {
                     ffrwmstrskip = true;
                     ffrwmallies = 3;
-                    ffrwmTypeByte = 9;
+                    ffrwmTypeByte = 10;
                     if (((Program.ffrspellbinding == true) && (Program.ffrsplevel == 8)) || (ffrwmbuff == 0))
                     {
                         if ((Program.ffrspellbinding == false) && (ffrwmstrength >= 80)) { ffrwmallies = 3; }
@@ -985,12 +985,12 @@ namespace ffr_spellbinder
                 else if (ffrwmbuff < 11)
                 {
                     // write - al3 WhiteSpell.txt Effect: Absorb Up
-                    ffrwmTypeByte = 8;
+                    ffrwmTypeByte = 9;
                 }
                 else if (ffrwmbuff < 13)
                 {
                     //write - al3 WhiteSpell.txt Effect: Evade Up
-                    ffrwmTypeByte = 14;
+                    ffrwmTypeByte = 16;
                 }
                 else if (ffrwmbuff == 13)
                 {
@@ -998,7 +998,7 @@ namespace ffr_spellbinder
                     if (ffrwmallies == 1)
                     {
                         // write - al3 WhiteSpell.txt Effect: Double Hits 
-                        ffrwmTypeByte = 10;
+                        ffrwmTypeByte = 12;
                     }
                     else { colors.echo(13, $"Debug: Bounced at HAST(Target was {ffrwmallies} instead of 1)"); goto whitemagic; }
                     // White FAST is only allowed to cast on self
@@ -1012,7 +1012,7 @@ namespace ffr_spellbinder
                     else if (ffrwmallies == 2) { ffrwmstrength = (int)Math.Floor(ffrwmstrength * 0.20); }
                     else { ffrwmstrength = (int)Math.Floor(ffrwmstrength * 0.25); }
                     //n769 = write - al3 WhiteSpell.txt Effect: Attack Up
-                    ffrwmTypeByte = 11;
+                    ffrwmTypeByte = 13;
                     // White TMPR is cut down in power by at least 75%
                 }
                 else
@@ -1086,12 +1086,12 @@ namespace ffr_spellbinder
                             ffrwmaccuracy++;
                         }
                         //n811 = write - al5 WhiteSpell.txt Target: Single Enemy
-                        ffrwmTargByte = 3;
+                        ffrwmTargByte = 2;
                     }
                     else if (ffrwmenemies == 2)
                     {
                         //write - al5 WhiteSpell.txt Target: Enemy Party
-                        ffrwmTargByte = 4;
+                        ffrwmTargByte = 1;
                     }
                     else { colors.echo(4, $"Value {ffrwmenemies} out of range for Enemy Target"); return "Spell Failed"; }
                 }
@@ -1103,43 +1103,43 @@ namespace ffr_spellbinder
                         else
                         {
                             //    n820 = write - al5 WhiteSpell.txt Target: Caster
-                            ffrwmTargByte = 0;
+                            ffrwmTargByte = 4;
                             #region SelfBuffPower
                             if (Program.ffrspellbinding == true)
                             {
-                                if (ffrwmTypeByte == 8)
+                                if (ffrwmTypeByte == 9)
                                 {
-                                    if (Program.ffrsplevel == 8) { ffrwmstrength = 64; ffrwmtier = 4; }
-                                    if (Program.ffrsplevel < 8) { ffrwmstrength = 32; ffrwmtier = 3; }
-                                    if (Program.ffrsplevel < 5) { ffrwmstrength = 24; ffrwmtier = 2; }
-                                    if (Program.ffrsplevel < 3) { ffrwmstrength = 16; ffrwmtier = 1; }
+                                    if (Program.ffrsplevel == 8) { ffrwmstrength = 64; Program.ffrsptier = 4; }
+                                    if (Program.ffrsplevel < 8) { ffrwmstrength = 32; Program.ffrsptier = 3; }
+                                    if (Program.ffrsplevel < 5) { ffrwmstrength = 24; Program.ffrsptier = 2; }
+                                    if (Program.ffrsplevel < 3) { ffrwmstrength = 16; Program.ffrsptier = 1; }
                                 }
-                                else if (ffrwmTypeByte == 14)
+                                else if (ffrwmTypeByte == 16)
                                 {
-                                    if (Program.ffrsplevel == 8) { ffrwmstrength = 240; ffrwmtier = 4; }
-                                    if (Program.ffrsplevel < 8) { ffrwmstrength = 120; ffrwmtier = 3; }
-                                    if (Program.ffrsplevel < 5) { ffrwmstrength = 80; ffrwmtier = 2; }
-                                    if (Program.ffrsplevel < 3) { ffrwmstrength = 60; ffrwmtier = 1; }
+                                    if (Program.ffrsplevel == 8) { ffrwmstrength = 240; Program.ffrsptier = 4; }
+                                    if (Program.ffrsplevel < 8) { ffrwmstrength = 120; Program.ffrsptier = 3; }
+                                    if (Program.ffrsplevel < 5) { ffrwmstrength = 80; Program.ffrsptier = 2; }
+                                    if (Program.ffrsplevel < 3) { ffrwmstrength = 60; Program.ffrsptier = 1; }
                                 }
-                                else if (ffrwmTypeByte == 11)
+                                else if (ffrwmTypeByte == 13)
                                 {
-                                    if (Program.ffrsplevel == 8) { ffrwmstrength = 16; ffrwmtier = 4; }
-                                    if (Program.ffrsplevel < 8) { ffrwmstrength = 12; ffrwmtier = 3; }
-                                    if (Program.ffrsplevel < 5) { ffrwmstrength = 10; ffrwmtier = 2; }
-                                    if (Program.ffrsplevel < 3) { ffrwmstrength = 8; ffrwmtier = 1; }
+                                    if (Program.ffrsplevel == 8) { ffrwmstrength = 16; Program.ffrsptier = 4; }
+                                    if (Program.ffrsplevel < 8) { ffrwmstrength = 12; Program.ffrsptier = 3; }
+                                    if (Program.ffrsplevel < 5) { ffrwmstrength = 10; Program.ffrsptier = 2; }
+                                    if (Program.ffrsplevel < 3) { ffrwmstrength = 8; Program.ffrsptier = 1; }
                                 }
                             }
-                            else if (ffrwmTypeByte == 14) { ffrwmstrength = ffrwmstrength * 2; }
+                            else if (ffrwmTypeByte == 16) { ffrwmstrength = ffrwmstrength * 2; }
                         }
                     }
                     #endregion
                     if (ffrwmallies == 2)
                     {
-                        if ((ffrwmTypeByte == 8) || (ffrwmTypeByte == 14)) { ffrwmallies++; }
+                        if ((ffrwmTypeByte == 9) || (ffrwmTypeByte == 16)) { ffrwmallies++; }
                         else
                         {
                             // write - al5 WhiteSpell.txt Target: Single Ally
-                            ffrwmTargByte = 1;
+                            ffrwmTargByte = 16;
                             #region CUREPower
                             if (ffrwmeffect == 4)
                             {
@@ -1152,9 +1152,9 @@ namespace ffr_spellbinder
                                     else { ffrwmstrength = whiteDice.Next(66, 185); }
                                 }
                                 else { ffrwmstrength = (int)Math.Floor(ffrwmstrength * 1.6); }
-                                if (ffrwmstrength > 32) { ffrwmtier = 2; }
-                                else { ffrwmtier = 1; }
-                                if (ffrwmstrength > 65) { ffrwmtier = 3; }
+                                if (ffrwmstrength > 32) { Program.ffrsptier = 2; }
+                                else { Program.ffrsptier = 1; }
+                                if (ffrwmstrength > 65) { Program.ffrsptier = 3; }
                             }
                             #endregion
                             #region BLESPower
@@ -1163,10 +1163,10 @@ namespace ffr_spellbinder
                                 if (Program.ffrspellbinding == true)
                                 {
                                     ffrwmaccuracy--;
-                                    if (Program.ffrsplevel == 8) { ffrwmstrength = 12; ffrwmtier = 4; }
-                                    if (Program.ffrsplevel < 8) { ffrwmstrength = 10; ffrwmtier = 3; }
-                                    if (Program.ffrsplevel < 5) { ffrwmstrength = 8; ffrwmtier = 2; }
-                                    if (Program.ffrsplevel < 3) { ffrwmstrength = 5; ffrwmtier = 1; }
+                                    if (Program.ffrsplevel == 8) { ffrwmstrength = 12; Program.ffrsptier = 4; }
+                                    if (Program.ffrsplevel < 8) { ffrwmstrength = 10; Program.ffrsptier = 3; }
+                                    if (Program.ffrsplevel < 5) { ffrwmstrength = 8; Program.ffrsptier = 2; }
+                                    if (Program.ffrsplevel < 3) { ffrwmstrength = 5; Program.ffrsptier = 1; }
                                 }
                             }
                             #endregion
@@ -1175,7 +1175,7 @@ namespace ffr_spellbinder
                     if (ffrwmallies == 3)
                     {
                         //n872 = write - al5 WhiteSpell.txt Target: All Allies
-                        ffrwmTargByte = 2;
+                        ffrwmTargByte = 8;
                         #region HEALPower
                         if (ffrwmeffect == 4)
                         {
@@ -1185,36 +1185,36 @@ namespace ffr_spellbinder
                                 else { ffrwmstrength = whiteDice.Next(48, 136); }
                             }
                             else { ffrwmstrength -= 4; }
-                            if (ffrwmstrength > 23) { ffrwmtier = 2; }
-                            else { ffrwmtier = 1; }
-                            if (ffrwmstrength > 47) { ffrwmtier = 3; }
+                            if (ffrwmstrength > 23) { Program.ffrsptier = 2; }
+                            else { Program.ffrsptier = 1; }
+                            if (ffrwmstrength > 47) { Program.ffrsptier = 3; }
                         }
                         #endregion
                         #region PartyBuffPower
                         else if ((ffrwmeffect == 5) && (Program.ffrspellbinding == true))
                         {
-                            if (ffrwmTypeByte == 8)
+                            if (ffrwmTypeByte == 9)
                             {
-                                if (Program.ffrsplevel == 8) { ffrwmstrength = 24; ffrwmtier = 4; }
-                                if (Program.ffrsplevel < 8) { ffrwmstrength = 16; ffrwmtier = 3; }
-                                if (Program.ffrsplevel < 5) { ffrwmstrength = 12; ffrwmtier = 2; }
-                                if (Program.ffrsplevel < 3) { ffrwmstrength = 8; ffrwmtier = 1; }
+                                if (Program.ffrsplevel == 8) { ffrwmstrength = 24; Program.ffrsptier = 4; }
+                                if (Program.ffrsplevel < 8) { ffrwmstrength = 16; Program.ffrsptier = 3; }
+                                if (Program.ffrsplevel < 5) { ffrwmstrength = 12; Program.ffrsptier = 2; }
+                                if (Program.ffrsplevel < 3) { ffrwmstrength = 8; Program.ffrsptier = 1; }
                             }
-                            else if (ffrwmTypeByte == 14)
+                            else if (ffrwmTypeByte == 16)
                             {
-                                if (Program.ffrsplevel == 8) { ffrwmstrength = 80; ffrwmtier = 4; }
-                                if (Program.ffrsplevel < 8) { ffrwmstrength = 60; ffrwmtier = 3; }
-                                if (Program.ffrsplevel < 5) { ffrwmstrength = 40; ffrwmtier = 2; }
-                                if (Program.ffrsplevel < 3) { ffrwmstrength = 30; ffrwmtier = 1; }
+                                if (Program.ffrsplevel == 8) { ffrwmstrength = 80; Program.ffrsptier = 4; }
+                                if (Program.ffrsplevel < 8) { ffrwmstrength = 60; Program.ffrsptier = 3; }
+                                if (Program.ffrsplevel < 5) { ffrwmstrength = 40; Program.ffrsptier = 2; }
+                                if (Program.ffrsplevel < 3) { ffrwmstrength = 30; Program.ffrsptier = 1; }
                             }
-                            else if (ffrwmTypeByte == 11)
+                            else if (ffrwmTypeByte == 13)
                             {
                                 ffrwmaccskip = false;
                                 ffrwmaccuracy -= 2;
-                                if (Program.ffrsplevel == 8) { ffrwmstrength = 10; ffrwmtier = 4; }
-                                if (Program.ffrsplevel < 8) { ffrwmstrength = 8; ffrwmtier = 3; }
-                                if (Program.ffrsplevel < 5) { ffrwmstrength = 5; ffrwmtier = 2; }
-                                if (Program.ffrsplevel < 3) { ffrwmstrength = 3; ffrwmtier = 1; }
+                                if (Program.ffrsplevel == 8) { ffrwmstrength = 10; Program.ffrsptier = 4; }
+                                if (Program.ffrsplevel < 8) { ffrwmstrength = 8; Program.ffrsptier = 3; }
+                                if (Program.ffrsplevel < 5) { ffrwmstrength = 5; Program.ffrsptier = 2; }
+                                if (Program.ffrsplevel < 3) { ffrwmstrength = 3; Program.ffrsptier = 1; }
                             }
                         }
                         #endregion
@@ -1270,17 +1270,17 @@ namespace ffr_spellbinder
             //  if (% ffrnowrite != 1) { / run WhiteSpell.txt | unset % ffr * }
 
             Console.WriteLine();
-            colors.echo(9, $"Type Byte: {ffrwmTypeByte}");
-            if (ffrwmEffByte != 0) { colors.echo(9, $"Effect Byte: {ffrwmEffByte}"); }
-            colors.echo(9, $"Target Byte: {ffrwmTargByte}");
-            colors.echo(9, $"Element Byte: {ffrwmElemByte}");
             if (ffrwmaccskip == false) { colors.echo(9, $"Accuracy Byte: {ffrwmAccByte}"); }
+            if (ffrwmEffByte != 0) { colors.echo(9, $"Effect Byte: {ffrwmEffByte}"); }
+            colors.echo(9, $"Element Byte: {ffrwmElemByte}");
+            colors.echo(9, $"Target Byte: {ffrwmTargByte}");
+            colors.echo(9, $"Type Byte: {ffrwmTypeByte}");
 
             Console.WriteLine();
             colors.echo(12, $"Magic Level: {Program.ffrsplevel}");
             colors.echo(12, $"Spell Slot: {Program.ffrspslot}");
-            colors.echo(12, $"Tier {ffrwmtier} Power");
-            ffrWhiteSpell = $"{ffrwmTypeByte}_{ffrwmEffByte}_{ffrwmTargByte}_{ffrwmElemByte}_{ffrwmAccByte}";
+            colors.echo(12, $"Tier {Program.ffrsptier} Power");
+            ffrWhiteSpell = $"{ffrwmAccByte}.{ffrwmEffByte}_{ffrwmElemByte}-{ffrwmTargByte}~{ffrwmTypeByte}";
 
             Console.WriteLine();
             colors.echo(0, $"Returned {ffrWhiteSpell} to ffr-spellbinder");
