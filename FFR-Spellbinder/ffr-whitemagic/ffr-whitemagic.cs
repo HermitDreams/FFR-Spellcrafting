@@ -690,7 +690,7 @@ namespace ffr_spellbinder
                     }
                     #endregion
                 }
-                else { ffrwmTypeByte = 6; }
+                else { ffrwmTypeByte = 7; }
             }
             #endregion
             #region Buffs

@@ -737,7 +737,7 @@ namespace ffr_spellbinder
                         else // Regeneration
                         {
                             ffrbmstrskip = false;
-                            ffrbmTypeByte = 6;
+                            ffrbmTypeByte = 7;
                             double ffrbmregmod = ffrbmstrength / 6;
                             if (Program.ffrspellbinding == true)
                             {
