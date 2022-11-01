@@ -546,18 +546,19 @@ namespace ffr_spellbinder
                         else { ffrbmtarget = 1; }
                         if (((Program.ffrspellbinding == true) && (Program.ffrsplevel == 8)) || ((Program.ffrspellbinding == false) && (blackDice.Next(1, 9) == 8)))
                         {
-                            if (Program.ffrspwall == false)
+                            if (Program.ffrspwall == 0)
                             {
-                                if (Program.ffrspresist > 4)
+                                if (Program.ffrspResistCount > 4)
                                 {
                                     colors.echo(4, $"Resists already capped! Rerolling.");
                                     goto blackmagic;
                                 }
-                                // set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend all
-                                Program.ffrspwall = true;
-                                Program.ffrspresist++;
+                                // set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend all
+                                Program.ffrspwall = Program.ffrspCurrentResist + 1;
+                                Program.ffrspResistCount++;
                             }
                             // write - a13 BlackSpell.txt Effect: Resist All
+                            Program.ffrspCurrentResist = Program.ffrspwall;
                             ffrbmEffByte = 255;
                             goto barrskip;
                         }
@@ -567,19 +568,19 @@ namespace ffr_spellbinder
                             if (((Program.ffrspellbinding == true) && (Program.ffrsplevel > 4)) || ((Program.ffrspellbinding == false) && (ffrbmstrength > 24))) { ffrbmresmagic = true; }
                             else
                             {
-                                if (Program.ffrspantiweak == false)
+                                if (Program.ffrspantiweak == 0)
                                 {
-                                    if (Program.ffrspresist > 4)
+                                    if (Program.ffrspResistCount > 4)
                                     {
                                         colors.echo(4, $"Resists already capped! Rerolling.");
                                         goto blackmagic;
                                     }
-                                    // else if (Program.ffrspresist == 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend hindrance }
-                                    // else if (Program.ffrspresist < 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend weak }
-                                    // else if (Program.ffrspresist == 4) { "Defend malus" }
-                                    // else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend psi }
-                                    Program.ffrspantiweak = true;
-                                    Program.ffrspresist++;
+                                    // else if (Program.ffrspResistCount == 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend hindrance }
+                                    // else if (Program.ffrspResistCount < 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend weak }
+                                    // else if (Program.ffrspResistCount == 4) { "Defend malus" }
+                                    // else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend psi }
+                                    Program.ffrspantiweak = Program.ffrspCurrentResist + 1;
+                                    Program.ffrspResistCount++;
                                 }
                             }
                         }
@@ -589,18 +590,18 @@ namespace ffr_spellbinder
                             if (((Program.ffrspellbinding == true) && (Program.ffrsplevel > 4)) || ((Program.ffrspellbinding == false) && (ffrbmstrength > 24))) { ffrbmresdecay = true; }
                             else
                             {
-                                if (Program.ffrspantibane == false)
+                                if (Program.ffrspantibane == 0)
                                 {
-                                    if (Program.ffrspresist > 4)
+                                    if (Program.ffrspResistCount > 4)
                                     {
                                         colors.echo(4, $"Resists already capped! Rerolling.");
                                         goto blackmagic;
                                     }
-                                    // n585 = elseif(% Program.ffrspresist = 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend poisonous }
-                                    // n586 = elseif(% Program.ffrspresist isnum 1 - 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend bane }
-                                    // n587 =            else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend gas }
-                                    Program.ffrspantibane = true;
-                                    Program.ffrspresist++;
+                                    // n585 = elseif(% Program.ffrspResistCount = 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend poisonous }
+                                    // n586 = elseif(% Program.ffrspResistCount isnum 1 - 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend bane }
+                                    // n587 =            else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend gas }
+                                    Program.ffrspantibane = Program.ffrspCurrentResist + 1;
+                                    Program.ffrspResistCount++;
                                 }
                             }
                         }
@@ -610,18 +611,18 @@ namespace ffr_spellbinder
                             if (((Program.ffrspellbinding == true) && (Program.ffrsplevel > 4)) || ((Program.ffrspellbinding == false) && (ffrbmstrength > 24))) { ffrbmresdecay = true; }
                             else
                             {
-                                if (Program.ffrspantizap == false)
+                                if (Program.ffrspantizap == 0)
                                 {
-                                    if (Program.ffrspresist > 4)
+                                    if (Program.ffrspResistCount > 4)
                                     {
                                         colors.echo(4, $"Resists already capped! Rerolling.");
                                         goto blackmagic;
                                     }
-                                    //n603 = elseif(% Program.ffrspresist = 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend dimension }
-                                    //n604 = elseif(% Program.ffrspresist isnum 1 - 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend time }
-                                    //n605 =            else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend age }
-                                    Program.ffrspantizap = true;
-                                    Program.ffrspresist++;
+                                    //n603 = elseif(% Program.ffrspResistCount = 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend dimension }
+                                    //n604 = elseif(% Program.ffrspResistCount isnum 1 - 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend time }
+                                    //n605 =            else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend age }
+                                    Program.ffrspantizap = Program.ffrspCurrentResist + 1;
+                                    Program.ffrspResistCount++;
                                 }
                             }
                         }
@@ -635,18 +636,18 @@ namespace ffr_spellbinder
                             }
                             else
                             {
-                                if (Program.ffrspantinecro == false)
+                                if (Program.ffrspantinecro == 0)
                                 {
-                                    if (Program.ffrspresist > 4)
+                                    if (Program.ffrspResistCount > 4)
                                     {
                                         colors.echo(4, $"Resists already capped! Rerolling.");
                                         goto blackmagic;
                                     }
-                                    //n621 = elseif(% Program.ffrspresist = 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend necrotic }
-                                    //n622 = elseif(% Program.ffrspresist isnum 1 - 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend evil }
-                                    //n623 =            else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend rub }
-                                    Program.ffrspantinecro = true;
-                                    Program.ffrspresist++;
+                                    //n621 = elseif(% Program.ffrspResistCount = 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend necrotic }
+                                    //n622 = elseif(% Program.ffrspResistCount isnum 1 - 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend evil }
+                                    //n623 =            else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend rub }
+                                    Program.ffrspantinecro = Program.ffrspCurrentResist + 1;
+                                    Program.ffrspResistCount++;
                                 }
                             }
                         }
@@ -656,18 +657,18 @@ namespace ffr_spellbinder
                             if (((Program.ffrspellbinding == true) && (Program.ffrsplevel > 4)) || ((Program.ffrspellbinding == false) && (ffrbmstrength > 24))) { ffrbmresdragon = true; }
                             else
                             {
-                                if (Program.ffrspantifire == false)
+                                if (Program.ffrspantifire == 0)
                                 {
-                                    if (Program.ffrspresist > 4)
+                                    if (Program.ffrspResistCount > 4)
                                     {
                                         colors.echo(4, $"Resists already capped! Rerolling.");
                                         goto blackmagic;
                                     }
-                                    //n642 = elseif(% Program.ffrspresist = 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend burning }
-                                    //n643 = elseif(% Program.ffrspresist isnum 1 - 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend fire }
-                                    //n644 =            else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend hot }
-                                    Program.ffrspantifire = true;
-                                    Program.ffrspresist++;
+                                    //n642 = elseif(% Program.ffrspResistCount = 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend burning }
+                                    //n643 = elseif(% Program.ffrspResistCount isnum 1 - 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend fire }
+                                    //n644 =            else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend hot }
+                                    Program.ffrspantifire = Program.ffrspCurrentResist + 1;
+                                    Program.ffrspResistCount++;
                                 }
                             }
                         }
@@ -677,18 +678,18 @@ namespace ffr_spellbinder
                             if (((Program.ffrspellbinding == true) && (Program.ffrsplevel > 4)) || ((Program.ffrspellbinding == false) && (ffrbmstrength > 24))) { ffrbmresdragon = true; }
                             else
                             {
-                                if (Program.ffrspantiice == false)
+                                if (Program.ffrspantiice == 0)
                                 {
-                                    if (Program.ffrspresist > 4)
+                                    if (Program.ffrspResistCount > 4)
                                     {
                                         colors.echo(4, $"Resists already capped! Rerolling.");
                                         goto blackmagic;
                                     }
-                                    //n660 = elseif(% Program.ffrspresist = 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend freezing }
-                                    //n661 = elseif(% Program.ffrspresist isnum 1 - 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend cold }
-                                    //n662 =            else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend ice }
-                                    Program.ffrspantiice = true;
-                                    Program.ffrspresist++;
+                                    //n660 = elseif(% Program.ffrspResistCount = 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend freezing }
+                                    //n661 = elseif(% Program.ffrspResistCount isnum 1 - 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend cold }
+                                    //n662 =            else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend ice }
+                                    Program.ffrspantiice = Program.ffrspCurrentResist + 1;
+                                    Program.ffrspResistCount++;
                                 }
                             }
                         }
@@ -698,18 +699,18 @@ namespace ffr_spellbinder
                             if (((Program.ffrspellbinding == true) && (Program.ffrsplevel > 4)) || ((Program.ffrspellbinding == false) && (ffrbmstrength > 24))) { ffrbmresdragon = true; }
                             else
                             {
-                                if (Program.ffrspantilightning == false)
+                                if (Program.ffrspantilightning == 0)
                                 {
-                                    if (Program.ffrspresist > 4)
+                                    if (Program.ffrspResistCount > 4)
                                     {
                                         colors.echo(4, $"Resists already capped! Rerolling.");
                                         goto blackmagic;
                                     }
-                                    //n678 = elseif(% Program.ffrspresist = 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend lightning }
-                                    //n679 = elseif(% Program.ffrspresist isnum 1 - 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend volt }
-                                    //n680 =            else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend ion }
-                                    Program.ffrspantilightning = true;
-                                    Program.ffrspresist++;
+                                    //n678 = elseif(% Program.ffrspResistCount = 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend lightning }
+                                    //n679 = elseif(% Program.ffrspResistCount isnum 1 - 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend volt }
+                                    //n680 =            else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend ion }
+                                    Program.ffrspantilightning = Program.ffrspCurrentResist + 1;
+                                    Program.ffrspResistCount++;
                                 }
                             }
                         }
@@ -719,18 +720,18 @@ namespace ffr_spellbinder
                             if (((Program.ffrspellbinding == true) && (Program.ffrsplevel > 4)) || ((Program.ffrspellbinding == false) && (ffrbmstrength > 24))) { ffrbmresmagic = true; }
                             else
                             {
-                                if (Program.ffrspantiquake == false)
+                                if (Program.ffrspantiquake == 0)
                                 {
-                                    if (Program.ffrspresist > 4)
+                                    if (Program.ffrspResistCount > 4)
                                     {
                                         colors.echo(4, $"Resists already capped! Rerolling.");
                                         goto blackmagic;
                                     }
-                                    //n696 = elseif(% Program.ffrspresist = 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend tectonic }
-                                    // n697 = elseif(% Program.ffrspresist isnum 1 - 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend land }
-                                    //n698 =            else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend geo }
-                                    Program.ffrspantiquake = true;
-                                    Program.ffrspresist++;
+                                    //n696 = elseif(% Program.ffrspResistCount = 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend tectonic }
+                                    // n697 = elseif(% Program.ffrspResistCount isnum 1 - 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend land }
+                                    //n698 =            else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend geo }
+                                    Program.ffrspantiquake = Program.ffrspCurrentResist + 1;
+                                    Program.ffrspResistCount++;
                                 }
                             }
                         }
@@ -757,55 +758,55 @@ namespace ffr_spellbinder
                         if (ffrbmresmagic == true)
                         {
                             ffrbmresist = "Magic";
-                            if (Program.ffrspantimagic == false)
+                            if (Program.ffrspantimagic == 0)
                             {
-                                if (Program.ffrspresist > 4)
+                                if (Program.ffrspResistCount > 4)
                                 {
                                     colors.echo(4, $"Resists already capped! Rerolling.");
                                     goto blackmagic;
                                 }
-                                //n712 = elseif(% Program.ffrspresist = 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend mortality }
-                                //n713 = elseif(% Program.ffrspresist isnum 1 - 2) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend life }
-                                //n714 = elseif(% Program.ffrspresist = 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend magic }
-                                //n715 =          else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend bio }
-                                Program.ffrspantimagic = true;
-                                Program.ffrspresist++;
+                                //n712 = elseif(% Program.ffrspResistCount = 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend mortality }
+                                //n713 = elseif(% Program.ffrspResistCount isnum 1 - 2) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend life }
+                                //n714 = elseif(% Program.ffrspResistCount = 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend magic }
+                                //n715 =          else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend bio }
+                                Program.ffrspantimagic = Program.ffrspCurrentResist + 1;
+                                Program.ffrspResistCount++;
                             }
                         }
                         else if (ffrbmresdecay == true)
                         {
                             ffrbmresist = "Decay";
-                            if (Program.ffrspantitoxin == false)
+                            if (Program.ffrspantitoxin == 0)
                             {
-                                if (Program.ffrspresist > 4)
+                                if (Program.ffrspResistCount > 4)
                                 {
                                     colors.echo(4, $"Resists already capped! Rerolling.");
                                     goto blackmagic;
                                 }
-                                //n727 = elseif(% Program.ffrspresist = 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend futility }
-                                //n728 = elseif(% Program.ffrspresist isnum 1 - 2) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend doom }
-                                //n729 = elseif(% Program.ffrspresist = 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend waste }
-                                //n730 =          else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend rot }
-                                Program.ffrspantitoxin = true;
-                                Program.ffrspresist++;
+                                //n727 = elseif(% Program.ffrspResistCount = 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend futility }
+                                //n728 = elseif(% Program.ffrspResistCount isnum 1 - 2) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend doom }
+                                //n729 = elseif(% Program.ffrspResistCount = 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend waste }
+                                //n730 =          else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend rot }
+                                Program.ffrspantitoxin = Program.ffrspCurrentResist + 1;
+                                Program.ffrspResistCount++;
                             }
                         }
                         else if (ffrbmresdragon == true)
                         {
                             ffrbmresist = "Dragon";
-                            if (Program.ffrspantidamage == false)
+                            if (Program.ffrspantidamage == 0)
                             {
-                                if (Program.ffrspresist > 4)
+                                if (Program.ffrspResistCount > 4)
                                 {
                                     colors.echo(4, $"Resists already capped! Rerolling.");
                                     goto blackmagic;
                                 }
-                                //n742 = elseif(% Program.ffrspresist = 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend elemental }
-                                //n743 = elseif(% Program.ffrspresist isnum 1 - 2) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend wyrm }
-                                //n744 = elseif(% Program.ffrspresist = 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend spell }
-                                //n745 =          else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend wiz }
-                                Program.ffrspantidamage = true;
-                                Program.ffrspresist++;
+                                //n742 = elseif(% Program.ffrspResistCount = 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend elemental }
+                                //n743 = elseif(% Program.ffrspResistCount isnum 1 - 2) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend wyrm }
+                                //n744 = elseif(% Program.ffrspResistCount = 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend spell }
+                                //n745 =          else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend wiz }
+                                Program.ffrspantidamage = Program.ffrspCurrentResist + 1;
+                                Program.ffrspResistCount++;
                             }
                         }
                         //n750 = write - al3 WhiteSpell.txt Effect: Resist % ffrbmresist
@@ -813,17 +814,17 @@ namespace ffr_spellbinder
                         {
                             switch (ffrbmresist)
                             {
-                                case "Status": ffrbmEffByte = 1; break;
-                                case "Poison/Stone": ffrbmEffByte = 2; break;
-                                case "Time": ffrbmEffByte = 4; break;
-                                case "Death": ffrbmEffByte = 8; break;
-                                case "Fire": ffrbmEffByte = 16; break;
-                                case "Ice": ffrbmEffByte = 32; break;
-                                case "Lit": ffrbmEffByte = 64; break;
-                                case "Earth": ffrbmEffByte = 128; break;
-                                case "Magic": ffrbmEffByte = 137; break;
-                                case "Decay": ffrbmEffByte = 14; break;
-                                case "Dragon": ffrbmEffByte = 112; break;
+                                case "Status": ffrbmEffByte = 1;       Program.ffrspCurrentResist = Program.ffrspantiweak; break;
+                                case "Poison/Stone": ffrbmEffByte = 2; Program.ffrspCurrentResist = Program.ffrspantibane; break;
+                                case "Time": ffrbmEffByte = 4;         Program.ffrspCurrentResist = Program.ffrspantizap;  break;
+                                case "Death": ffrbmEffByte = 8;        Program.ffrspCurrentResist = Program.ffrspantinecro; break;
+                                case "Fire": ffrbmEffByte = 16;        Program.ffrspCurrentResist = Program.ffrspantifire; break;
+                                case "Ice": ffrbmEffByte = 32;         Program.ffrspCurrentResist = Program.ffrspantiice;  break;
+                                case "Lit": ffrbmEffByte = 64;         Program.ffrspCurrentResist = Program.ffrspantilightning; break;
+                                case "Earth": ffrbmEffByte = 128;      Program.ffrspCurrentResist = Program.ffrspantiquake; break;
+                                case "Magic": ffrbmEffByte = 137;      Program.ffrspCurrentResist = Program.ffrspantimagic; break;
+                                case "Decay": ffrbmEffByte = 14;       Program.ffrspCurrentResist = Program.ffrspantitoxin; break;
+                                case "Dragon": ffrbmEffByte = 112; Program.ffrspCurrentResist = Program.ffrspantidamage; break;
                                 default: ffrbmEffByte = blackDice.Next(0, 256); break;
                             }
                         }

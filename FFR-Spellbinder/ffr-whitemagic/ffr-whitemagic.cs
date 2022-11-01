@@ -714,19 +714,20 @@ namespace ffr_spellbinder
                         else if ((Program.ffrspellbinding == true) && (Program.ffrsplevel == 8) && (whiteDice.Next(1, 21) >= whiteDice.Next(1, 81))) { ffrwmallies = 3; }
                         else { ffrwmallies = 2; }
                         // echo 8 - s Checking for SANC rolls. ( $+ $v1 vs $v2 $+ )
-                        if (Program.ffrspwall == false)
+                        if (Program.ffrspwall == 0)
                         {
-                            if (Program.ffrspresist > 4)
+                            if (Program.ffrspResistCount > 4)
                             {
                                 colors.echo(4, $"Resists already capped! Rerolling.");
                                 goto whitemagic;
                             }
-                            // set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend all
-                            Program.ffrspwall = true;
-                            Program.ffrspresist++;
+                            // set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend all
+                            Program.ffrspwall = Program.ffrspResistCount + 1;
+                            Program.ffrspResistCount++;
                         }
                         // write - a13 WhiteSpell.txt Effect: Resist All
                         ffrwmEffByte = 255;
+                        Program.ffrspCurrentResist = Program.ffrspwall;
                         goto walljump;
                     }
                     else if (ffrwmbuff == 1)
@@ -735,19 +736,19 @@ namespace ffr_spellbinder
                         if ((((Program.ffrspellbinding == true) && (Program.ffrsplevel < 5)) || ((Program.ffrspellbinding == false) && (ffrwmstrength < 50))))
                         {
                             if ((((Program.ffrspellbinding == true) && (Program.ffrsplevel == 1)) || ((Program.ffrspellbinding == false) && (ffrwmstrength <= 10)))) { ffrwmallies = 2; }
-                            if (Program.ffrspantiweak == false)
+                            if (Program.ffrspantiweak == 0)
                             {
-                                if (Program.ffrspresist > 4)
+                                if (Program.ffrspResistCount > 4)
                                 {
                                     colors.echo(4, $"Resists already capped! Rerolling.");
                                     goto whitemagic;
                                 }
-                                // else if (Program.ffrspresist == 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend hindrance }
-                                // else if (Program.ffrspresist < 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend weak }
-                                // else if (Program.ffrspresist == 4) { "Defend malus" }
-                                // else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend psi }
-                                Program.ffrspantiweak = true;
-                                Program.ffrspresist++;
+                                // else if (Program.ffrspResistCount == 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend hindrance }
+                                // else if (Program.ffrspResistCount < 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend weak }
+                                // else if (Program.ffrspResistCount == 4) { "Defend malus" }
+                                // else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend psi }
+                                Program.ffrspantiweak = Program.ffrspResistCount + 1;
+                                Program.ffrspResistCount++;
                             }
                         }
                         else { ffrwmresmagic = true; }
@@ -758,18 +759,18 @@ namespace ffr_spellbinder
                         if ((((Program.ffrspellbinding == true) && (Program.ffrsplevel < 5)) || ((Program.ffrspellbinding == false) && (ffrwmstrength < 50))))
                         {
                             if ((((Program.ffrspellbinding == true) && (Program.ffrsplevel == 1)) || ((Program.ffrspellbinding == false) && (ffrwmstrength <= 10)))) { ffrwmallies = 2; }
-                            if (Program.ffrspantibane == false)
+                            if (Program.ffrspantibane == 0)
                             {
-                                if (Program.ffrspresist > 4)
+                                if (Program.ffrspResistCount > 4)
                                 {
                                     colors.echo(4, $"Resists already capped! Rerolling.");
                                     goto whitemagic;
                                 }
-                                // n585 = elseif(% Program.ffrspresist = 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend poisonous }
-                                // n586 = elseif(% Program.ffrspresist isnum 1 - 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend bane }
-                                // n587 =            else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend gas }
-                                Program.ffrspantibane = true;
-                                Program.ffrspresist++;
+                                // n585 = elseif(% Program.ffrspResistCount = 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend poisonous }
+                                // n586 = elseif(% Program.ffrspResistCount isnum 1 - 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend bane }
+                                // n587 =            else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend gas }
+                                Program.ffrspantibane = Program.ffrspResistCount + 1;
+                                Program.ffrspResistCount++;
                             }
                         }
                         else { ffrwmresdecay = true; }
@@ -780,18 +781,18 @@ namespace ffr_spellbinder
                         if ((((Program.ffrspellbinding == true) && (Program.ffrsplevel < 5)) || ((Program.ffrspellbinding == false) && (ffrwmstrength < 50))))
                         {
                             if ((((Program.ffrspellbinding == true) && (Program.ffrsplevel == 1)) || ((Program.ffrspellbinding == false) && (ffrwmstrength <= 10)))) { ffrwmallies = 2; }
-                            if (Program.ffrspantizap == false)
+                            if (Program.ffrspantizap == 0)
                             {
-                                if (Program.ffrspresist > 4)
+                                if (Program.ffrspResistCount > 4)
                                 {
                                     colors.echo(4, $"Resists already capped! Rerolling.");
                                     goto whitemagic;
                                 }
-                                //n603 = elseif(% Program.ffrspresist = 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend dimension }
-                                //n604 = elseif(% Program.ffrspresist isnum 1 - 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend time }
-                                //n605 =            else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend age }
-                                Program.ffrspantizap = true;
-                                Program.ffrspresist++;
+                                //n603 = elseif(% Program.ffrspResistCount = 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend dimension }
+                                //n604 = elseif(% Program.ffrspResistCount isnum 1 - 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend time }
+                                //n605 =            else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend age }
+                                Program.ffrspantizap = Program.ffrspResistCount + 1;
+                                Program.ffrspResistCount++;
                             }
                         }
                         else { ffrwmresdecay = true; }
@@ -802,18 +803,18 @@ namespace ffr_spellbinder
                         if ((((Program.ffrspellbinding == true) && (Program.ffrsplevel < 5)) || ((Program.ffrspellbinding == false) && (ffrwmstrength < 50))))
                         {
                             if ((((Program.ffrspellbinding == true) && (Program.ffrsplevel == 1)) || ((Program.ffrspellbinding == false) && (ffrwmstrength <= 10)))) { ffrwmallies = 2; }
-                            if (Program.ffrspantinecro == false)
+                            if (Program.ffrspantinecro == 0)
                             {
-                                if (Program.ffrspresist > 4)
+                                if (Program.ffrspResistCount > 4)
                                 {
                                     colors.echo(4, $"Resists already capped! Rerolling.");
                                     goto whitemagic;
                                 }
-                                //n621 = elseif(% Program.ffrspresist = 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend necrotic }
-                                //n622 = elseif(% Program.ffrspresist isnum 1 - 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend evil }
-                                //n623 =            else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend rub }
-                                Program.ffrspantinecro = true;
-                                Program.ffrspresist++;
+                                //n621 = elseif(% Program.ffrspResistCount = 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend necrotic }
+                                //n622 = elseif(% Program.ffrspResistCount isnum 1 - 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend evil }
+                                //n623 =            else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend rub }
+                                Program.ffrspantinecro = Program.ffrspResistCount + 1;
+                                Program.ffrspResistCount++;
                             }
                         }
                         else
@@ -828,18 +829,18 @@ namespace ffr_spellbinder
                         if ((((Program.ffrspellbinding == true) && (Program.ffrsplevel < 5)) || ((Program.ffrspellbinding == false) && (ffrwmstrength < 50))))
                         {
                             if ((((Program.ffrspellbinding == true) && (Program.ffrsplevel == 1)) || ((Program.ffrspellbinding == false) && (ffrwmstrength <= 10)))) { ffrwmallies = 2; }
-                            if (Program.ffrspantifire == false)
+                            if (Program.ffrspantifire == 0)
                             {
-                                if (Program.ffrspresist > 4)
+                                if (Program.ffrspResistCount > 4)
                                 {
                                     colors.echo(4, $"Resists already capped! Rerolling.");
                                     goto whitemagic;
                                 }
-                                //n642 = elseif(% Program.ffrspresist = 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend burning }
-                                //n643 = elseif(% Program.ffrspresist isnum 1 - 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend fire }
-                                //n644 =            else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend hot }
-                                Program.ffrspantifire = true;
-                                Program.ffrspresist++;
+                                //n642 = elseif(% Program.ffrspResistCount = 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend burning }
+                                //n643 = elseif(% Program.ffrspResistCount isnum 1 - 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend fire }
+                                //n644 =            else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend hot }
+                                Program.ffrspantifire = Program.ffrspResistCount + 1;
+                                Program.ffrspResistCount++;
                             }
                         }
                         else { ffrwmresdragon = true; }
@@ -850,18 +851,18 @@ namespace ffr_spellbinder
                         if ((((Program.ffrspellbinding == true) && (Program.ffrsplevel < 5)) || ((Program.ffrspellbinding == false) && (ffrwmstrength < 50))))
                         {
                             if ((((Program.ffrspellbinding == true) && (Program.ffrsplevel == 1)) || ((Program.ffrspellbinding == false) && (ffrwmstrength <= 10)))) { ffrwmallies = 2; }
-                            if (Program.ffrspantiice == false)
+                            if (Program.ffrspantiice == 0)
                             {
-                                if (Program.ffrspresist > 4)
+                                if (Program.ffrspResistCount > 4)
                                 {
                                     colors.echo(4, $"Resists already capped! Rerolling.");
                                     goto whitemagic;
                                 }
-                                //n660 = elseif(% Program.ffrspresist = 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend freezing }
-                                //n661 = elseif(% Program.ffrspresist isnum 1 - 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend cold }
-                                //n662 =            else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend ice }
-                                Program.ffrspantiice = true;
-                                Program.ffrspresist++;
+                                //n660 = elseif(% Program.ffrspResistCount = 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend freezing }
+                                //n661 = elseif(% Program.ffrspResistCount isnum 1 - 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend cold }
+                                //n662 =            else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend ice }
+                                Program.ffrspantiice = Program.ffrspResistCount + 1;
+                                Program.ffrspResistCount++;
                             }
                         }
                         else { ffrwmresdragon = true; }
@@ -872,18 +873,18 @@ namespace ffr_spellbinder
                         if ((((Program.ffrspellbinding == true) && (Program.ffrsplevel < 5)) || ((Program.ffrspellbinding == false) && (ffrwmstrength < 50))))
                         {
                             if ((((Program.ffrspellbinding == true) && (Program.ffrsplevel == 1)) || ((Program.ffrspellbinding == false) && (ffrwmstrength <= 10)))) { ffrwmallies = 2; }
-                            if (Program.ffrspantilightning == false)
+                            if (Program.ffrspantilightning == 0)
                             {
-                                if (Program.ffrspresist > 4)
+                                if (Program.ffrspResistCount > 4)
                                 {
                                     colors.echo(4, $"Resists already capped! Rerolling.");
                                     goto whitemagic;
                                 }
-                                //n678 = elseif(% Program.ffrspresist = 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend lightning }
-                                //n679 = elseif(% Program.ffrspresist isnum 1 - 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend volt }
-                                //n680 =            else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend ion }
-                                Program.ffrspantilightning = true;
-                                Program.ffrspresist++;
+                                //n678 = elseif(% Program.ffrspResistCount = 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend lightning }
+                                //n679 = elseif(% Program.ffrspResistCount isnum 1 - 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend volt }
+                                //n680 =            else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend ion }
+                                Program.ffrspantilightning = Program.ffrspResistCount + 1;
+                                Program.ffrspResistCount++;
                             }
                         }
                         else { ffrwmresdragon = true; }
@@ -894,18 +895,18 @@ namespace ffr_spellbinder
                         if ((((Program.ffrspellbinding == true) && (Program.ffrsplevel < 5)) || ((Program.ffrspellbinding == false) && (ffrwmstrength < 50))))
                         {
                             if ((((Program.ffrspellbinding == true) && (Program.ffrsplevel == 1)) || ((Program.ffrspellbinding == false) && (ffrwmstrength <= 10)))) { ffrwmallies = 2; }
-                            if (Program.ffrspantiquake == false)
+                            if (Program.ffrspantiquake == 0)
                             {
-                                if (Program.ffrspresist > 4)
+                                if (Program.ffrspResistCount > 4)
                                 {
                                     colors.echo(4, $"Resists already capped! Rerolling.");
                                     goto whitemagic;
                                 }
-                                //n696 = elseif(% Program.ffrspresist = 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend tectonic }
-                                // n697 = elseif(% Program.ffrspresist isnum 1 - 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend land }
-                                //n698 =            else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend geo }
-                                Program.ffrspantiquake = true;
-                                Program.ffrspresist++;
+                                //n696 = elseif(% Program.ffrspResistCount = 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend tectonic }
+                                // n697 = elseif(% Program.ffrspResistCount isnum 1 - 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend land }
+                                //n698 =            else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend geo }
+                                Program.ffrspantiquake = Program.ffrspResistCount + 1;
+                                Program.ffrspResistCount++;
                             }
                         }
                         else { ffrwmresmagic = true; }
@@ -913,71 +914,71 @@ namespace ffr_spellbinder
                     if (ffrwmresmagic == true)
                     {
                         ffrwmresist = "Magic";
-                        if (Program.ffrspantimagic == false)
+                        if (Program.ffrspantimagic == 0)
                         {
-                            if (Program.ffrspresist > 4)
+                            if (Program.ffrspResistCount > 4)
                             {
                                 colors.echo(4, $"Resists already capped! Rerolling.");
                                 goto whitemagic;
                             }
-                            //n712 = elseif(% Program.ffrspresist = 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend mortality }
-                            //n713 = elseif(% Program.ffrspresist isnum 1 - 2) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend life }
-                            //n714 = elseif(% Program.ffrspresist = 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend magic }
-                            //n715 =          else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend bio }
-                            Program.ffrspantimagic = true;
-                            Program.ffrspresist++;
+                            //n712 = elseif(% Program.ffrspResistCount = 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend mortality }
+                            //n713 = elseif(% Program.ffrspResistCount isnum 1 - 2) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend life }
+                            //n714 = elseif(% Program.ffrspResistCount = 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend magic }
+                            //n715 =          else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend bio }
+                            Program.ffrspantimagic = Program.ffrspResistCount + 1;
+                            Program.ffrspResistCount++;
                         }
                     }
                     else if (ffrwmresdecay == true)
                     {
                         ffrwmresist = "Decay";
-                        if (Program.ffrspantitoxin == false)
+                        if (Program.ffrspantitoxin == 0)
                         {
-                            if (Program.ffrspresist > 4)
+                            if (Program.ffrspResistCount > 4)
                             {
                                 colors.echo(4, $"Resists already capped! Rerolling.");
                                 goto whitemagic;
                             }
-                            //n727 = elseif(% Program.ffrspresist = 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend futility }
-                            //n728 = elseif(% Program.ffrspresist isnum 1 - 2) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend doom }
-                            //n729 = elseif(% Program.ffrspresist = 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend waste }
-                            //n730 =          else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend rot }
-                            Program.ffrspantitoxin = true;
-                            Program.ffrspresist++;
+                            //n727 = elseif(% Program.ffrspResistCount = 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend futility }
+                            //n728 = elseif(% Program.ffrspResistCount isnum 1 - 2) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend doom }
+                            //n729 = elseif(% Program.ffrspResistCount = 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend waste }
+                            //n730 =          else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend rot }
+                            Program.ffrspantitoxin = Program.ffrspResistCount + 1;
+                            Program.ffrspResistCount++;
                         }
                     }
                     else if (ffrwmresdragon == true)
                     {
                         ffrwmresist = "Dragon";
-                        if (Program.ffrspantidamage == false)
+                        if (Program.ffrspantidamage == 0)
                         {
-                            if (Program.ffrspresist > 4)
+                            if (Program.ffrspResistCount > 4)
                             {
                                 colors.echo(4, $"Resists already capped! Rerolling.");
                                 goto whitemagic;
                             }
-                            //n742 = elseif(% Program.ffrspresist = 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend elemental }
-                            //n743 = elseif(% Program.ffrspresist isnum 1 - 2) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend wyrm }
-                            //n744 = elseif(% Program.ffrspresist = 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend spell }
-                            //n745 =          else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspresist + 1) Defend wiz }
-                            Program.ffrspantidamage = true;
-                            Program.ffrspresist++;
+                            //n742 = elseif(% Program.ffrspResistCount = 0) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend elemental }
+                            //n743 = elseif(% Program.ffrspResistCount isnum 1 - 2) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend wyrm }
+                            //n744 = elseif(% Program.ffrspResistCount = 3) { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend spell }
+                            //n745 =          else { set % Program.ffrspresmsg $+ $calc(% Program.ffrspResistCount + 1) Defend wiz }
+                            Program.ffrspantidamage = Program.ffrspResistCount + 1;
+                            Program.ffrspResistCount++;
                         }
                     }
                     //n750 = write - al3 WhiteSpell.txt Effect: Resist % ffrwmresist
                     switch (ffrwmresist)
                     {
-                        case "Status": ffrwmEffByte = 1; break;
-                        case "Poison / Stone": ffrwmEffByte = 2; break;
-                        case "Time": ffrwmEffByte = 4; break;
-                        case "Death": ffrwmEffByte = 8; break;
-                        case "Fire": ffrwmEffByte = 16; break;
-                        case "Ice": ffrwmEffByte = 32; break;
-                        case "Lit": ffrwmEffByte = 64; break;
-                        case "Earth": ffrwmEffByte = 128; break;
-                        case "Magic": ffrwmEffByte = 137; break;
-                        case "Decay": ffrwmEffByte = 14; break;
-                        case "Dragon": ffrwmEffByte = 112; break;
+                        case "Status": ffrwmEffByte = 1;         Program.ffrspCurrentResist = Program.ffrspantiweak; break;
+                        case "Poison / Stone": ffrwmEffByte = 2; Program.ffrspCurrentResist = Program.ffrspantibane; break;
+                        case "Time": ffrwmEffByte = 4;           Program.ffrspCurrentResist = Program.ffrspantizap; break;
+                        case "Death": ffrwmEffByte = 8;          Program.ffrspCurrentResist = Program.ffrspantinecro; break;
+                        case "Fire": ffrwmEffByte = 16;          Program.ffrspCurrentResist = Program.ffrspantifire; break;
+                        case "Ice": ffrwmEffByte = 32;           Program.ffrspCurrentResist = Program.ffrspantiice; break;
+                        case "Lit": ffrwmEffByte = 64;           Program.ffrspCurrentResist = Program.ffrspantilightning; break;
+                        case "Earth": ffrwmEffByte = 128;        Program.ffrspCurrentResist = Program.ffrspantiquake; break;
+                        case "Magic": ffrwmEffByte = 137;        Program.ffrspCurrentResist = Program.ffrspantimagic; break;
+                        case "Decay": ffrwmEffByte = 14;         Program.ffrspCurrentResist = Program.ffrspantitoxin; break;
+                        case "Dragon": ffrwmEffByte = 112;       Program.ffrspCurrentResist = Program.ffrspantidamage; break;
                         default: ffrwmEffByte = whiteDice.Next(0, 256); break;
                     }
                 }

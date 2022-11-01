@@ -9,6 +9,7 @@ using System.Net.NetworkInformation;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using static System.Formats.Asn1.AsnWriter;
 // FF1 Spellbinder, for use with Final Fantasy Randomizer. IRC Script and C# port by Linkshot, 2018-2022
 namespace ffr_spellbinder
 {
@@ -31,21 +32,22 @@ namespace ffr_spellbinder
         public static int ffrspslot = 0;
         public static string ffrspmagic = "white";
         public static int ffrspreroll = 0;
-        public static int ffrspresist = 0;
+        public static int ffrspResistCount = 0;
+        public static int ffrspCurrentResist = 0;
         public static int ffrsptier = 0;
         #region ResistVars
-        public static bool ffrspwall = false;
-        public static bool ffrspantiweak = false;
-        public static bool ffrspantibane = false;
-        public static bool ffrspantizap = false;
-        public static bool ffrspantinecro = false;
-        public static bool ffrspantifire = false;
-        public static bool ffrspantiice = false;
-        public static bool ffrspantilightning = false;
-        public static bool ffrspantiquake = false;
-        public static bool ffrspantimagic = false;
-        public static bool ffrspantitoxin = false;
-        public static bool ffrspantidamage = false;
+        public static int ffrspwall = 0;
+        public static int ffrspantiweak = 0;
+        public static int ffrspantibane = 0;
+        public static int ffrspantizap = 0;
+        public static int ffrspantinecro = 0;
+        public static int ffrspantifire = 0;
+        public static int ffrspantiice = 0;
+        public static int ffrspantilightning = 0;
+        public static int ffrspantiquake = 0;
+        public static int ffrspantimagic = 0;
+        public static int ffrspantitoxin = 0;
+        public static int ffrspantidamage = 0;
         #endregion ResistVars
         public static int ffrspbatmsgloop = 0;
 
@@ -60,6 +62,7 @@ namespace ffr_spellbinder
 
         public static int ffrspShapeByte;
         public static int ffrspColorByte;
+        public static int ffrspMsgByte = 0;
 
         #region CastingItems
         public static string ffrLightAxe = "";
@@ -76,6 +79,8 @@ namespace ffr_spellbinder
         static void Main()
         {
             var ffrspTable = new List<string>();
+            var ffrspBatMsg = new List<string>();
+            var ffrspResMsg = new List<string>();
             var ffrpath = @"C:\Users\Linkshot\Utilities\FFR-Spellbinder\output\";
             var book = @$"table\SpellTable_{DateTime.UtcNow.Ticks.ToString()}.txt";
             var rune = @$"patch\FFR-Custom-Spells_({ffrspflags})_{DateTime.UtcNow.Ticks.ToString()}.ips";
@@ -85,6 +90,8 @@ namespace ffr_spellbinder
                 {
                     var ffrspNamePatch = new List<char>();
                     var ffrspSpellPatch = new List<byte>();
+                    var ffrspMsgTextPatch = new List<char>();
+                    var ffrspSpellMsgPatch = new List<byte>();
                     var ffrPatchCount = 0;
                     etch.Write(Encoding.ASCII.GetBytes("PATCH"));
                     // while (ffrspbatmsgloop !>= 77)
@@ -102,6 +109,7 @@ namespace ffr_spellbinder
                     ffrspreroll = 0;
                     ffrspslot++;
                     if (ffrsplevel == 5 && ffrspslot == 3 && ffrspmagic == "black") {
+                        #region WARP
                         ffrsptype = "Travel back one floor. ";
                         ffrSpellAcc = 255;
                         ffrSpellEff = 0;
@@ -110,12 +118,15 @@ namespace ffr_spellbinder
                         ffrSpellType = 0;
                         ffrspShapeByte = 0xD8;
                         ffrspColorByte = 42;
+                        ffrspMsgByte = 0x24;
                         ffrspgfxcolor = "Dark Green";
                         ffrspgfxshape = "Glowing Ball";
                         ffrspname = "WARP";
                         goto spwrite;
                     }
+                    #endregion WARP
                     else if (ffrsplevel == 6 && ffrspslot == 2 && ffrspmagic == "white") {
+                        #region EXIT
                         ffrsptype = "Return to World Map. ";
                         ffrSpellAcc = 255;
                         ffrSpellEff = 0;
@@ -124,13 +135,25 @@ namespace ffr_spellbinder
                         ffrSpellType = 0;
                         ffrspShapeByte = 0xDC;
                         ffrspColorByte = 42;
+                        ffrspMsgByte = 0x24;
                         ffrspgfxcolor = "Dark Green";
                         ffrspgfxshape = "Bursting Ball";
                         ffrspname = "EXIT";
                         goto spwrite;
                     }
+                #endregion EXIT
                 spdupe:
+                    ffrspname = "";
+                    ffrsptarg = "";
+                    ffrspelem = "";
+                    ffrsptype = "";
+                    ffrspeff = "";
+                    ffrspgfxcolor = "";
+                    ffrspgfxshape = "";
                     ffrSpell = "";
+                    ffrspShapeByte = 0xA8; // Fistchuks, yo
+                    ffrspColorByte = 0x2E; // Black
+                    ffrspMsgByte = 0x00;
                     if (ffrspmagic == "white") { ffrSpell = ffr_whitemagic.WMag(); }
                     // Console.WriteLine("=");
                     else if (ffrspmagic == "black") { ffrSpell = ffr_blackmagic.BMag(); }
@@ -227,6 +250,8 @@ namespace ffr_spellbinder
                     #region DamageSpells
                     if (ffrSpellType < 3)
                     {
+                        if (ffrSpellAcc == 255) ffrspMsgByte = 0x2C;
+                        else ffrspMsgByte = 0x00;
                         if (ffrspmagic == "white" || Enumerable.Range(64, 2).Contains(ffrSpellElem)) ffrspShapeByte = (ffrSpellTarg == 1) ? 204 : 200;
                         else ffrspShapeByte = (ffrSpellTarg == 2) ? 212 : 208;
                         if (ffrSpellType == 2)
@@ -402,6 +427,7 @@ namespace ffr_spellbinder
                                         }
                                         break;
                                     case 2: // Poison smoke
+                                        ffrspMsgByte = 0x4D;
                                         switch (ffrSpellTarg)
                                         {
                                             case 1: ffrspname = "BANE"; break;
@@ -410,6 +436,7 @@ namespace ffr_spellbinder
                                         }
                                         break;
                                     case 4: // Exile to 4th Dimension (Time)
+                                        ffrspMsgByte = 0x1F;
                                         switch (ffrSpellTarg)
                                         {
                                             case 1: ffrspname = "ZAP!"; break;
@@ -418,6 +445,7 @@ namespace ffr_spellbinder
                                         }
                                         break;
                                     case 8: // Erased (Death)
+                                        ffrspMsgByte = 0x15;
                                         switch (ffrSpellTarg)
                                         {
                                             case 1: ffrspname = "ERAD"; break;
@@ -426,6 +454,7 @@ namespace ffr_spellbinder
                                         }
                                         break;
                                     case 16: // Erased (Fire)
+                                        ffrspMsgByte = 0x15;
                                         switch (ffrSpellTarg)
                                         {
                                             case 1: ffrspname = "EVAP"; break;
@@ -434,6 +463,7 @@ namespace ffr_spellbinder
                                         }
                                         break;
                                     case 64: // Exile to 4th Dimension (Lightning)
+                                        ffrspMsgByte = 0x1F;
                                         switch (ffrSpellTarg)
                                         {
                                             case 1: ffrspname = "BZZT"; break;
@@ -442,6 +472,7 @@ namespace ffr_spellbinder
                                         }
                                         break;
                                     case 128: // Fell into crack
+                                        ffrspMsgByte = 0x16;
                                         switch (ffrSpellTarg)
                                         {
                                             case 1: ffrspname = "QAKE"; break;
@@ -466,6 +497,7 @@ namespace ffr_spellbinder
                                         }
                                         break;
                                     case 32:
+                                        ffrspMsgByte = 0x4C;
                                         switch (ffrSpellTarg)
                                         {
                                             case 1: ffrspname = "FREZ"; break;
@@ -535,6 +567,7 @@ namespace ffr_spellbinder
                             #endregion Blind
                             case 16: // Stun
                                 #region Paralyze
+                                ffrspMsgByte = 0x0D;
                                 switch (ffrSpellElem)
                                 {
                                     case 0:
@@ -562,6 +595,7 @@ namespace ffr_spellbinder
                                         }
                                         break;
                                     case 4:
+                                        ffrspMsgByte = 0x1E;
                                         switch (ffrSpellTarg)
                                         {
                                             case 1: ffrspname = "STOP"; break;
@@ -570,6 +604,7 @@ namespace ffr_spellbinder
                                         }
                                         break;
                                     case 32:
+                                        ffrspMsgByte = 0x4C;
                                         switch (ffrSpellTarg)
                                         {
                                             case 1: ffrspname = "SQAL"; break;
@@ -626,6 +661,7 @@ namespace ffr_spellbinder
                                         }
                                         break;
                                     case 4:
+                                        ffrspMsgByte = 0x1E;
                                         switch (ffrSpellTarg)
                                         {
                                             case 1: ffrspname = "JUMP"; break;
@@ -651,6 +687,7 @@ namespace ffr_spellbinder
                                         }
                                         break;
                                     case 32:
+                                        ffrspMsgByte = 0x4C;
                                         switch (ffrSpellTarg)
                                         {
                                             case 1: ffrspname = "HIB "; break;
@@ -707,6 +744,7 @@ namespace ffr_spellbinder
                                         }
                                         break;
                                     case 32:
+                                        ffrspMsgByte = 0x4C;
                                         switch (ffrSpellTarg)
                                         {
                                             case 1: ffrspname = "HOWL"; break;
@@ -727,6 +765,12 @@ namespace ffr_spellbinder
                                 break;
                             #endregion Silence
                             case 120: // Cocktail
+                                switch (ffrSpellElem)
+                                {
+                                    case 4: ffrspMsgByte = 0x1E; break;
+                                    case 32: ffrspMsgByte = 0x4C; break;
+                                    default: ffrspMsgByte = 0x00; break;
+                                }
                                 switch (ffrSpellTarg)
                                 {
                                     case 1: ffrspname = "HEX "; break;
@@ -770,7 +814,8 @@ namespace ffr_spellbinder
                                             default: ffrspname = $"TARG{ffrSpellTarg}.TIME.NEG_EFFECT.CONFUSE"; break;
                                         }
                                         break;
-                                    case 16:
+                                    case 16: // "Ablaze" if "Frozen" is not present
+                                        // ffrspMsgByte = 0x4C;
                                         switch (ffrSpellTarg)
                                         {
                                             case 1: ffrspname = "PYRO"; break;
@@ -802,6 +847,7 @@ namespace ffr_spellbinder
                                 if (PowerOf2.Divide(ffrSpellEff - 4) == true) // Poison
                                 #region Poisons
                                 {
+                                    ffrspMsgByte = 0x4D;
                                     switch (ffrSpellEff - 4)
                                     {
                                         case 8:
@@ -856,6 +902,7 @@ namespace ffr_spellbinder
                     #region AttackRateDown
                     else if (ffrSpellType == 4)
                     {
+                        ffrspMsgByte = 0x0B;
                         switch (ffrSpellElem)
                         {
                             case 0:
@@ -921,6 +968,7 @@ namespace ffr_spellbinder
                     #region LowerMorale
                     else if (ffrSpellType == 5)
                     {
+                        ffrspMsgByte = 0x0F;
                         switch (ffrSpellElem)
                         {
                             case 0:
@@ -978,6 +1026,7 @@ namespace ffr_spellbinder
                     #region HealthUp
                     else if (ffrSpellType == 7)
                     {
+                        ffrspMsgByte = 0x01;
                         switch (ffrSpellTarg)
                         {
                             case 4: if (ffrsptier > 1) ffrspname = $"RGN{ffrsptier}"; if (ffrsptier == 1) ffrspname = "REGN"; break;
@@ -1076,6 +1125,7 @@ namespace ffr_spellbinder
                     #region ArmorUp
                     else if (ffrSpellType == 9)
                     {
+                        ffrspMsgByte = 0x02;
                         switch (ffrSpellTarg)
                         {
                             case 4: if (ffrsptier > 1) ffrspname = $"BUK{ffrsptier}"; if (ffrsptier == 1) ffrspname = "BUKL"; break;
@@ -1088,6 +1138,14 @@ namespace ffr_spellbinder
                     #region Resists
                     else if (ffrSpellType == 10)
                     {
+                        switch (ffrspCurrentResist)
+                        {
+                            case 1: ffrspMsgByte = 0x08; break;
+                            case 2: ffrspMsgByte = 0x0C; break;
+                            case 3: ffrspMsgByte = 0x10; break;
+                            case 4: ffrspMsgByte = 0x19; break;
+                            case 5: ffrspMsgByte = 0x1C; break;
+                        }
                         switch (ffrSpellEff)
                         {
                             case 1:
@@ -1202,6 +1260,7 @@ namespace ffr_spellbinder
                     #region DoubleHits
                     else if (ffrSpellType == 12)
                     {
+                        ffrspMsgByte = 0x12;
                         var funnySpeed = new Random();
                         switch (ffrSpellTarg)
                         {
@@ -1218,6 +1277,7 @@ namespace ffr_spellbinder
                         switch (ffrspmagic)
                         {
                             case "white":
+                                ffrspMsgByte = 0x1B;
                                 switch (ffrSpellTarg)
                                 {
                                     case 4: if (ffrsptier > 1) ffrspname = $"FOC{ffrsptier}"; if (ffrsptier == 1) ffrspname = "FOCS"; break;
@@ -1227,6 +1287,7 @@ namespace ffr_spellbinder
                                 }
                                 break;
                             case "black":
+                                ffrspMsgByte = 0x0A;
                                 switch (ffrSpellTarg)
                                 {
                                     case 4: if (ffrsptier > 1) ffrspname = $"SAB{ffrsptier}"; if (ffrsptier == 1) ffrspname = "SABR"; break;
@@ -1242,6 +1303,7 @@ namespace ffr_spellbinder
                     #region EvadeDown
                     else if (ffrSpellType == 14)
                     {
+                        ffrspMsgByte = 0x05;
                         switch (ffrSpellElem)
                         {
                             case 0:
@@ -1299,6 +1361,7 @@ namespace ffr_spellbinder
                     #region MaxHP
                     else if (ffrSpellType == 15)
                     {
+                        ffrspMsgByte = 0x18;
                         switch (ffrspellbinding)
                         {
                             case true:
@@ -1325,6 +1388,7 @@ namespace ffr_spellbinder
                     #region EvadeUp
                     else if (ffrSpellType == 16)
                     {
+                        ffrspMsgByte = 0x03;
                         switch (ffrSpellTarg)
                         {
                             case 4: if (ffrsptier > 1) ffrspname = $"RUS{ffrsptier}"; if (ffrsptier == 1) ffrspname = "RUSE"; break;
@@ -1337,6 +1401,7 @@ namespace ffr_spellbinder
                     #region RemoveResists
                     else if (ffrSpellType == 17)
                     {
+                        ffrspMsgByte = 0x1D;
                         switch (ffrSpellElem)
                         {
                             case 0:
@@ -1394,16 +1459,30 @@ namespace ffr_spellbinder
                     #region PowerWord
                     else if (ffrSpellType == 18)
                     {
+                        if (ffrSpellElem == 32) ffrspMsgByte = 0x4C;
                         switch (ffrSpellEff)
                         {
-                            case 1: if (ffrspmagic == "white") ffrspname = "FROG"; if (ffrspmagic == "black") ffrspname = "XXXX"; break;
+                            case 1: 
+                                if (ffrspmagic == "white") ffrspname = "FROG"; ffrspMsgByte = 0x2F;
+                                if (ffrspmagic == "black")
+                                {
+                                    ffrspname = "XXXX";
+                                    switch (ffrSpellElem)
+                                    {
+                                        case 2: ffrspMsgByte = 0x4D; break;
+                                        case 4 or 64: ffrspMsgByte = 0x1F; break;
+                                        case 8 or 16: ffrspMsgByte = 0x15; break;
+                                        case 128: ffrspMsgByte = 0x16; break;
+                                    }
+                                }
+                                break;
                             case 2: if (ffrspmagic == "white") ffrspname = "CAST"; if (ffrspmagic == "black") ffrspname = "PETR"; break;
                             case 8: ffrspname = "BLND"; break;
-                            case 16: ffrspname = "STUN"; break;
-                            case 32: ffrspname = "ZZZZ"; break;
+                            case 16: ffrspname = "STUN"; if (ffrSpellElem == 4) ffrspMsgByte = 0x1E; break;
+                            case 32: ffrspname = "ZZZZ"; if (ffrSpellElem == 4) ffrspMsgByte = 0x1E; break;
                             case 64: ffrspname = "JINX"; break;
-                            case 96: ffrspname = "COMA"; break;
-                            case 124: ffrspname = "WEAK"; break;
+                            case 96: ffrspname = "COMA"; if (ffrSpellElem == 4) ffrspMsgByte = 0x1E; break;
+                            case 124: ffrspname = "WEAK"; if (ffrSpellElem == 4) ffrspMsgByte = 0x1E; break;
                             case 128: ffrspname = "FOOL"; break;
                             case 132: ffrspname = "DCAY"; break;
                             default: ffrspname = $"POWER_WORD.EFF{ffrSpellEff}"; break;
@@ -1564,11 +1643,200 @@ namespace ffr_spellbinder
                         case 43: ffrspgfxcolor = "Pale Cyan"; break;
                         case 44: ffrspgfxcolor = "Bright Cyan"; break;
                         case 45: ffrspgfxcolor = "Gray"; break;
+                        case 46: ffrspgfxcolor = "Black"; break;
+                        default: ffrspgfxcolor = "Malformed"; break;
                     }
                     #endregion ColorName
+                    #region BattleMessages
+                    while (ffrspbatmsgloop < 78)
+                    {
+                        switch (ffrspbatmsgloop)
+                        #region MessageList
+                        {
+                            case 0x01: ffrspBatMsg.Add("HP up!"); break;
+                            case 0x02: ffrspBatMsg.Add("Armor up"); break;
+                            case 0x03: ffrspBatMsg.Add("Easy to dodge"); break;
+                            case 0x05: ffrspBatMsg.Add("Easy to hit"); break;
+                            case 0x08: ffrspBatMsg.Add("Defend lightning"); break;
+                            case 0x0A: ffrspBatMsg.Add("Weapons stronger"); break;
+                            case 0x0B: ffrspBatMsg.Add("Attack rate down"); break;
+                            case 0x0C: ffrspBatMsg.Add("Defend fire"); break;
+                            case 0x0D: ffrspBatMsg.Add("Attack halted"); break;
+                            case 0x0F: ffrspBatMsg.Add("Became terrified"); break;
+                            case 0x10: ffrspBatMsg.Add("Defend cold"); break;
+                            case 0x12: ffrspBatMsg.Add("Quick shot"); break;
+                            case 0x15: ffrspBatMsg.Add("Erased"); break;
+                            case 0x16: ffrspBatMsg.Add("Fell into crack"); break;
+                            case 0x18: ffrspBatMsg.Add("HP max!"); break;
+                            case 0x19: ffrspBatMsg.Add("Defend magic"); break;
+                            case 0x1B: ffrspBatMsg.Add("Weapon became enchanted"); break;
+                            case 0x1C: ffrspBatMsg.Add("Defend all"); break;
+                            case 0x1D: ffrspBatMsg.Add("Defenseless"); break;
+                            case 0x1E: ffrspBatMsg.Add("Time stopped"); break;
+                            case 0x1F: ffrspBatMsg.Add("Exile to 4th dimension"); break;
+                            case 0x24: ffrspBatMsg.Add("Can't run"); break;
+                            case 0x2C: ffrspBatMsg.Add("Critical hit!!"); break;
+                            case 0x2F: ffrspBatMsg.Add("Stopped"); break;
+                            case 0x4A: ffrspBatMsg.Add("Ineffective now"); break;
+                            case 0x4C: ffrspBatMsg.Add("Frozen"); break;
+                            case 0x4D: ffrspBatMsg.Add("Poison smoke"); break;
+                            default: ffrspBatMsg.Add(""); break;
+                        }
+                        #endregion MessageList
+                        ffrspbatmsgloop++;
+                    }
+                    #endregion BattleMessages
+                    #region ResistMessages
+                    if (ffrspResistCount > ffrspResMsg.Count)
+                    {
+                        switch (ffrSpellEff)
+                        {
+                            #region StatusResist
+                            case 1:
+                                switch (ffrspResistCount)
+                                {
+                                    case 1: ffrspResMsg.Add("hindrance"); break;
+                                    case 2 or 3: ffrspResMsg.Add("weak"); break;
+                                    case 4: ffrspResMsg.Add("trick"); break;
+                                    case 5: ffrspResMsg.Add("psi"); break;
+                                }
+                                break;
+                            #endregion StatusResist
+                            #region PoisonResist
+                            case 2:
+                                switch (ffrspResistCount)
+                                {
+                                    case 1: ffrspResMsg.Add("poisonous"); break;
+                                    case 2 or 3: ffrspResMsg.Add("bane"); break;
+                                    case 4: ffrspResMsg.Add("smoke"); break;
+                                    case 5: ffrspResMsg.Add("gas"); break;
+                                }
+                                break;
+                            #endregion PoisonResist
+                            #region TimeResist
+                            case 4:
+                                switch (ffrspResistCount)
+                                {
+                                    case 1: ffrspResMsg.Add("dimension"); break;
+                                    case 2 or 3: ffrspResMsg.Add("time"); break;
+                                    case 4: ffrspResMsg.Add("exile"); break;
+                                    case 5: ffrspResMsg.Add("zap"); break;
+                                }
+                                break;
+                            #endregion TimeResist
+                            #region DeathResist
+                            case 8:
+                                switch (ffrspResistCount)
+                                {
+                                    case 1: ffrspResMsg.Add("bleakness"); break;
+                                    case 2 or 3: ffrspResMsg.Add("doom"); break;
+                                    case 4: ffrspResMsg.Add("death"); break;
+                                    case 5: ffrspResMsg.Add("rot"); break;
+                                }
+                                break;
+                            #endregion DeathResist
+                            #region DecayResist
+                            case 14:
+                                switch (ffrspResistCount)
+                                {
+                                    case 1: ffrspResMsg.Add("futility "); break;
+                                    case 2 or 3: ffrspResMsg.Add("omen"); break;
+                                    case 4: ffrspResMsg.Add("decay"); break;
+                                    case 5: ffrspResMsg.Add("age"); break;
+                                }
+                                break;
+                            #endregion DecayResist
+                            #region FireResist
+                            case 16:
+                                switch (ffrspResistCount)
+                                {
+                                    case 1: ffrspResMsg.Add("pyromancy"); break;
+                                    case 2 or 3: ffrspResMsg.Add("fire"); break;
+                                    case 4: ffrspResMsg.Add("blaze"); break;
+                                    case 5: ffrspResMsg.Add("hot"); break;
+                                }
+                                break;
+                            #endregion FireResist
+                            #region IceResist
+                            case 32:
+                                switch (ffrspResistCount)
+                                {
+                                    case 1: ffrspResMsg.Add("frostbite"); break;
+                                    case 2 or 3: ffrspResMsg.Add("cold"); break;
+                                    case 4: ffrspResMsg.Add("chill"); break;
+                                    case 5: ffrspResMsg.Add("ice"); break;
+                                }
+                                break;
+                            #endregion IceResist
+                            #region LightningResist
+                            case 64:
+                                switch (ffrspResistCount)
+                                {
+                                    case 1: ffrspResMsg.Add("lightning"); break;
+                                    case 2 or 3: ffrspResMsg.Add("volt"); break;
+                                    case 4: ffrspResMsg.Add("spark"); break;
+                                    case 5: ffrspResMsg.Add("ion"); break;
+                                }
+                                break;
+                            #endregion LightningResist
+                            #region ArcaneResist
+                            case 112:
+                                switch (ffrspResistCount)
+                                {
+                                    case 1: ffrspResMsg.Add("elemental"); break;
+                                    case 2 or 3: ffrspResMsg.Add("wild"); break;
+                                    case 4: ffrspResMsg.Add("spell"); break;
+                                    case 5: ffrspResMsg.Add("wiz"); break;
+                                }
+                                break;
+                            #endregion ArcaneResist
+                            #region EarthResist
+                            case 128:
+                                switch (ffrspResistCount)
+                                {
+                                    case 1: ffrspResMsg.Add("tectonic "); break;
+                                    case 2 or 3: ffrspResMsg.Add("land"); break;
+                                    case 4: ffrspResMsg.Add("crack"); break;
+                                    case 5: ffrspResMsg.Add("geo"); break;
+                                }
+                                break;
+                            #endregion EarthResist
+                            #region MagicResist
+                            case 137:
+                                switch (ffrspResistCount)
+                                {
+                                    case 1: ffrspResMsg.Add("willpower"); break;
+                                    case 2 or 3: ffrspResMsg.Add("life"); break;
+                                    case 4: ffrspResMsg.Add("magic"); break;
+                                    case 5: ffrspResMsg.Add("bio"); break;
+                                }
+                                break;
+                            #endregion MagicResist
+                            #region WALL
+                            case 255:
+                                switch (ffrspResistCount)
+                                {
+                                    case 1: ffrspResMsg.Add("all      "); break;
+                                    case 2 or 3: ffrspResMsg.Add("all "); break;
+                                    case 4: ffrspResMsg.Add("all  "); break;
+                                    case 5: ffrspResMsg.Add("all"); break;
+                                }
+                                break;
+                                #endregion WALL
+                        }
+                        switch (ffrspResistCount)
+                        {
+                            case 1: ffrspBatMsg[0x08] = ffrspBatMsg[0x08].Replace("lightning", ffrspResMsg[0]); break;
+                            case 2: ffrspBatMsg[0x0C] = ffrspBatMsg[0x0C].Replace("fire", ffrspResMsg[1]); break;
+                            case 3: ffrspBatMsg[0x10] = ffrspBatMsg[0x10].Replace("cold", ffrspResMsg[2]); break;
+                            case 4: ffrspBatMsg[0x19] = ffrspBatMsg[0x19].Replace("magic", ffrspResMsg[3]); break;
+                            case 5: ffrspBatMsg[0x1C] = ffrspBatMsg[0x1C].Replace("all", ffrspResMsg[4]); break;
+                        }
+                    }
+                #endregion ResistMessages
 
-                    // Check for ffrspname in the array containing all results
-                    spwrite:
+                // Check for ffrspname in the array containing all results
+                spwrite:
                     if (ffrspTable.IndexOf(ffrspname) != -1)
                     {
                         colors.echo(4, $"{ffrspname} already exists! Rerolling.");
@@ -1579,86 +1847,14 @@ namespace ffr_spellbinder
                     ffrPatchCount = 1;
                     while (ffrPatchCount <= 4)
                     {
-                        switch (ffrspname.Substring(ffrPatchCount - 1, 1))
-                        {
-                            #region FF1CharMap
-                            case "0": ffrspNamePatch.Add((char)0x80); break;
-                            case "1": ffrspNamePatch.Add((char)0x81); break;
-                            case "2": ffrspNamePatch.Add((char)0x82); break;
-                            case "3": ffrspNamePatch.Add((char)0x83); break;
-                            case "4": ffrspNamePatch.Add((char)0x84); break;
-                            case "5": ffrspNamePatch.Add((char)0x85); break;
-                            case "6": ffrspNamePatch.Add((char)0x86); break;
-                            case "7": ffrspNamePatch.Add((char)0x87); break;
-                            case "8": ffrspNamePatch.Add((char)0x88); break;
-                            case "9": ffrspNamePatch.Add((char)0x89); break;
-                            case "A": ffrspNamePatch.Add((char)0x8A); break;
-                            case "B": ffrspNamePatch.Add((char)0x8B); break;
-                            case "C": ffrspNamePatch.Add((char)0x8C); break;
-                            case "D": ffrspNamePatch.Add((char)0x8D); break;
-                            case "E": ffrspNamePatch.Add((char)0x8E); break;
-                            case "F": ffrspNamePatch.Add((char)0x8F); break;
-                            case "G": ffrspNamePatch.Add((char)0x90); break;
-                            case "H": ffrspNamePatch.Add((char)0x91); break;
-                            case "I": ffrspNamePatch.Add((char)0x92); break;
-                            case "J": ffrspNamePatch.Add((char)0x93); break;
-                            case "K": ffrspNamePatch.Add((char)0x94); break;
-                            case "L": ffrspNamePatch.Add((char)0x95); break;
-                            case "M": ffrspNamePatch.Add((char)0x96); break;
-                            case "N": ffrspNamePatch.Add((char)0x97); break;
-                            case "O": ffrspNamePatch.Add((char)0x98); break;
-                            case "P": ffrspNamePatch.Add((char)0x99); break;
-                            case "Q": ffrspNamePatch.Add((char)0x9A); break;
-                            case "R": ffrspNamePatch.Add((char)0x9B); break;
-                            case "S": ffrspNamePatch.Add((char)0x9C); break;
-                            case "T": ffrspNamePatch.Add((char)0x9D); break;
-                            case "U": ffrspNamePatch.Add((char)0x9E); break;
-                            case "V": ffrspNamePatch.Add((char)0x9F); break;
-                            case "W": ffrspNamePatch.Add((char)0xA0); break;
-                            case "X": ffrspNamePatch.Add((char)0xA1); break;
-                            case "Y": ffrspNamePatch.Add((char)0xA2); break;
-                            case "Z": ffrspNamePatch.Add((char)0xA3); break;
-                            case "a": ffrspNamePatch.Add((char)0xA4); break;
-                            case "b": ffrspNamePatch.Add((char)0xA5); break;
-                            case "c": ffrspNamePatch.Add((char)0xA6); break;
-                            case "d": ffrspNamePatch.Add((char)0xA7); break;
-                            case "e": ffrspNamePatch.Add((char)0xA8); break;
-                            case "f": ffrspNamePatch.Add((char)0xA9); break;
-                            case "g": ffrspNamePatch.Add((char)0xAA); break;
-                            case "h": ffrspNamePatch.Add((char)0xAB); break;
-                            case "i": ffrspNamePatch.Add((char)0xAC); break;
-                            case "j": ffrspNamePatch.Add((char)0xAD); break;
-                            case "k": ffrspNamePatch.Add((char)0xAE); break;
-                            case "l": ffrspNamePatch.Add((char)0xAF); break;
-                            case "m": ffrspNamePatch.Add((char)0xB0); break;
-                            case "n": ffrspNamePatch.Add((char)0xB1); break;
-                            case "o": ffrspNamePatch.Add((char)0xB2); break;
-                            case "p": ffrspNamePatch.Add((char)0xB3); break;
-                            case "q": ffrspNamePatch.Add((char)0xB4); break;
-                            case "r": ffrspNamePatch.Add((char)0xB5); break;
-                            case "s": ffrspNamePatch.Add((char)0xB6); break;
-                            case "t": ffrspNamePatch.Add((char)0xB7); break;
-                            case "u": ffrspNamePatch.Add((char)0xB8); break;
-                            case "v": ffrspNamePatch.Add((char)0xB9); break;
-                            case "w": ffrspNamePatch.Add((char)0xBA); break;
-                            case "x": ffrspNamePatch.Add((char)0xBB); break;
-                            case "y": ffrspNamePatch.Add((char)0xBC); break;
-                            case "z": ffrspNamePatch.Add((char)0xBD); break;
-                            case "\"": ffrspNamePatch.Add((char)0xBE); break;
-                            case ",": ffrspNamePatch.Add((char)0xBF); break;
-                            case ".": ffrspNamePatch.Add((char)0xC0); break;
-                            case " ": ffrspNamePatch.Add((char)0xC1); break;
-                            case "-": ffrspNamePatch.Add((char)0xC2); break;
-                            case "!": ffrspNamePatch.Add((char)0xC4); break;
-                            default: ffrspNamePatch.Add((char)0xC5); break; // i wonder what this does!
-                                #endregion FF1CharMap
-                        }
+                        ffrspNamePatch.Add(FF1CharMap.Transmute(ffrspname.Substring(ffrPatchCount - 1, 1)));
                         ffrPatchCount++;
                     }
                     ffrspNamePatch.Add((char)0x00);
+                    ffrspSpellMsgPatch.Add((byte)ffrspMsgByte);
                     if (ffrspreroll >= 5) { colors.echo(12, $"Rerolled {ffrspreroll} times! Ignored flags to avoid collisions."); }
-                    quill.WriteLine($"{ffrspname}: {ffrsptype}{ffrspgfxcolor} {ffrspgfxshape}.");
-                    colors.echo(0, $"Wrote \"{ffrspname}: {ffrsptype}{ffrspgfxcolor} {ffrspgfxshape}\" to {book}");
+                    quill.WriteLine($"{ffrspname}: {ffrsptype}{ffrspgfxcolor} {ffrspgfxshape}. \"{ffrspBatMsg[ffrspMsgByte]}\"");
+                    colors.echo(0, $"Wrote \"{ffrspname}: {ffrsptype}{ffrspgfxcolor} {ffrspgfxshape}. \"{ffrspBatMsg[ffrspMsgByte]}\"\" to {book}");
                     Console.WriteLine();
                     ffrspSpellPatch.Add((byte)ffrSpellAcc);
                     ffrspSpellPatch.Add((byte)ffrSpellEff);
@@ -1719,11 +1915,65 @@ namespace ffr_spellbinder
                                 // }
                                 #endregion BlackAoE
                                 #region BattleMessages
-                                // if (ffrspresist < 5) { ffrmsg28 = "Defend all [Unassigned]" }
-                                // if (ffrspresist < 4) { ffrmsg25 = "Defend magic [Unassigned]" }
-                                // if (ffrspresist < 3) { ffrmsg16 = "Defend cold [Unassigned]" }
-                                // if (ffrspresist < 2) { ffrmsg12 = "Defend fire [Unassigned]" }
-                                // if (ffrspresist < 1) { ffrmsg8 = "Defend lightning [Unassigned]" }
+                                #region ResistPatch
+                                if (ffrspResistCount >= 1)
+                                {
+                                    etch.Write((byte)0x02); etch.Write((byte)0xCC); etch.Write((byte)0xA1); etch.Write((byte)0x00); etch.Write((byte)0x09);
+                                    ffrEtchCount = 0;
+                                    while (ffrEtchCount <= 0x08)
+                                    {
+                                        etch.Write((byte)FF1CharMap.Transmute(ffrspResMsg[0].Substring(ffrEtchCount, 1)));
+                                        ffrEtchCount++;
+                                    }
+                                }
+                                if (ffrspResistCount >= 2)
+                                {
+                                    etch.Write((byte)0x02); etch.Write((byte)0xCC); etch.Write((byte)0xDE); etch.Write((byte)0x00); etch.Write((byte)0x04);
+                                    ffrEtchCount = 0;
+                                    while (ffrEtchCount <= 0x03)
+                                    {
+                                        etch.Write((byte)FF1CharMap.Transmute(ffrspResMsg[1].Substring(ffrEtchCount, 1)));
+                                        ffrEtchCount++;
+                                    }
+                                }
+                                if (ffrspResistCount >= 3)
+                                {
+                                    etch.Write((byte)0x02); etch.Write((byte)0xCD); etch.Write((byte)0x15); etch.Write((byte)0x00); etch.Write((byte)0x04);
+                                    ffrEtchCount = 0;
+                                    while (ffrEtchCount <= 0x03)
+                                    {
+                                        etch.Write((byte)FF1CharMap.Transmute(ffrspResMsg[2].Substring(ffrEtchCount, 1)));
+                                        ffrEtchCount++;
+                                    }
+                                }
+                                if (ffrspResistCount >= 4)
+                                {
+                                    etch.Write((byte)0x02); etch.Write((byte)0xCD); etch.Write((byte)0x79); etch.Write((byte)0x00); etch.Write((byte)0x05);
+                                    ffrEtchCount = 0;
+                                    while (ffrEtchCount <= 0x04)
+                                    {
+                                        etch.Write((byte)FF1CharMap.Transmute(ffrspResMsg[3].Substring(ffrEtchCount, 1)));
+                                        ffrEtchCount++;
+                                    }
+                                }
+                                if (ffrspResistCount >= 5)
+                                {
+                                    etch.Write((byte)0x02); etch.Write((byte)0xCD); etch.Write((byte)0xB1); etch.Write((byte)0x00); etch.Write((byte)0x03);
+                                    ffrEtchCount = 0;
+                                    while (ffrEtchCount <= 0x02)
+                                    {
+                                        etch.Write((byte)FF1CharMap.Transmute(ffrspResMsg[4].Substring(ffrEtchCount, 1)));
+                                        ffrEtchCount++;
+                                    }
+                                }
+                                #endregion ResistPatch
+                                etch.Write((byte)0x02); etch.Write((byte)0xCF); etch.Write((byte)0x48); etch.Write((byte)0x00); etch.Write((byte)0x06);
+                                ffrEtchCount = 0;
+                                while (ffrEtchCount <= 0x05)
+                                {
+                                    etch.Write((byte)FF1CharMap.Transmute(ffrspBatMsg[0x4C].Substring(ffrEtchCount, 1)));
+                                    ffrEtchCount++;
+                                }
                                 // Assign Message 76:
                                 // if: TypeByte 3 or 18. ElemByte 32. { ffrmsg76 = "Frozen" }
                                 // else if: TypeByte 3 or 18. EffByte 128 || (EffByte - 4 is a power of 2). ElemByte 16. { ffrmsg76 = "Ablaze" }
@@ -1731,11 +1981,20 @@ namespace ffr_spellbinder
                                 // Write down applicable battle messages and whether they were assigned
                                 // (1, 2, 3, 5, 8, 10, 11, 12, 13, 15, 16, 18, 21, 22, 24, 25, 27, 28, 29, 30, 31, 43, 47, 74, 76, 77)
                                 #endregion BattleMessages
-/* Header for Spell Data */     etch.Write((byte)0x03); etch.Write((byte)0x01); etch.Write((byte)0xF0); etch.Write((byte)0x01); etch.Write((byte)0xFF);
+                                /* Header for Spell Data */
+                                etch.Write((byte)0x03); etch.Write((byte)0x01); etch.Write((byte)0xF0); etch.Write((byte)0x01); etch.Write((byte)0xFF);
                                 ffrEtchCount = 0;
                                 while (ffrEtchCount <= 0x1FE)
                                 {
                                     etch.Write((byte)ffrspSpellPatch[ffrEtchCount]);
+                                    ffrEtchCount++;
+                                }
+                                /* Header for Spell Message Pointers */
+                                etch.Write((byte)0x03); etch.Write((byte)0x04); etch.Write((byte)0xD0); etch.Write((byte)0x00); etch.Write((byte)0x40);
+                                ffrEtchCount = 0;
+                                while (ffrEtchCount <= 0x3F)
+                                {
+                                    etch.Write((byte)ffrspSpellMsgPatch[ffrEtchCount]);
                                     ffrEtchCount++;
                                 }
                                 etch.Write(Encoding.ASCII.GetBytes("EOF"));
