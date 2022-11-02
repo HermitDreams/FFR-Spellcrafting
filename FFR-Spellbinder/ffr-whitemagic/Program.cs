@@ -9,12 +9,14 @@ using System.Net.NetworkInformation;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Timers;
 using static System.Formats.Asn1.AsnWriter;
 // FF1 Spellbinder, for use with Final Fantasy Randomizer. IRC Script and C# port by Linkshot, 2018-2022
 namespace ffr_spellbinder
 {
     internal class Program
     {
+        #region Initialization
         // Flag List (Accept only these)
         // e: Enemy Slot Sanity Checker
         // h: Out-of-Battle Healing Preservation
@@ -25,9 +27,9 @@ namespace ffr_spellbinder
         // i: Assign appropriate Item Magic
         // S: LOK2 & HEL2 spell fixes compatibility
         // x: Turn off level balancing
-        public static string ffrspflags = "-ehkS";
-        public static int ffrspblackAoE = 0;
+        public static string ffrspflags = "-ehikS";
         public static bool ffrspellbinding = true;
+        public static int ffrspblackAoE = 0;
         public static double ffrsplevel = 1;
         public static int ffrspslot = 0;
         public static string ffrspmagic = "white";
@@ -65,25 +67,100 @@ namespace ffr_spellbinder
         public static int ffrspMsgByte = 0;
 
         #region CastingItems
-        public static string ffrLightAxe = "";
-        public static string ffrHealGear = "";
-        public static string ffrDefense = "";
-        public static string ffrWhiteShirt = "";
-        public static string ffrPowerBonk = "";
-        public static string ffrThorZeus = "";
-        public static string ffrBaneSword = "";
-        public static string ffrMageStaff = "";
-        public static string ffrBlackShirt = "";
-        public static string ffrWizardStaff = "";
+        public static int ffrLightAxe;
+        public static int ffrHealGear;
+        public static int ffrDefense;
+        public static int ffrWhiteShirt;
+        public static int ffrPowerBonk;
+        public static int ffrThorZeus;
+        public static int ffrBaneSword;
+        public static int ffrMageStaff;
+        public static int ffrBlackShirt;
+        public static int ffrWizardStaff;
+
+        public static bool ffrLightAxeLocked = false;
+        public static bool ffrHealGearLocked = false;
+        public static bool ffrDefenseLocked = false;
+        public static bool ffrWhiteShirtLocked = false;
+        public static bool ffrPowerBonkLocked = false;
+        public static bool ffrThorZeusLocked = false;
+        public static bool ffrBaneSwordLocked = false;
+        public static bool ffrMageStaffLocked = false;
+        public static bool ffrBlackShirtLocked = false;
+        public static bool ffrWizardStaffLocked = false;
         #endregion CastingItems
+        #endregion Initialization
         static void Main()
         {
+            #region Reinitialization
+            ffrspblackAoE = 0;
+            ffrsplevel = 1;
+            ffrspslot = 0;
+            ffrspmagic = "white";
+            ffrspreroll = 0;
+            ffrspResistCount = 0;
+            ffrspCurrentResist = 0;
+            ffrsptier = 0;
+            #region ResistVars
+            ffrspwall = 0;
+            ffrspantiweak = 0;
+            ffrspantibane = 0;
+            ffrspantizap = 0;
+            ffrspantinecro = 0;
+            ffrspantifire = 0;
+            ffrspantiice = 0;
+            ffrspantilightning = 0;
+            ffrspantiquake = 0;
+            ffrspantimagic = 0;
+            ffrspantitoxin = 0;
+            ffrspantidamage = 0;
+            #endregion ResistVars
+            ffrspbatmsgloop = 0;
+
+            ffrspname = "";
+            ffrsptarg = "";
+            ffrspelem = "";
+            ffrsptype = "";
+            ffrspeff = "";
+            ffrspgfxcolor = "";
+            ffrspgfxshape = "";
+            ffrSpell = "";
+
+            ffrspShapeByte = 0;
+            ffrspColorByte = 0;
+            ffrspMsgByte = 0;
+
+            #region CastingItems
+            ffrLightAxe = 0;
+            ffrHealGear = 0;
+            ffrDefense = 0;
+            ffrWhiteShirt = 0;
+            ffrPowerBonk = 0;
+            ffrThorZeus = 0;
+            ffrBaneSword = 0;
+            ffrMageStaff = 0;
+            ffrBlackShirt = 0;
+            ffrWizardStaff = 0;
+
+            ffrLightAxeLocked = false;
+            ffrHealGearLocked = false;
+            ffrDefenseLocked = false;
+            ffrWhiteShirtLocked = false;
+            ffrPowerBonkLocked = false;
+            ffrThorZeusLocked = false;
+            ffrBaneSwordLocked = false;
+            ffrMageStaffLocked = false;
+            ffrBlackShirtLocked = false;
+            ffrWizardStaffLocked = false;
+            #endregion CastingItems
             var ffrspTable = new List<string>();
             var ffrspBatMsg = new List<string>();
             var ffrspResMsg = new List<string>();
+            var itemCheck = new List<string>();
             var ffrpath = @"C:\Users\Linkshot\Utilities\FFR-Spellbinder\output\";
             var book = @$"table\SpellTable_{DateTime.UtcNow.Ticks.ToString()}.txt";
             var rune = @$"patch\FFR-Custom-Spells_({ffrspflags})_{DateTime.UtcNow.Ticks.ToString()}.ips";
+            #endregion Reinitialization
             using (TextWriter quill = File.CreateText($@"{ffrpath}{book}"))
             {
                 using (BinaryWriter etch = new BinaryWriter(File.OpenWrite($@"{ffrpath}{rune}")))
@@ -108,7 +185,8 @@ namespace ffr_spellbinder
                 sploop:
                     ffrspreroll = 0;
                     ffrspslot++;
-                    if (ffrsplevel == 5 && ffrspslot == 3 && ffrspmagic == "black") {
+                    if (ffrsplevel == 5 && ffrspslot == 3 && ffrspmagic == "black")
+                    {
                         #region WARP
                         ffrsptype = "Travel back one floor. ";
                         ffrSpellAcc = 255;
@@ -125,7 +203,8 @@ namespace ffr_spellbinder
                         goto spwrite;
                     }
                     #endregion WARP
-                    else if (ffrsplevel == 6 && ffrspslot == 2 && ffrspmagic == "white") {
+                    else if (ffrsplevel == 6 && ffrspslot == 2 && ffrspmagic == "white")
+                    {
                         #region EXIT
                         ffrsptype = "Return to World Map. ";
                         ffrSpellAcc = 255;
@@ -189,7 +268,7 @@ namespace ffr_spellbinder
                     {
                         case 0: ffrspColorByte = (ffrspmagic == "white") ? 36 : 40; break;
                         case 1 or 65: ffrspColorByte = 37; break;
-                        case 2 or 96: ffrspColorByte = 32; if (ffrspmagic == "black" && (((ffrSpellType == 1 || ffrSpellEff == 1) && ffrSpellElem == 2) || (PowerOf2.Divide(ffrSpellEff - 4) == true && ffrSpellType == 3 && ffrSpellEff != 8) || (ffrSpellType == 18 && ffrSpellEff != 2))) ffrspColorByte = 35; break;
+                        case 2 or 96: ffrspColorByte = 32; if (ffrspmagic == "black" && (((ffrSpellType == 1 || ffrSpellEff == 1) && ffrSpellElem == 2) || ((ffrSpellEff & 4) > 0 && ffrSpellType == 3) || (ffrSpellType == 18 && ffrSpellEff != 2))) ffrspColorByte = 35; break;
                         case 4 or 80: ffrspColorByte = 42; break;
                         case 8: ffrspColorByte = 45; break;
                         case 16: ffrspColorByte = 38; break;
@@ -844,7 +923,7 @@ namespace ffr_spellbinder
                                 break;
                             #endregion Confusion
                             default:
-                                if (PowerOf2.Divide(ffrSpellEff - 4) == true) // Poison
+                                if ((ffrSpellEff & 4) > 0) // Poison
                                 #region Poisons
                                 {
                                     ffrspMsgByte = 0x4D;
@@ -1039,7 +1118,7 @@ namespace ffr_spellbinder
                     #region PosEffect
                     else if (ffrSpellType == 8)
                     {
-                        if (ffrSpellEff == 3) ffrspShapeByte = (ffrSpellTarg == 8) ? 192 : 188;
+                        if (ffrSpellEff == 255) ffrspShapeByte = (ffrSpellTarg == 8) ? 192 : 188;
                         switch (ffrSpellEff)
                         {
                             case 1:
@@ -1057,14 +1136,6 @@ namespace ffr_spellbinder
                                     case 8: ffrspname = "SOFa"; break;
                                     case 16: ffrspname = "SOFT"; break;
                                     default: ffrspname = $"TARG{ffrSpellTarg}.POS_EFFECT.STONE"; break;
-                                }
-                                break;
-                            case 3:
-                                switch (ffrSpellTarg)
-                                {
-                                    case 8: ffrspname = "LIF2"; break; // change to LIFx later
-                                    case 16: ffrspname = "LIF2"; break;
-                                    default: ffrspname = $"TARG{ffrSpellTarg}.POS_EFFECT.DEATH.STONE"; break;
                                 }
                                 break;
                             case 4 or 20 or 132 or 148:
@@ -1116,6 +1187,14 @@ namespace ffr_spellbinder
                                     case 8: ffrspname = "CLRa"; break;
                                     case 16: ffrspname = "CLER"; break;
                                     default: ffrspname = $"TARG{ffrSpellTarg}.POS_EFFECT.ALL"; break;
+                                }
+                                break;
+                            case 255:
+                                switch (ffrSpellTarg)
+                                {
+                                    case 8: ffrspname = "LIFx"; break;
+                                    case 16: ffrspname = "LIF2"; break;
+                                    default: ffrspname = $"TARG{ffrSpellTarg}.POS_EFFECT.DEATH.STONE"; break;
                                 }
                                 break;
                             default: ffrspname = $"POS_EFFECT.EFF{ffrSpellEff}"; break;
@@ -1462,7 +1541,7 @@ namespace ffr_spellbinder
                         if (ffrSpellElem == 32) ffrspMsgByte = 0x4C;
                         switch (ffrSpellEff)
                         {
-                            case 1: 
+                            case 1:
                                 if (ffrspmagic == "white") ffrspname = "FROG"; ffrspMsgByte = 0x2F;
                                 if (ffrspmagic == "black")
                                 {
@@ -1543,12 +1622,11 @@ namespace ffr_spellbinder
                             }
                             break;
                         case 8:
-                            string ffrspmend = (PowerOf2.Divide(ffrSpellEff - 16) == true && ffrSpellEff != 32) ? " and Paralysis" : "";
+                            string ffrspmend = /* (PowerOf2.Divide(ffrSpellEff - 16) == true && ffrSpellEff != 32) */ ((ffrSpellEff & 16) > 0) ? " and Paralysis" : "";
                             switch (ffrSpellEff)
                             {
                                 case 1: ffrspeff = $"Revives {ffrsptarg} to 1 HP if fallen"; break;
                                 case 2: ffrspeff = $"Softens {ffrsptarg} if Petrified"; break;
-                                case 3: ffrspeff = $"Revives {ffrsptarg} to full health if fallen"; break;
                                 case 4 or 20: ffrspeff = $"Removes Poison{ffrspmend} from {ffrsptarg}"; break;
                                 case 8 or 24: ffrspeff = $"Removes Blindness{ffrspmend} from {ffrsptarg}"; break;
                                 case 16: ffrspeff = $"Removes Paralysis from {ffrsptarg}"; break;
@@ -1557,6 +1635,7 @@ namespace ffr_spellbinder
                                 case 128 or 144: ffrspeff = $"Snaps {ffrsptarg} out of Confusion{ffrspmend}"; break;
                                 case 132 or 148: ffrspeff = $"Cures {ffrsptarg} of Poison and Confusion{ffrspmend}"; break;
                                 case 252: ffrspeff = $"Removes all non-lethal ailments from {ffrsptarg}"; break;
+                                case 255: ffrspeff = $"Revives {ffrsptarg} to full health if fallen"; break;
                                 default: ffrspeff = $"Questionable remedy"; break;
                             }
                             break;
@@ -1585,7 +1664,7 @@ namespace ffr_spellbinder
                     {
                         case 1: ffrsptype = $"{ffrSpellEff} {ffrspelem} Damage to {ffrsptarg}. +{ffrSpellAcc} Crit Chance. "; break;
                         case 2: ffrsptype = $"{ffrSpellEff} Prejudicial Damage to {ffrsptarg}. +{ffrSpellAcc} Crit Chance. "; break;
-                        case 3: ffrsptype = $"{ffrspeff}. +{ffrSpellAcc} Chance to Hit. "; if (PowerOf2.Divide(ffrSpellEff - 4) == true && ffrSpellEff != 8) ffrsptype += "Venomous. "; break;
+                        case 3: ffrsptype = $"{ffrspeff}. +{ffrSpellAcc} Chance to Hit. "; if ((ffrSpellEff & 4) > 0) ffrsptype += "Venomous. "; break;
                         case 4: ffrsptype = $"{ffrspelem}-based Slowdown on {ffrsptarg}. +{ffrSpellAcc} Chance to Hit. "; break;
                         case 5: ffrsptype = $"{ffrSpellEff} {ffrspelem} Intimidation on {ffrsptarg}. +{ffrSpellAcc} Chance to Hit. "; break;
                         case 7: ffrsptype = $"{ffrSpellEff} Health to {ffrsptarg}. "; break;
@@ -1601,7 +1680,7 @@ namespace ffr_spellbinder
                         case 15: ffrsptype = $"Brings {ffrsptarg} back to full health. "; break;
                         case 16: ffrsptype = $"Improves the Evasion of {ffrsptarg} by {ffrSpellEff}. "; break;
                         case 17: ffrsptype = $"Uses {ffrspelem} to Remove all Resistance from {ffrsptarg}. +{ffrSpellAcc} Chance to Hit. "; break;
-                        case 18: ffrsptype = $"{ffrspeff}, if vulnerable. "; if (PowerOf2.Divide(ffrSpellEff - 4) == true && ffrSpellEff != 8) ffrsptype += "Venomous. "; break;
+                        case 18: ffrsptype = $"{ffrspeff}, if vulnerable. "; if ((ffrSpellEff & 4) > 0) ffrsptype += "Venomous. "; break;
                         default: ffrsptype = $"Unspecified spell. "; break;
                     }
                     #endregion TypeName
@@ -1837,12 +1916,117 @@ namespace ffr_spellbinder
 
                 // Check for ffrspname in the array containing all results
                 spwrite:
-                    if (ffrspTable.IndexOf(ffrspname) != -1)
+                    if (ffrspTable.Contains(ffrspname))
                     {
                         colors.echo(4, $"{ffrspname} already exists! Rerolling.");
                         ffrspreroll++;
                         goto spdupe;
                     }
+                    #region ItemMagicFlag
+                    if (ffrspflags.Contains("i"))
+                    {
+                        if (ffrSpellTarg == 1)
+                        {
+                            switch (ffrSpellElem)
+                            {
+                                case 2: if (ffrBaneSwordLocked == false) { ffrBaneSword = ffrspTable.Count; if (!itemCheck.Contains("Bane Sword")) itemCheck.Add("Bane Sword"); if (ffrsplevel >= 5) ffrBaneSwordLocked = true; } break;
+                                case 64: if (ffrThorZeusLocked == false) { ffrThorZeus = ffrspTable.Count; if (!itemCheck.Contains("Thor H/Zeus G")) itemCheck.Add("Thor H/Zeus G"); if (ffrsplevel >= 3) ffrThorZeusLocked = true; } break;
+                            }
+                            switch (ffrSpellType)
+                            {
+                                case 1 or 2:
+                                    if (ffrspmagic == "white")
+                                    {
+                                        if (ffrLightAxeLocked == false && ffrBaneSword != ffrspTable.Count)
+                                        {
+                                            ffrLightAxe = ffrspTable.Count;
+                                            if (!itemCheck.Contains("Light Axe")) itemCheck.Add("Light Axe");
+                                            if (ffrsplevel >= 3) ffrLightAxeLocked = true;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (ffrMageStaffLocked == false && Math.Max(ffrThorZeus, ffrBaneSword) != ffrspTable.Count)
+                                        {
+                                            ffrMageStaff = ffrspTable.Count;
+                                            if (!itemCheck.Contains("Mage Staff")) itemCheck.Add("Mage Staff");
+                                            if (ffrsplevel >= 3) ffrMageStaffLocked = true;
+                                        }
+                                        if (ffrBlackShirtLocked == false && Math.Max(Math.Max(ffrThorZeus, ffrBaneSword), ffrMageStaff) != ffrspTable.Count)
+                                        {
+                                            ffrBlackShirt = ffrspTable.Count;
+                                            if (!itemCheck.Contains("Black Shirt")) itemCheck.Add("Black Shirt");
+                                            if (ffrsplevel >= 4) ffrBlackShirtLocked = true;
+                                        }
+                                    }
+                                    break;
+                                case 3 or 4 or 5 or 14 or 17:
+                                    if (ffrSpellType != 3 || (ffrSpellEff & 3) == 0)
+                                    {
+                                        if (ffrWizardStaffLocked == false && Math.Max(ffrThorZeus, ffrBaneSword) != ffrspTable.Count)
+                                        {
+                                            ffrWizardStaff = ffrspTable.Count;
+                                            if (!itemCheck.Contains("Wizard Staff")) itemCheck.Add("Wizard Staff");
+                                            if (ffrsplevel >= 4) ffrWizardStaffLocked = true;
+                                        }
+                                    }
+                                    break;
+                            }
+                        }
+                        if (ffrSpellTarg == 8)
+                        {
+                            switch (ffrSpellType)
+                            {
+
+                                case 7 or 8 or 15:
+                                    if (ffrHealGearLocked == false)
+                                    {
+                                        ffrHealGear = ffrspTable.Count;
+                                        if (!itemCheck.Contains("Heal Helm/Rod")) itemCheck.Add("Heal Helm/Rod");
+                                        if (ffrspflags.Contains("h"))
+                                        {
+                                            var healDice = new Random();
+                                            if (healDice.Next(4) + 1 < 4) { ffrHealGearLocked = true; }
+                                            else colors.echo(13, "Advancing Heal Gear!");
+                                        }
+                                        else if (ffrsplevel >= 3) ffrHealGearLocked = true;
+                                    }
+                                    break;
+                                case 9 or 10 or 16:
+                                    if (ffrWhiteShirtLocked == false)
+                                    {
+                                        ffrWhiteShirt = ffrspTable.Count;
+                                        if (!itemCheck.Contains("White Shirt")) itemCheck.Add("White Shirt");
+                                        if (ffrsplevel >= 3) ffrWhiteShirtLocked = true;
+                                    }
+                                    break;
+                            }
+                        }
+                        if (ffrSpellTarg == 4)
+                        {
+                            switch (ffrSpellType)
+                            {
+                                case 9 or 10 or 16:
+                                    if (ffrDefenseLocked == false)
+                                    {
+                                        ffrDefense = ffrspTable.Count;
+                                        if (!itemCheck.Contains("Defense Sword")) itemCheck.Add("Defense Sword");
+                                        if ((ffrsplevel >= 3 && ffrspmagic == "white") || (ffrsplevel >= 5 && ffrspmagic == "black")) ffrDefenseLocked = true;
+                                    }
+                                    break;
+                            }
+                        }
+                        if (Enumerable.Range(12, 2).Contains(ffrSpellType) && (ffrSpellTarg & 12) >= 4)
+                        {
+                            if (ffrPowerBonkLocked == false)
+                            {
+                                ffrPowerBonk = ffrspTable.Count;
+                                if (!itemCheck.Contains("Power Bonk")) itemCheck.Add("Power Bonk");
+                                if (ffrsplevel >= 5) ffrPowerBonkLocked = true;
+                            }
+                        }
+                    }
+                    #endregion ItemMagicFlag
                     ffrspTable.Add(ffrspname);
                     ffrPatchCount = 1;
                     while (ffrPatchCount <= 4)
@@ -1881,7 +2065,34 @@ namespace ffr_spellbinder
                             quill.Write("=====");
                             if (ffrsplevel == 8) // Array finished populating
                             {
-/* Header for Spell Names */    etch.Write((byte)0x02); etch.Write((byte)0xBE); etch.Write((byte)0x13); etch.Write((byte)0x01); etch.Write((byte)0x3F);
+                                #region WritingItemMagic
+                                if (ffrspflags.Contains("i"))
+                                    try
+                                    {
+                                        quill.WriteLine();
+                                        quill.Flush(); // refilling ink before writing items
+                                        quill.WriteLine("CASTING ITEMS");
+                                        quill.WriteLine($"    {itemCheck[itemCheck.IndexOf("Light Axe")]}: {ffrspTable[ffrLightAxe]}");
+                                        quill.WriteLine($"   {itemCheck[itemCheck.IndexOf("Mage Staff")]}: {ffrspTable[ffrMageStaff]}");
+                                        quill.WriteLine($"  {itemCheck[itemCheck.IndexOf("Black Shirt")]}: {ffrspTable[ffrBlackShirt]}");
+                                        quill.WriteLine($"{itemCheck[itemCheck.IndexOf("Thor H/Zeus G")]}: {ffrspTable[ffrThorZeus]}");
+                                        quill.WriteLine($"   {itemCheck[itemCheck.IndexOf("Bane Sword")]}: {ffrspTable[ffrBaneSword]}");
+                                        quill.WriteLine($"   {itemCheck[itemCheck.IndexOf("Power Bonk")]}: {ffrspTable[ffrPowerBonk]}");
+                                        quill.WriteLine($"{itemCheck[itemCheck.IndexOf("Defense Sword")]}: {ffrspTable[ffrDefense]}");
+                                        quill.WriteLine($"  {itemCheck[itemCheck.IndexOf("White Shirt")]}: {ffrspTable[ffrWhiteShirt]}");
+                                        quill.WriteLine($" {itemCheck[itemCheck.IndexOf("Wizard Staff")]}: {ffrspTable[ffrWizardStaff]}");
+                                        quill.WriteLine($"{itemCheck[itemCheck.IndexOf("Heal Helm/Rod")]}: {ffrspTable[ffrHealGear]}");
+                                    }
+                                    catch
+                                    {
+                                        colors.echo(4, "Failed to write Item Magic. Taking a short rest before retrying...");
+                                        Thread.Sleep(3000);
+                                        Main();
+                                        return;
+                                    }
+                                #endregion WritingItemMagic
+                                /* Header for Spell Names */
+                                etch.Write((byte)0x02); etch.Write((byte)0xBE); etch.Write((byte)0x13); etch.Write((byte)0x01); etch.Write((byte)0x3F);
                                 var ffrEtchCount = 0;
                                 while (ffrEtchCount <= 0x13E)
                                 {
@@ -1889,26 +2100,9 @@ namespace ffr_spellbinder
                                     // if ((ffrEtchCount + 1) % 4 == 0 && ffrEtchCount != 0x13F) etch.Write((byte)0x00);
                                     ffrEtchCount++;
                                 }
-                                #region ItemMagic
-                                // start going through array of spells at specific slots, forward and then backward
-                                // deny that slot being assigned twice
-                                // if (ffrspflags.IndexOf("i") != -1) {
-                                // ffrLightAxe: TypeByte 1 or 2. TargByte 1. Array entries of (modulo 8 > 3) only. Start seeking at 17th entry.
-                                // ffrHealGear: TypeByte 7, 8, or 15. TargByte 8. Array entries of (modulo 8 > 3) only. Start seeking at 17th entry.
-                                // ffrDefense: TypeByte 9, 10, or 16. TargByte 4. Start seeking at 17th entry.
-                                // ffrWhiteShirt: TypeByte 9, 10, or 16. TargByte 8. Start seeking at 17th entry.
-                                // ffrPowerBonk: TypeByte 12 or 13. TargByte 4 or 8. Start seeking at 33rd entry.
-                                // ffrThorZeus: ElemByte 64. TargByte 1. Start seeking at 21st entry.
-                                // ffrBaneSword: ElemByte 2 or (TypeByte 3 && EffByte - 4 is a power of 2). TargByte 1. Array entires of (modulo 8 < 4) only. Start seeking at 37th entry.
-                                // ffrMageStaff: TypeByte 1. TargByte 1. Array entries of (modulo 8 < 4) only. Start seeking at 21st entry.
-                                // ffrBlackShirt: TypeByte 1. TargByte 1. Array entries of (modulo 8 < 4) only. Start seeking at 29th entry.
-                                // ffrWizardStaff: TypeByte > 2. (TypeByte != 3 || EffByte > 3). TargByte 1. Starts seeking at 9th entry.
-                                // }
-                                // if all succeed, echo.colors(9,$"Item Magic verified!");
-                                // else prompt user to proceed or retry
-                                #endregion ItemMagic
+                                etch.Flush();
                                 #region BlackAoE
-                                // if (ffrspflags.IndexOf("b") != -1) {
+                                // if (ffrspflags.Contains("b")) {
                                 // Check for 6 of TypeByte 1 && TargByte 1 at (modulo 8 < 4) entries
                                 // if true: echo.colors(9,$"{amount} damage spells detected!");
                                 // if false: clear array and start over
@@ -1974,6 +2168,7 @@ namespace ffr_spellbinder
                                     etch.Write((byte)FF1CharMap.Transmute(ffrspBatMsg[0x4C].Substring(ffrEtchCount, 1)));
                                     ffrEtchCount++;
                                 }
+                                etch.Flush();
                                 // Assign Message 76:
                                 // if: TypeByte 3 or 18. ElemByte 32. { ffrmsg76 = "Frozen" }
                                 // else if: TypeByte 3 or 18. EffByte 128 || (EffByte - 4 is a power of 2). ElemByte 16. { ffrmsg76 = "Ablaze" }
@@ -1981,16 +2176,35 @@ namespace ffr_spellbinder
                                 // Write down applicable battle messages and whether they were assigned
                                 // (1, 2, 3, 5, 8, 10, 11, 12, 13, 15, 16, 18, 21, 22, 24, 25, 27, 28, 29, 30, 31, 43, 47, 74, 76, 77)
                                 #endregion BattleMessages
+                                #region ItemMagicBytes
+                                if (ffrspflags.Contains("i"))
+                                {
+                                    etch.Write((byte)0x03); etch.Write((byte)0x00); etch.Write((byte)0xF3); etch.Write((byte)0x00); etch.Write((byte)0x01); etch.Write((byte)(ffrLightAxe + 1));
+                                    etch.Write((byte)0x03); etch.Write((byte)0x00); etch.Write((byte)0xFB); etch.Write((byte)0x00); etch.Write((byte)0x01); etch.Write((byte)(ffrHealGear + 1));
+                                    etch.Write((byte)0x03); etch.Write((byte)0x01); etch.Write((byte)0x03); etch.Write((byte)0x00); etch.Write((byte)0x01); etch.Write((byte)(ffrMageStaff + 1));
+                                    etch.Write((byte)0x03); etch.Write((byte)0x01); etch.Write((byte)0x0B); etch.Write((byte)0x00); etch.Write((byte)0x01); etch.Write((byte)(ffrDefense + 1));
+                                    etch.Write((byte)0x03); etch.Write((byte)0x01); etch.Write((byte)0x13); etch.Write((byte)0x00); etch.Write((byte)0x01); etch.Write((byte)(ffrWizardStaff + 1));
+                                    etch.Write((byte)0x03); etch.Write((byte)0x01); etch.Write((byte)0x2B); etch.Write((byte)0x00); etch.Write((byte)0x01); etch.Write((byte)(ffrThorZeus + 1));
+                                    etch.Write((byte)0x03); etch.Write((byte)0x01); etch.Write((byte)0x33); etch.Write((byte)0x00); etch.Write((byte)0x01); etch.Write((byte)(ffrBaneSword + 1));
+                                    // Separating weapons and armor for readability
+                                    etch.Write((byte)0x03); etch.Write((byte)0x01); etch.Write((byte)0x8B); etch.Write((byte)0x00); etch.Write((byte)0x01); etch.Write((byte)(ffrWhiteShirt + 1));
+                                    etch.Write((byte)0x03); etch.Write((byte)0x01); etch.Write((byte)0x8F); etch.Write((byte)0x00); etch.Write((byte)0x01); etch.Write((byte)(ffrBlackShirt + 1));
+                                    etch.Write((byte)0x03); etch.Write((byte)0x01); etch.Write((byte)0xCB); etch.Write((byte)0x00); etch.Write((byte)0x01); etch.Write((byte)(ffrHealGear + 1));
+                                    etch.Write((byte)0x03); etch.Write((byte)0x01); etch.Write((byte)0xE3); etch.Write((byte)0x00); etch.Write((byte)0x01); etch.Write((byte)(ffrThorZeus + 1));
+                                    etch.Write((byte)0x03); etch.Write((byte)0x01); etch.Write((byte)0xE7); etch.Write((byte)0x00); etch.Write((byte)0x01); etch.Write((byte)(ffrPowerBonk + 1));
+                                }
+                                #endregion ItemMagicBytes
                                 /* Header for Spell Data */
-                                etch.Write((byte)0x03); etch.Write((byte)0x01); etch.Write((byte)0xF0); etch.Write((byte)0x01); etch.Write((byte)0xFF);
+                                etch.Write((byte)0x03); etch.Write((byte)0x01); etch.Write((byte)0xF0); etch.Write((byte)0x01); etch.Write((byte)0xFF); 
                                 ffrEtchCount = 0;
                                 while (ffrEtchCount <= 0x1FE)
                                 {
                                     etch.Write((byte)ffrspSpellPatch[ffrEtchCount]);
                                     ffrEtchCount++;
                                 }
+                                etch.Flush();
                                 /* Header for Spell Message Pointers */
-                                etch.Write((byte)0x03); etch.Write((byte)0x04); etch.Write((byte)0xD0); etch.Write((byte)0x00); etch.Write((byte)0x40);
+                                etch.Write((byte)0x03); etch.Write((byte)0x04); etch.Write((byte)0xD0); etch.Write((byte)0x00); etch.Write((byte)0x40);    
                                 ffrEtchCount = 0;
                                 while (ffrEtchCount <= 0x3F)
                                 {
@@ -2000,11 +2214,13 @@ namespace ffr_spellbinder
                                 etch.Write(Encoding.ASCII.GetBytes("EOF"));
                                 colors.echo(9, $"Generated 64 spells! Flags used: {ffrspflags}");
                                 Process.Start("notepad.exe", $@"{ffrpath}{book}");
+                                Process.Start(@$"{ffrpath}\flips\flips.exe", $@"{ffrpath}{rune}");
                             }
                             else if (ffrsplevel > 8) { colors.echo(4, $"ffrsplevel reached {ffrsplevel}, which exceeds 8!"); }
                             else
                             {
                                 quill.WriteLine();
+                                if (ffrsplevel == 4) quill.Flush(); // halfway point! refilling ink!!
                                 ffrsplevel++;
                                 ffrspslot = 0;
                                 ffrspmagic = "white";

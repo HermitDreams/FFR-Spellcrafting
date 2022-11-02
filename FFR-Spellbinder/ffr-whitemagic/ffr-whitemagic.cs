@@ -91,7 +91,7 @@ namespace ffr_spellbinder
             // Spellbinding Slot Permissions
             #region HEL2Fix
             // Compatibility with HEL2 fix
-            if ((Program.ffrspflags.IndexOf("S") != -1) && (Program.ffrsplevel == 5) && (Program.ffrspslot == 4) && (Program.ffrspreroll < 5))
+            if ((Program.ffrspflags.Contains("S")) && (Program.ffrsplevel == 5) && (Program.ffrspslot == 4) && (Program.ffrspreroll < 5))
             {
                 ffrwmeffect = 4;
                 ffrwmheal = 1;
@@ -100,7 +100,7 @@ namespace ffr_spellbinder
             #endregion
             #region PreserveHealing
             // Makes sure Healing lands in 11 specific slots
-            if ((Program.ffrspflags.IndexOf("h") != -1) && (Program.ffrspreroll < 5))
+            if ((Program.ffrspflags.Contains("h")) && (Program.ffrspreroll < 5))
             {
                 // if (L isincs % Program.ffrspflags) { write - i SpellLog.txt Flag "h" is evaluating this spell.Reroll counter is at % Program.ffrspreroll of 5. }
                 if (ffrwmafflict == 8)
@@ -208,7 +208,7 @@ namespace ffr_spellbinder
             #endregion
             #region EnemySanity
             // Prevents Harm, Confusion, Fear, Soft, and Life from landing in slots enemies use
-            if ((Program.ffrspflags.IndexOf("e") != -1) && (Program.ffrspreroll < 5))
+            if ((Program.ffrspflags.Contains("e")) && (Program.ffrspreroll < 5))
             {
                 // if (L isincs % Program.ffrspflags) { write - i SpellLog.txt Flag "e" is evaluating this spell.Reroll counter is at % Program.ffrspreroll of 5 }
                 if ((ffrwmeffect == 2) || ((ffrwmeffect == 3) && ((ffrwmdebuff == 5) || (ffrwmdebuff == 7) || ((ffrwmdebuff == 10) && (ffrwmafflict == 8)))) || ((ffrwmeffect == 4) && (Enumerable.Range(7, 3).Contains(ffrwmheal)) && (ffrwmafflict < 3)))
@@ -575,20 +575,16 @@ namespace ffr_spellbinder
                                 {
                                     //write - a13 WhiteSpell.txt Effect: Revive
                                     ffrwmEffByte = 1;
-                                    ffrwmallies = 2;
                                 }
                                 else { colors.echo(13, $"Debug: Bounced at LIFE({whiteDice} vs 4)"); goto whitemagic; }
                             }
                             else
                             {
                                 // write - al3 WhiteSpell.txt Effect: Revive
-                                if ((Program.ffrsplevel > 6) && (ffrwmallies == 3)) { ffrwmEffByte = 3; }
-                                else
-                                {
-                                    ffrwmallies = 2;
-                                    ffrwmEffByte = 1;
-                                }
+                                if ((Program.ffrsplevel > 6) && (ffrwmallies == 3)) { ffrwmEffByte = 255; }
+                                else { ffrwmEffByte = 1; }
                             }
+                            ffrwmallies = 2;
                         }
                         // Soft must win a coinflip
                         else if (ffrwmafflict == 2)
@@ -1144,7 +1140,7 @@ namespace ffr_spellbinder
                             #region CUREPower
                             if (ffrwmeffect == 4)
                             {
-                                if ((Program.ffrspellbinding == true) || (Program.ffrspflags.IndexOf("h") != -1))
+                                if ((Program.ffrspellbinding == true) || (Program.ffrspflags.Contains("h")))
                                 {
                                     if (Program.ffrsplevel != 8)
                                     {
@@ -1180,7 +1176,7 @@ namespace ffr_spellbinder
                         #region HEALPower
                         if (ffrwmeffect == 4)
                         {
-                            if ((Program.ffrspellbinding == true) || (Program.ffrspflags.IndexOf("h") != -1))
+                            if ((Program.ffrspellbinding == true) || (Program.ffrspflags.Contains("h")))
                             {
                                 if (Program.ffrsplevel != 8) { ffrwmstrength = (int)Math.Floor(6 * Math.Pow(2, (Program.ffrsplevel / 2 - 0.5))); } // HEAL formula, accurate to FF1
                                 else { ffrwmstrength = whiteDice.Next(48, 136); }

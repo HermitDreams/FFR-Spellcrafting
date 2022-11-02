@@ -8,6 +8,12 @@ namespace ffr_spellbinder
 {
     internal class colors
     {
+        /// <summary>
+        /// Instantiates colors inside of a WriteLine block, using standard Control Code format
+        /// (0 = White, 1 = Black, ... 15 = Gray)
+        /// </summary>
+        /// <param name="colorId"></param>
+        /// <param name="text"></param>
         public static void echo(int colorId, string text)
         {
             ConsoleColor colorName;

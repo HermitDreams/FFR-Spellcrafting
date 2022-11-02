@@ -105,7 +105,7 @@ namespace ffr_spellbinder
             // Spellbinding Slot Permissions
             #region LOK2Fix
             // Compatibility with LOK2 fix
-            if ((Program.ffrspflags.IndexOf("S") != -1) && (Program.ffrsplevel == 3) && (Program.ffrspslot == 4) && (Program.ffrspreroll < 5))
+            if ((Program.ffrspflags.Contains("S")) && (Program.ffrsplevel == 3) && (Program.ffrspslot == 4) && (Program.ffrspreroll < 5))
             {
                 ffrbmeffect = 2;
                 ffrbmalter = 1;
@@ -114,7 +114,7 @@ namespace ffr_spellbinder
             #endregion LOK2Fix
             #region KeepDmg
             // -b2: Preserves all slots with damage spells
-            if ((Program.ffrspflags.IndexOf("b2") != -1) && (Program.ffrspreroll < 5))
+            if ((Program.ffrspflags.Contains("b2")) && (Program.ffrspreroll < 5))
             {
                 if (((Program.ffrsplevel != 4) && (Program.ffrspslot == 1)) || ((Program.ffrsplevel == 1) && (Program.ffrspslot == 4)) || ((Program.ffrsplevel == 3) && (Program.ffrspslot == 3)) || ((Program.ffrsplevel == 4) && (Program.ffrspslot == 4)))
                 {
@@ -125,7 +125,7 @@ namespace ffr_spellbinder
             }
             #endregion KeepDmg
             #region ConfuseBad
-            if ((Program.ffrspflags.IndexOf("C") != -1) && (Program.ffrsplevel == 1) && (Program.ffrspslot == 1) && (ffrbmeffect == 2) && (ffrbmalter == 2) && (Program.ffrspreroll < 5))
+            if ((Program.ffrspflags.Contains("C")) && (Program.ffrsplevel == 1) && (Program.ffrspslot == 1) && (ffrbmeffect == 2) && (ffrbmalter == 2) && (Program.ffrspreroll < 5))
             {
                 colors.echo(11, $"Debug: Bounced Buff {ffrbmbuff} from FIRE slot");
                 goto blackmagic;
@@ -1014,7 +1014,7 @@ namespace ffr_spellbinder
             // Accuracy Balance
             // Defines the appropriate tiers of Accuracy for Spellbooks
             // Accuracy no longer caps
-            if (Program.ffrspellbinding == true && (ffrbmTypeByte != 3 || PowerOf2.Divide(ffrbmEffByte-4) == false))
+            if (Program.ffrspellbinding == true && (ffrbmTypeByte != 3 || (ffrbmEffByte & 4) > 0))
             {
                 switch (ffrbmElemByte) // Set element penalties and bonuses
                 {
@@ -1061,7 +1061,7 @@ namespace ffr_spellbinder
 
             #region EnemyCheck
             // Prevents Confusion and Fear from landing in slots enemies use
-            if ((Program.ffrspflags.IndexOf("e") != -1) && (Program.ffrspreroll < 5))
+            if ((Program.ffrspflags.Contains("e")) && (Program.ffrspreroll < 5))
             {
                 // if (L isincs % Program.ffrspflags) { write - i SpellLog.txt Flag "e" is evaluating this spell.Reroll counter is at % Program.ffrspreroll of 5 }
                 if ((ffrbmeffect == 2) && (ffrbmalter == 1) && ((ffrbmdebuff == 6) || (ffrbmdebuff == 9)))
