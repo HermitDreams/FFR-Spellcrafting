@@ -978,11 +978,8 @@ namespace ffr_spellbinder
 
             if (ffrbmb2 == true)
             {
-                switch ((int)Program.ffrsplevel, Program.ffrspslot)
-                {
-                    case (1, 1 or 4) or (2 , 1) or (3 , 1 or 3) or (4 , 4): ffrbmtarget = 1; break;
-                    case (5 or 6 or 7, 1): ffrbmtarget = 2; break;
-                }
+                if (Program.ffrsplevel < 3) ffrbmtarget = 1;
+                else if (Program.ffrsplevel < 8) ffrbmtarget = 2;
             }
 
             // Assigns the target byte

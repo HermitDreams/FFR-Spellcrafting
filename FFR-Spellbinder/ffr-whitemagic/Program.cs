@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq.Expressions;
+using System.Net.Http.Headers;
 using System.Net.NetworkInformation;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
@@ -27,7 +28,7 @@ namespace ffr_spellbinder
         // i: Assign appropriate Item Magic
         // S: LOK2 & HEL2 spell fixes compatibility
         // x: Turn off level balancing
-        public static string ffrspflags = "-ehikS";
+        public static string ffrspflags = "";
         public static bool ffrspellbinding = true;
         public static int ffrspblackAoE = 0;
         public static double ffrsplevel = 1;
@@ -92,7 +93,26 @@ namespace ffr_spellbinder
         #endregion Initialization
         static void Main()
         {
+            colors.echo(0, "Select flags! (Case Sensitive)");
+            colors.echo(0, " ====================================================== ", 2);
+            colors.echo(0, "| - b: Minimum 6 Spellbombs                            |", 2);
+            colors.echo(0, "|   - b2: Preserve Damage Slots                        |", 2);
+            colors.echo(0, "| - C: Confusion status can't cast buffs               |", 2);
+            colors.echo(0, "| - e: Enemies will only cast spells they can use      |", 2);
+            colors.echo(0, "| - h: Out-of-Battle Spells don't change               |", 2);
+            colors.echo(0, "| - i: Assigns appropriate spells to each Casting Item |", 2);
+            colors.echo(0, "| - k: No Instakills below Level 5                     |", 2);
+            colors.echo(0, "| - S: Complies with Final Fantasy Randomizer's        |", 2);
+            colors.echo(0, "|                           bugfixes to LOK2 and HEL2  |", 2);
+            colors.echo(0, " ====================================================== ", 2);
+            colors.echo(12, "NOTE: All flags will give up after 5 failures to fill a spell slot");
+            colors.echo(2, "(If something seems out of place, that's probably what happened)");
+            ffrspflags = $"{Console.ReadLine()}";
+            // Thread.Yield();
             #region Reinitialization
+            var ffrspretries = 0;
+        retry:
+            colors.echo(ffrspretries, $"Spellbinding! Attempt {ffrspretries + 1}..");
             ffrspblackAoE = 0;
             ffrsplevel = 1;
             ffrspslot = 0;
@@ -1922,6 +1942,9 @@ namespace ffr_spellbinder
                         ffrspreroll++;
                         goto spdupe;
                     }
+                    #region BlackDamageAssess
+                    if (ffrSpellType == 1 && ffrSpellTarg == 1 && ffrspmagic == "black" && ffrspflags.Contains("b")) ffrspblackAoE++;
+                    #endregion BlackDamageAssess
                     #region ItemMagicFlag
                     if (ffrspflags.Contains("i"))
                     {
@@ -1961,6 +1984,15 @@ namespace ffr_spellbinder
                                     }
                                     break;
                                 case 3 or 4 or 5 or 14 or 17:
+                                    if (ffrSpellType == 3 && (ffrSpellEff & 4) > 0)
+                                    {
+                                        if (ffrBaneSwordLocked == false) 
+                                        { 
+                                            ffrBaneSword = ffrspTable.Count;
+                                            if (!itemCheck.Contains("Bane Sword")) itemCheck.Add("Bane Sword");
+                                            if (ffrsplevel >= 5) ffrBaneSwordLocked = true;
+                                        }
+                                    }
                                     if (ffrSpellType != 3 || (ffrSpellEff & 3) == 0)
                                     {
                                         if (ffrWizardStaffLocked == false && Math.Max(ffrThorZeus, ffrBaneSword) != ffrspTable.Count)
@@ -2065,6 +2097,19 @@ namespace ffr_spellbinder
                             quill.Write("=====");
                             if (ffrsplevel == 8) // Array finished populating
                             {
+                                #region BlackAoE
+                                if (ffrspflags.Contains("b"))
+                                {
+                                    if (ffrspblackAoE >= 6) { colors.echo(11, $"{ffrspblackAoE} damage spells detected!"); }
+                                    else
+                                    {
+                                        ffrspretries++;
+                                        colors.echo(4, "Failed to meet Spellbomb Quota. Taking a short rest before retrying...");
+                                        Thread.Sleep(3000);
+                                        goto retry;
+                                    }
+                                }
+                                #endregion BlackAoE
                                 #region WritingItemMagic
                                 if (ffrspflags.Contains("i"))
                                     try
@@ -2082,13 +2127,14 @@ namespace ffr_spellbinder
                                         quill.WriteLine($"  {itemCheck[itemCheck.IndexOf("White Shirt")]}: {ffrspTable[ffrWhiteShirt]}");
                                         quill.WriteLine($" {itemCheck[itemCheck.IndexOf("Wizard Staff")]}: {ffrspTable[ffrWizardStaff]}");
                                         quill.WriteLine($"{itemCheck[itemCheck.IndexOf("Heal Helm/Rod")]}: {ffrspTable[ffrHealGear]}");
+                                        colors.echo(13, $"Assigned all {itemCheck.Count} Casting Items!");
                                     }
                                     catch
                                     {
+                                        ffrspretries++;
                                         colors.echo(4, "Failed to write Item Magic. Taking a short rest before retrying...");
                                         Thread.Sleep(3000);
-                                        Main();
-                                        return;
+                                        goto retry;
                                     }
                                 #endregion WritingItemMagic
                                 /* Header for Spell Names */
@@ -2101,13 +2147,6 @@ namespace ffr_spellbinder
                                     ffrEtchCount++;
                                 }
                                 etch.Flush();
-                                #region BlackAoE
-                                // if (ffrspflags.Contains("b")) {
-                                // Check for 6 of TypeByte 1 && TargByte 1 at (modulo 8 < 4) entries
-                                // if true: echo.colors(9,$"{amount} damage spells detected!");
-                                // if false: clear array and start over
-                                // }
-                                #endregion BlackAoE
                                 #region BattleMessages
                                 #region ResistPatch
                                 if (ffrspResistCount >= 1)
@@ -2212,7 +2251,7 @@ namespace ffr_spellbinder
                                     ffrEtchCount++;
                                 }
                                 etch.Write(Encoding.ASCII.GetBytes("EOF"));
-                                colors.echo(9, $"Generated 64 spells! Flags used: {ffrspflags}");
+                                colors.echo(9, $"Generated 64 spells! Flags used: -{ffrspflags}. Rerolls: {ffrspretries}");
                                 Process.Start("notepad.exe", $@"{ffrpath}{book}");
                                 Process.Start(@$"{ffrpath}\flips\flips.exe", $@"{ffrpath}{rune}");
                             }
