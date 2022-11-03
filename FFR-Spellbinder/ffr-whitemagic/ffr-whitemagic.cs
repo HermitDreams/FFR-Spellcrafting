@@ -379,6 +379,14 @@ namespace ffr_spellbinder
                             if (ffrwmstrength < 20) { Program.ffrsptier = 1; }
                         }
                     }
+                    else
+                    {
+                        ffrwmstrength = Math.Floor(ffrwmstrength * 0.75);
+                        if (ffrwmstrength < 40) { Program.ffrsptier = 3; }
+                        else Program.ffrsptier = 4;
+                        if (ffrwmstrength < 30) { Program.ffrsptier = 2; }
+                        if (ffrwmstrength < 20) { Program.ffrsptier = 1; }
+                    }
                     // write - al3 WhiteSpell.txt Effect: Fear
                     ffrwmTypeByte = 5;
                 }
@@ -392,6 +400,11 @@ namespace ffr_spellbinder
                         if (ffrwmstrength < 160) { Program.ffrsptier = 3; }
                         if (ffrwmstrength < 100) { Program.ffrsptier = 2; }
                         if (ffrwmstrength < 60) { Program.ffrsptier = 1; }
+                    }
+                    else
+                    {
+                        ffrwmstrength = Math.Floor(ffrwmstrength * 2.5 - 5);
+                        Program.ffrsptier = (int)Math.Floor((ffrwmstrength + 20) / 40);
                     }
                     // write - al3 WhiteSpell.txt Effect: Locked
                     ffrwmTypeByte = 14;
@@ -1005,9 +1018,30 @@ namespace ffr_spellbinder
                 else if (ffrwmbuff == 14)
                 {
                     ffrwmaccskip = false;
-                    if (ffrwmallies == 3) { ffrwmstrength = (int)Math.Floor(ffrwmstrength * 0.15); }
-                    else if (ffrwmallies == 2) { ffrwmstrength = (int)Math.Floor(ffrwmstrength * 0.20); }
-                    else { ffrwmstrength = (int)Math.Floor(ffrwmstrength * 0.25); }
+                    if (Program.ffrspellbinding == false)
+                    {
+                        if (ffrwmallies == 3) {
+                            ffrwmaccuracy = (int)Math.Floor(ffrwmaccuracy * 0.2);
+                            if (ffrwmaccuracy < 32) { Program.ffrsptier = 3; }
+                            else Program.ffrsptier = 4;
+                            if (ffrwmaccuracy < 16) { Program.ffrsptier = 2; }
+                            if (ffrwmaccuracy < 8) { Program.ffrsptier = 1; }
+                        }
+                        else if (ffrwmallies == 2) {
+                            ffrwmaccuracy = (int)Math.Floor(ffrwmaccuracy * 0.3);
+                            if (ffrwmaccuracy < 48) { Program.ffrsptier = 3; }
+                            else Program.ffrsptier = 4;
+                            if (ffrwmaccuracy < 24) { Program.ffrsptier = 2; }
+                            if (ffrwmaccuracy < 16) { Program.ffrsptier = 1; }
+                        }
+                        else { 
+                            ffrwmaccuracy = (int)Math.Floor(ffrwmaccuracy * 0.53);
+                            if (ffrwmaccuracy < 64) { Program.ffrsptier = 3; }
+                            else Program.ffrsptier = 4;
+                            if (ffrwmaccuracy < 40) { Program.ffrsptier = 2; }
+                            if (ffrwmaccuracy < 24) { Program.ffrsptier = 1; }
+                        }
+                    }
                     //n769 = write - al3 WhiteSpell.txt Effect: Attack Up
                     ffrwmTypeByte = 13;
                     // White TMPR is cut down in power by at least 75%
@@ -1126,7 +1160,23 @@ namespace ffr_spellbinder
                                     if (Program.ffrsplevel < 3) { ffrwmstrength = 8; Program.ffrsptier = 1; }
                                 }
                             }
-                            else if (ffrwmTypeByte == 16) { ffrwmstrength = ffrwmstrength * 2; }
+                            else if (ffrwmTypeByte == 9)
+                            {
+                                ffrwmstrength = Math.Floor(ffrwmstrength * 0.64);
+                                if (ffrwmstrength < 48) { Program.ffrsptier = 3; }
+                                else Program.ffrsptier = 4;
+                                if (ffrwmstrength < 28) { Program.ffrsptier = 2; }
+                                if (ffrwmstrength < 20) { Program.ffrsptier = 1; }
+                            }
+                            else if (ffrwmTypeByte == 13) ffrwmstrength = Math.Floor(ffrwmstrength * 0.2);
+                            else if (ffrwmTypeByte == 16)
+                            {
+                                ffrwmstrength = Math.Floor(ffrwmstrength * 2.4);
+                                if (ffrwmstrength < 200) { Program.ffrsptier = 3; }
+                                else Program.ffrsptier = 4;
+                                if (ffrwmstrength < 100) { Program.ffrsptier = 2; }
+                                if (ffrwmstrength < 75) { Program.ffrsptier = 1; }
+                            }
                         }
                     }
                     #endregion
@@ -1165,6 +1215,7 @@ namespace ffr_spellbinder
                                     if (Program.ffrsplevel < 5) { ffrwmstrength = 8; Program.ffrsptier = 2; }
                                     if (Program.ffrsplevel < 3) { ffrwmstrength = 5; Program.ffrsptier = 1; }
                                 }
+                                else ffrwmstrength = Math.Floor(ffrwmstrength * 0.14);
                             }
                             #endregion
                         }
@@ -1188,30 +1239,50 @@ namespace ffr_spellbinder
                         }
                         #endregion
                         #region PartyBuffPower
-                        else if ((ffrwmeffect == 5) && (Program.ffrspellbinding == true))
+                        else if (ffrwmeffect == 5)
                         {
-                            if (ffrwmTypeByte == 9)
+                            if (Program.ffrspellbinding == true)
                             {
-                                if (Program.ffrsplevel == 8) { ffrwmstrength = 24; Program.ffrsptier = 4; }
-                                if (Program.ffrsplevel < 8) { ffrwmstrength = 16; Program.ffrsptier = 3; }
-                                if (Program.ffrsplevel < 5) { ffrwmstrength = 12; Program.ffrsptier = 2; }
-                                if (Program.ffrsplevel < 3) { ffrwmstrength = 8; Program.ffrsptier = 1; }
+                                if (ffrwmTypeByte == 9)
+                                {
+                                    if (Program.ffrsplevel == 8) { ffrwmstrength = 24; Program.ffrsptier = 4; }
+                                    if (Program.ffrsplevel < 8) { ffrwmstrength = 16; Program.ffrsptier = 3; }
+                                    if (Program.ffrsplevel < 5) { ffrwmstrength = 12; Program.ffrsptier = 2; }
+                                    if (Program.ffrsplevel < 3) { ffrwmstrength = 8; Program.ffrsptier = 1; }
+                                }
+                                else if (ffrwmTypeByte == 16)
+                                {
+                                    if (Program.ffrsplevel == 8) { ffrwmstrength = 80; Program.ffrsptier = 4; }
+                                    if (Program.ffrsplevel < 8) { ffrwmstrength = 60; Program.ffrsptier = 3; }
+                                    if (Program.ffrsplevel < 5) { ffrwmstrength = 40; Program.ffrsptier = 2; }
+                                    if (Program.ffrsplevel < 3) { ffrwmstrength = 30; Program.ffrsptier = 1; }
+                                }
+                                else if (ffrwmTypeByte == 13)
+                                {
+                                    ffrwmaccskip = false;
+                                    ffrwmaccuracy -= 2;
+                                    if (Program.ffrsplevel == 8) { ffrwmstrength = 10; Program.ffrsptier = 4; }
+                                    if (Program.ffrsplevel < 8) { ffrwmstrength = 8; Program.ffrsptier = 3; }
+                                    if (Program.ffrsplevel < 5) { ffrwmstrength = 5; Program.ffrsptier = 2; }
+                                    if (Program.ffrsplevel < 3) { ffrwmstrength = 3; Program.ffrsptier = 1; }
+                                }
                             }
+                            else if (ffrwmTypeByte == 9)
+                            {
+                                ffrwmstrength = Math.Floor(ffrwmstrength * 0.3);
+                                if (ffrwmstrength < 24) { Program.ffrsptier = 3; }
+                                else Program.ffrsptier = 4;
+                                if (ffrwmstrength < 16) { Program.ffrsptier = 2; }
+                                if (ffrwmstrength < 12) { Program.ffrsptier = 1; }
+                            }
+                            else if (ffrwmTypeByte == 13) ffrwmstrength = Math.Floor(ffrwmstrength * 0.12);
                             else if (ffrwmTypeByte == 16)
                             {
-                                if (Program.ffrsplevel == 8) { ffrwmstrength = 80; Program.ffrsptier = 4; }
-                                if (Program.ffrsplevel < 8) { ffrwmstrength = 60; Program.ffrsptier = 3; }
-                                if (Program.ffrsplevel < 5) { ffrwmstrength = 40; Program.ffrsptier = 2; }
-                                if (Program.ffrsplevel < 3) { ffrwmstrength = 30; Program.ffrsptier = 1; }
-                            }
-                            else if (ffrwmTypeByte == 13)
-                            {
-                                ffrwmaccskip = false;
-                                ffrwmaccuracy -= 2;
-                                if (Program.ffrsplevel == 8) { ffrwmstrength = 10; Program.ffrsptier = 4; }
-                                if (Program.ffrsplevel < 8) { ffrwmstrength = 8; Program.ffrsptier = 3; }
-                                if (Program.ffrsplevel < 5) { ffrwmstrength = 5; Program.ffrsptier = 2; }
-                                if (Program.ffrsplevel < 3) { ffrwmstrength = 3; Program.ffrsptier = 1; }
+                                ffrwmstrength = Math.Floor(ffrwmstrength * 0.8);
+                                if (ffrwmstrength < 70) { Program.ffrsptier = 3; }
+                                else Program.ffrsptier = 4;
+                                if (ffrwmstrength < 50) { Program.ffrsptier = 2; }
+                                if (ffrwmstrength < 35) { Program.ffrsptier = 1; }
                             }
                         }
                         #endregion

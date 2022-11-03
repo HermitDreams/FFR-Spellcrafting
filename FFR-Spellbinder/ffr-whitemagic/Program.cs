@@ -113,6 +113,7 @@ namespace ffr_spellbinder
             var ffrspretries = 0;
         retry:
             colors.echo(ffrspretries, $"Spellbinding! Attempt {ffrspretries + 1}..");
+            if (ffrspflags.Contains("x")) ffrspellbinding = false;
             ffrspblackAoE = 0;
             ffrsplevel = 1;
             ffrspslot = 0;
@@ -120,7 +121,6 @@ namespace ffr_spellbinder
             ffrspreroll = 0;
             ffrspResistCount = 0;
             ffrspCurrentResist = 0;
-            ffrsptier = 0;
             #region ResistVars
             ffrspwall = 0;
             ffrspantiweak = 0;
@@ -242,6 +242,7 @@ namespace ffr_spellbinder
                     }
                 #endregion EXIT
                 spdupe:
+                    ffrsptier = 0;
                     ffrspname = "";
                     ffrsptarg = "";
                     ffrspelem = "";
@@ -319,6 +320,7 @@ namespace ffr_spellbinder
                                 case 16: ffrspColorByte = 37; break;
                                 case 32 or 48: ffrspColorByte = 42; break;
                                 case 64 or 80: ffrspColorByte = 33; break;
+                                case 128 or 144: ffrspColorByte = 34; break;
                             }
                             break;
                         case 9: ffrspColorByte = (ffrspmagic == "black") ? 44 : 41; break;
@@ -359,7 +361,7 @@ namespace ffr_spellbinder
                             else ffrspColorByte = 43;
                             switch (ffrSpellTarg)
                             {
-                                case 1: if (ffrsplevel < 8) ffrspname = $"HRM{ffrsptier}"; if (ffrsptier == 1) ffrspname = "HARM"; if (ffrsplevel == 8) ffrspname = "VANQ"; break;
+                                case 1: if (ffrsptier > 1) ffrspname = $"HRM{ffrsptier}"; if (ffrsptier == 1) ffrspname = "HARM"; if (ffrSpellEff >= 100) ffrspname = "VANQ"; break;
                                 case 2: if (ffrsptier > 1) ffrspname = $"JUG{ffrsptier}"; if (ffrsptier == 1) ffrspname = "JUDG"; break;
                                 default: ffrspname = $"TARG{ffrSpellTarg}.HARM_UNDEAD"; break;
                             }
@@ -1198,6 +1200,14 @@ namespace ffr_spellbinder
                                     case 8: ffrspname = "VOXa"; break;
                                     case 16: ffrspname = "VOX "; break;
                                     default: ffrspname = $"TARG{ffrSpellTarg}.POS_EFFECT.MUTE"; break;
+                                }
+                                break;
+                            case 128 or 144:
+                                switch (ffrSpellTarg)
+                                {
+                                    case 8: ffrspname = "TAMa"; break;
+                                    case 16: ffrspname = "TAME"; break;
+                                    default: ffrspname = $"TARG{ffrSpellTarg}.POS_EFFECT.CONFUSE"; break;
                                 }
                                 break;
                             case 252:
