@@ -102,8 +102,10 @@ namespace ffr_spellbinder
             colors.echo(0, "| - h: Out-of-Battle Spells don't change               |", 2);
             colors.echo(0, "| - i: Assigns appropriate spells to each Casting Item |", 2);
             colors.echo(0, "| - k: No Instakills below Level 5                     |", 2);
-            colors.echo(0, "| - S: Complies with Final Fantasy Randomizer's        |", 2);
-            colors.echo(0, "|                           bugfixes to LOK2 and HEL2  |", 2);
+            colors.echo(0, "| - n: Hide the name of every spell                    |", 2);
+            colors.echo(0, "|   - n2: Hide names and allow duplicate types         |", 2);
+            colors.echo(0, "| - S: Complies with FFR's bugfixes to LOK2 and HEL2   |", 2);
+            colors.echo(0, "| - x: Ignores magic level when generating spells      |", 2);
             colors.echo(0, " ====================================================== ", 2);
             colors.echo(12, "NOTE: All flags will give up after 5 failures to fill a spell slot");
             colors.echo(2, "(If something seems out of place, that's probably what happened)");
@@ -177,6 +179,7 @@ namespace ffr_spellbinder
             var ffrspBatMsg = new List<string>();
             var ffrspResMsg = new List<string>();
             var itemCheck = new List<string>();
+            var ffrNameHide = new List<string>();
             var ffrpath = @"C:\Users\Linkshot\Utilities\FFR-Spellbinder\output\";
             var book = @$"table\SpellTable_{DateTime.UtcNow.Ticks.ToString()}.txt";
             var rune = @$"patch\FFR-Custom-Spells_({ffrspflags})_{DateTime.UtcNow.Ticks.ToString()}.ips";
@@ -1945,13 +1948,15 @@ namespace ffr_spellbinder
                 #endregion ResistMessages
 
                 // Check for ffrspname in the array containing all results
-                spwrite:
+                spwrite:                    
+                    if (ffrspflags.Contains("n2")) ffrspname = $"{ffrspmagic.Substring(0, 1).ToUpper()}{ffrsplevel}-{ffrspslot}";
                     if (ffrspTable.Contains(ffrspname))
                     {
                         colors.echo(4, $"{ffrspname} already exists! Rerolling.");
                         ffrspreroll++;
                         goto spdupe;
                     }
+                    if (ffrspflags.Contains("n")) ffrNameHide.Add($"{ffrspmagic.Substring(0, 1).ToUpper()}{ffrsplevel}-{ffrspslot}");
                     #region BlackDamageAssess
                     if (ffrSpellType == 1 && ffrSpellTarg == 1 && ffrspmagic == "black" && ffrspflags.Contains("b")) ffrspblackAoE++;
                     #endregion BlackDamageAssess
@@ -2070,6 +2075,7 @@ namespace ffr_spellbinder
                     }
                     #endregion ItemMagicFlag
                     ffrspTable.Add(ffrspname);
+                    if (ffrspflags.Contains("n")) ffrspname = $"{ffrspmagic.Substring(0, 1).ToUpper()}{ffrsplevel}-{ffrspslot}";
                     ffrPatchCount = 1;
                     while (ffrPatchCount <= 4)
                     {
@@ -2107,6 +2113,16 @@ namespace ffr_spellbinder
                             quill.Write("=====");
                             if (ffrsplevel == 8) // Array finished populating
                             {
+                                if (ffrspflags.Contains("n"))
+                                {
+                                    var ffrNameCount = 0;
+                                    ffrspTable.Clear();
+                                    while (ffrNameCount <= 63)
+                                    { 
+                                        ffrspTable.Add(ffrNameHide[ffrNameCount]);
+                                        ffrNameCount++;
+                                    }
+                                }
                                 #region BlackAoE
                                 if (ffrspflags.Contains("b"))
                                 {
