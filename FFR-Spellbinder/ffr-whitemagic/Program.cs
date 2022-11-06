@@ -66,6 +66,15 @@ namespace ffr_spellbinder
         public static int ffrspShapeByte;
         public static int ffrspColorByte;
         public static int ffrspMsgByte = 0;
+        public static int ffrspRmPermByte = 0;
+        public static int ffrspWmPermByte = 0;
+        public static int ffrspBmPermByte = 0;
+        public static int ffrspRwPermByte = 0;
+
+        public static bool ffrspRmPerms = true;
+        public static bool ffrspWmPerms = true;
+        public static bool ffrspBmPerms = true;
+        public static bool ffrspRwPerms = true;
 
         #region CastingItems
         public static int ffrLightAxe;
@@ -151,6 +160,10 @@ namespace ffr_spellbinder
             ffrspShapeByte = 0;
             ffrspColorByte = 0;
             ffrspMsgByte = 0;
+            ffrspRmPermByte = 0;
+            ffrspWmPermByte = 0;
+            ffrspBmPermByte = 0;
+            ffrspRwPermByte = 0;
 
             #region CastingItems
             ffrLightAxe = 0;
@@ -192,6 +205,12 @@ namespace ffr_spellbinder
                     var ffrspSpellPatch = new List<byte>();
                     var ffrspMsgTextPatch = new List<char>();
                     var ffrspSpellMsgPatch = new List<byte>();
+                        var ffrspRmPermsPatch = new List<byte>();
+                        var ffrspWmPermsPatch = new List<byte>();
+                        var ffrspBmPermsPatch = new List<byte>();
+                        var ffrspKnPermsPatch = new List<byte>();
+                        var ffrspNjPermsPatch = new List<byte>();
+                        var ffrspRwPermsPatch = new List<byte>();
                     var ffrPatchCount = 0;
                     etch.Write(Encoding.ASCII.GetBytes("PATCH"));
                     // while (ffrspbatmsgloop !>= 77)
@@ -209,8 +228,8 @@ namespace ffr_spellbinder
                     ffrspreroll = 0;
                     ffrspslot++;
                     if (ffrsplevel == 5 && ffrspslot == 3 && ffrspmagic == "black")
-                    {
                         #region WARP
+                    {
                         ffrsptype = "Travel back one floor. ";
                         ffrSpellAcc = 255;
                         ffrSpellEff = 0;
@@ -223,12 +242,17 @@ namespace ffr_spellbinder
                         ffrspgfxcolor = "Dark Green";
                         ffrspgfxshape = "Glowing Ball";
                         ffrspname = "WARP";
+                        if (ffrspflags.Contains("r"))
+                        {
+                            ffrspRmPerms = false;
+                            ffrspBmPerms = false;
+                        }
                         goto spwrite;
                     }
                     #endregion WARP
                     else if (ffrsplevel == 6 && ffrspslot == 2 && ffrspmagic == "white")
-                    {
                         #region EXIT
+                    {
                         ffrsptype = "Return to World Map. ";
                         ffrSpellAcc = 255;
                         ffrSpellEff = 0;
@@ -241,6 +265,11 @@ namespace ffr_spellbinder
                         ffrspgfxcolor = "Dark Green";
                         ffrspgfxshape = "Bursting Ball";
                         ffrspname = "EXIT";
+                        if (ffrspflags.Contains("r"))
+                        {
+                            ffrspRmPerms = false;
+                            ffrspWmPerms = false;
+                        }
                         goto spwrite;
                     }
                 #endregion EXIT
@@ -257,6 +286,10 @@ namespace ffr_spellbinder
                     ffrspShapeByte = 0xA8; // Fistchuks, yo
                     ffrspColorByte = 0x2E; // Black
                     ffrspMsgByte = 0x00;
+                    ffrspRmPerms = true;
+                    ffrspWmPerms = true;
+                    ffrspBmPerms = true;
+                    ffrspRwPerms = true;
                     if (ffrspmagic == "white") { ffrSpell = ffr_whitemagic.WMag(); }
                     // Console.WriteLine("=");
                     else if (ffrspmagic == "black") { ffrSpell = ffr_blackmagic.BMag(); }
@@ -2074,6 +2107,26 @@ namespace ffr_spellbinder
                         }
                     }
                     #endregion ItemMagicFlag
+                    #region Permissions
+                    if (ffrspflags.Contains("r"))
+                    {
+                        var permSlot = Math.Pow(2, (4 - ffrspslot));
+                        if (ffrspmagic == "black") ffrspWmPerms = false;
+                        if (ffrspmagic == "white")
+                        {
+                            ffrspBmPerms = false;
+                            permSlot = Math.Pow(2, (8 - ffrspslot));
+                        }
+                        if (ffrspRwPerms == false)
+                        {
+                            ffrspRmPerms = false;
+                            ffrspRwPermByte += (int)permSlot;
+                        }
+                        if (ffrspWmPerms == false) ffrspWmPermByte += (int)permSlot;
+                        if (ffrspBmPerms == false) ffrspBmPermByte += (int)permSlot;
+                        if (ffrspRmPerms == false) ffrspRmPermByte += (int)permSlot;
+                    }
+                    #endregion Permissions
                     ffrspTable.Add(ffrspname);
                     if (ffrspflags.Contains("n")) ffrspname = $"{ffrspmagic.Substring(0, 1).ToUpper()}{ffrsplevel}-{ffrspslot}";
                     ffrPatchCount = 1;
@@ -2111,6 +2164,19 @@ namespace ffr_spellbinder
                         else if (ffrspmagic == "black")
                         {
                             quill.Write("=====");
+                            #region PermBytes
+                            if (ffrspflags.Contains("r"))
+                            {
+                                int knightByte = ffrspRwPermByte | ffrspWmPermByte;
+                                int ninjaByte = ffrspRwPermByte | ffrspBmPermByte;
+                                ffrspRwPermsPatch.Add((byte)ffrspRwPermByte);
+                                ffrspWmPermsPatch.Add((byte)ffrspWmPermByte);
+                                ffrspBmPermsPatch.Add((byte)ffrspBmPermByte);
+                                ffrspRmPermsPatch.Add((byte)ffrspRmPermByte);
+                                if (ffrsplevel <= 3) ffrspKnPermsPatch.Add((byte)knightByte);
+                                if (ffrsplevel <= 4) ffrspNjPermsPatch.Add((byte)ninjaByte);
+                            }
+                            #endregion PermBytes
                             if (ffrsplevel == 8) // Array finished populating
                             {
                                 if (ffrspflags.Contains("n"))
@@ -2276,6 +2342,68 @@ namespace ffr_spellbinder
                                     etch.Write((byte)ffrspSpellMsgPatch[ffrEtchCount]);
                                     ffrEtchCount++;
                                 }
+                                #region EtchPerms
+                                if (ffrspflags.Contains("r"))
+                                {
+                                    int etchedClasses = 0;
+                                    while (etchedClasses != 6)
+                                    {
+                                        ffrEtchCount = 0;
+                                        switch (etchedClasses)
+                                        {
+                                            case 0: // Red Mage
+                                                etch.Write((byte)0x03); etch.Write((byte)0xAD); etch.Write((byte)0x40); etch.Write((byte)0x00); etch.Write((byte)0x08);
+                                                while (ffrEtchCount <= 0x07)
+                                                {
+                                                    etch.Write((byte)ffrspRmPermsPatch[ffrEtchCount]);
+                                                    ffrEtchCount++;
+                                                }
+                                                break;
+                                            case 1: // White Mage
+                                                etch.Write((byte)0x03); etch.Write((byte)0xAD); etch.Write((byte)0x48); etch.Write((byte)0x00); etch.Write((byte)0x08);
+                                                while (ffrEtchCount <= 0x07)
+                                                {
+                                                    etch.Write((byte)ffrspWmPermsPatch[ffrEtchCount]);
+                                                    ffrEtchCount++;
+                                                }
+                                                break;
+                                            case 2: // Black Mage
+                                                etch.Write((byte)0x03); etch.Write((byte)0xAD); etch.Write((byte)0x50); etch.Write((byte)0x00); etch.Write((byte)0x08);
+                                                while (ffrEtchCount <= 0x07)
+                                                {
+                                                    etch.Write((byte)ffrspBmPermsPatch[ffrEtchCount]);
+                                                    ffrEtchCount++;
+                                                }
+                                                break;
+                                            case 3: // Knight
+                                                etch.Write((byte)0x03); etch.Write((byte)0xAD); etch.Write((byte)0x58); etch.Write((byte)0x00); etch.Write((byte)0x03);
+                                                while (ffrEtchCount <= 0x02)
+                                                {
+                                                    etch.Write((byte)ffrspKnPermsPatch[ffrEtchCount]);
+                                                    ffrEtchCount++;
+                                                }
+                                                break;
+                                            case 4: // Ninja
+                                                etch.Write((byte)0x03); etch.Write((byte)0xAD); etch.Write((byte)0x60); etch.Write((byte)0x00); etch.Write((byte)0x04);
+                                                while (ffrEtchCount <= 0x03)
+                                                {
+                                                    etch.Write((byte)ffrspNjPermsPatch[ffrEtchCount]);
+                                                    ffrEtchCount++;
+                                                }
+                                                break;
+                                            case 5: // Red Wizard
+                                                etch.Write((byte)0x03); etch.Write((byte)0xAD); etch.Write((byte)0x70); etch.Write((byte)0x00); etch.Write((byte)0x08);
+                                                while (ffrEtchCount <= 0x07)
+                                                {
+                                                    etch.Write((byte)ffrspRwPermsPatch[ffrEtchCount]);
+                                                    ffrEtchCount++;
+                                                }
+                                                break;
+                                        }
+                                        etchedClasses++;
+                                    }
+                                }
+                                #endregion EtchPerms
                                 etch.Write(Encoding.ASCII.GetBytes("EOF"));
                                 colors.echo(9, $"Generated 64 spells! Flags used: -{ffrspflags}. Rerolls: {ffrspretries}");
                                 Process.Start("notepad.exe", $@"{ffrpath}{book}");
@@ -2285,6 +2413,13 @@ namespace ffr_spellbinder
                             else
                             {
                                 quill.WriteLine();
+                                if (ffrspflags.Contains("r"))
+                                {
+                                    ffrspRmPermByte = 0;
+                                    ffrspWmPermByte = 0;
+                                    ffrspBmPermByte = 0;
+                                    ffrspRwPermByte = 0;
+                                }
                                 if (ffrsplevel == 4) quill.Flush(); // halfway point! refilling ink!!
                                 ffrsplevel++;
                                 ffrspslot = 0;
