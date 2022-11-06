@@ -89,7 +89,7 @@ TYP (BYTE?)
 - [03] == NEG_EFFECT (EFF 8-bit)
 - [04] == ATTACK_DOWN (NO EFF)
 - [05] == LOWER_MORALE (EFF BYTE)
-- [06] == HEALTH_UP (EFF BYTE)
+- [07] == HEALTH_UP (EFF BYTE)
 - [08] == POS_EFFECT (EFF 8-bit)
 - [09] == ARMOR_UP (EFF BYTE)
 - [0A] == RESIST (EFF 8-bit)
@@ -167,8 +167,26 @@ PATCHING (POINTER 3 BYTES, LENGTH 2 BYTES)
 - 02CD79,0005: "magic"
 - 02CDB1,0003: "all"
 - 02CF48,0006: "Go mad"
+- 0300F3,0001: Light Axe Spell
+- 0300FB,0001: Heal Rod Spell
+- 030103,0001: Mage Staff Spell
+- 03010B,0001: Defense Spell
+- 030113,0001: Wizard Staff Spell
+- 03012B,0001: Thor Hammer Spell
+- 030133,0001: Bane Sword Spell
+- 03018B,0001: White Shirt Spell
+- 03018F,0001: Black Shirt Spell
+- 0301CB,0001: Heal Helm Spell
+- 0301E3,0001: Zeus Gauntlet Spell
+- 0301E7,0001: Power Glove Spell
 - 0301F0,01FF: Spell Parameters (insert [00] between each entry)
 - 0304D0,0040: Message Pointers
+- 03AD40,0008: Red Mage Magic Permissions
+- 03AD48,0008: White Mage Magic Permissions
+- 03AD50,0008: Black Mage Magic Permissions
+- 03AD58,0008: Knight Magic Permissions
+- 03AD60,0008: Ninja Magic Permissions
+- 03AD70,0008: Red Wizard Magic Permissions
 
 SPELL SYNTAX
 - (ACC)(EFF)(ELM)(TRG)(TYP)(SHP)(CLR)[00]
