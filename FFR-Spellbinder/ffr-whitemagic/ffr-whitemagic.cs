@@ -64,6 +64,10 @@ namespace ffr_spellbinder
             int ffrwmElemByte = 0;
             int ffrwmAccByte = 0;
 
+            Program.ffrspRmPerms = true;
+            Program.ffrspWmPerms = true;
+            Program.ffrspRwPerms = true;
+
             #region Auto-Hit
 
             // Sets Accuracy to Auto-Hit or Tiered
@@ -191,7 +195,7 @@ namespace ffr_spellbinder
                 else if ((Program.ffrsplevel == 8) && (Program.ffrspslot == 1))
                 {
                     ffrwmeffect = 4;
-                    ffrwmallies = 3;
+                    ffrwmallies = 2;
                     ffrwmheal = 7;
                     ffrwmafflict = 1;
                 }
@@ -250,11 +254,15 @@ namespace ffr_spellbinder
                 }
                 else { if (ffrwmenemies == 1) { ffrwmstrength = ffrwmstrength * whiteDice.Next(100, 151) / 100; } }
                 ffrwmstrength = Convert.ToInt32(Math.Floor(ffrwmstrength * 0.8));
-                if (ffrwmstrength == 96) { ffrwmstrength += 4; }
+                // if (ffrwmstrength == 96) { ffrwmstrength += 4; }
                 if (Enumerable.Range(24, 16).Contains((int)ffrwmstrength)) { Program.ffrsptier = 2; }
                 else if (Enumerable.Range(40, 40).Contains((int)ffrwmstrength)) { Program.ffrsptier = 3; }
                 else if (ffrwmstrength >= 80) { Program.ffrsptier = 4; }
                 else { Program.ffrsptier = 1; }
+                if (ffrwmstrength > 50 && ffrwmenemies != 1) Program.ffrspRmPerms = false;
+                if (ffrwmstrength > 60) Program.ffrspWmPerms = false;
+                if (ffrwmstrength > 70) Program.ffrspRmPerms = false;
+                if (ffrwmstrength >= 80 && ffrwmenemies != 1) Program.ffrspRwPerms = false;
             }
             #endregion
             #region Prejudice
@@ -262,7 +270,8 @@ namespace ffr_spellbinder
             {
                 // write - al2 WhiteSpell.txt Type: Harm Undead
                 ffrwmTypeByte = 2;
-                if (Program.ffrspellbinding == true)
+                Program.ffrspRwPerms = false;
+                    if (Program.ffrspellbinding == true)
                 {
                     if (Program.ffrsplevel < 7) { ffrwmaccuracy = 5; }
                     else { ffrwmaccuracy++; }
@@ -272,7 +281,7 @@ namespace ffr_spellbinder
                 if (ffrwmstrength > 30) { Program.ffrsptier = 2; }
                 else { Program.ffrsptier = 1; }
                 if (ffrwmstrength > 50) { Program.ffrsptier = 3; }
-                if (ffrwmstrength > 70) { Program.ffrsptier = 4; }
+                if (ffrwmstrength >= 80) { Program.ffrsptier = 4; Program.ffrspWmPerms = false; }
             }
             #endregion
             #region EffectNameCleanup
@@ -288,7 +297,7 @@ namespace ffr_spellbinder
                     else if (ffrwmeffect == 5) { colors.echo(13, $"Debug: Shifting Debuff to Buff"); }
                     goto wmbase;
                 }
-                else { colors.echo(8, $"Debug: Debuff was allowed"); }
+                else if (ffrwmBecameStatus == false) { colors.echo(8, $"Debug: Debuff was allowed"); }
                 // write - al2 WhiteSpell.txt Type: Debuff
             }
             else if (ffrwmeffect == 4)
@@ -368,6 +377,7 @@ namespace ffr_spellbinder
                 }
                 else if (ffrwmdebuff == 7)
                 {
+                    Program.ffrspRwPerms = false;
                     if (Program.ffrspellbinding == true)
                     {
                         if (Program.ffrsplevel > 6) { ffrwmstrength = 40 + (whiteDice.Next(0, 4) * 8); Program.ffrsptier = 4; }
@@ -388,6 +398,7 @@ namespace ffr_spellbinder
                         if (ffrwmstrength < 20) { Program.ffrsptier = 1; }
                     }
                     // write - al3 WhiteSpell.txt Effect: Fear
+                    if (ffrwmstrength >= 40) Program.ffrspWmPerms = false;
                     ffrwmTypeByte = 5;
                 }
                 else if (ffrwmdebuff == 8)
@@ -407,6 +418,7 @@ namespace ffr_spellbinder
                         Program.ffrsptier = (int)Math.Floor((ffrwmstrength + 20) / 40);
                     }
                     // write - al3 WhiteSpell.txt Effect: Locked
+                    if (ffrwmstrength >= 160) Program.ffrspWmPerms = false;
                     ffrwmTypeByte = 14;
                 }
                 else if (ffrwmdebuff == 9)
@@ -424,6 +436,7 @@ namespace ffr_spellbinder
                 // Power Word Processing
                 else if (ffrwmdebuff == 10)
                 {
+                    Program.ffrspRwPerms = false;
                     ffrwmTypeByte = 18;
                     ffrwmTargByte = 2;
                     ffrwmaccskip = true;
@@ -437,14 +450,15 @@ namespace ffr_spellbinder
                             //write - al3 WhiteSpell.txt Effect: Power Word "Pacify"
                             //write - al4 WhiteSpell.txt Element: Creature // Status+Poison+Earth
                             //write - al5 WhiteSpell.txt Target: Single Enemy
+                            Program.ffrspWmPerms = false;
                             ffrwmEffByte = 1;
                             ffrwmElemByte = 131;
                             ffrwmTargByte = 2;
                             ffrwmspecial = true;
                         }
-                        else { colors.echo(13, $"Debug: FROG failed... Making a new spell."); goto whitemagic; }
+                        else { colors.echo(13, $"Debug: FROG failed... Trying common Power Word."); ffrwmafflict = whiteDice.Next(4, 9); goto wmpword; }
                     }
-                    else if (ffrwmafflict == 2)
+                    else if (ffrwmafflict < 4)
                     {
                         if (whiteDice.Next(1, 21) >= whiteDice.Next(1, 81))
                         {
@@ -452,14 +466,15 @@ namespace ffr_spellbinder
                             //write - al3 WhiteSpell.txt Effect: Power Word "Preserve"
                             //write - al4 WhiteSpell.txt Element: Stone
                             //write - al5 WhiteSpell.txt Target: Single Ally
+                            Program.ffrspWmPerms = false;
                             ffrwmEffByte = 2;
                             ffrwmElemByte = 2;
                             ffrwmTargByte = 16;
                             ffrwmspecial = true;
                         }
-                        else { colors.echo(13, $"Debug: CAST failed... Making a new spell."); goto whitemagic; }
+                        else { colors.echo(13, $"Debug: CAST failed... Trying common Power Word."); ffrwmafflict = whiteDice.Next(4, 9); goto wmpword; }
                     }
-                    else if (ffrwmafflict == 3) { colors.echo(13, $"Debug: Rerolling a blank Power Word"); ffrwmafflict = whiteDice.Next(1, 9); goto wmpword; }
+                    // else if (ffrwmafflict == 3) { colors.echo(13, $"Debug: Rerolling a blank Power Word"); ffrwmafflict = whiteDice.Next(1, 9); goto wmpword; }
                     else if (ffrwmafflict == 4)
                     {
                         //write - al3 WhiteSpell.txt Effect: Power Word "Blind"
@@ -503,12 +518,13 @@ namespace ffr_spellbinder
                 {
                     // write - a14 WhiteSpell.txt Element: Fire
                     // write - al5 WhiteSpell.txt Target: All Allies
+                    Program.ffrspRwPerms = false;
                     ffrwmEffByte = 32;
                     ffrwmElemByte = 16;
                     ffrwmTargByte = 8;
                     ffrwmspecial = true;
                 }
-                else if ((ffrwmdebuff == 10) && (ffrwmafflict < 3)) { colors.echo(13, $"Debug: Element already set by Power Word"); }
+                else if ((ffrwmdebuff == 10) && (ffrwmafflict < 4)) { colors.echo(13, $"Debug: Element already set by Power Word"); }
                 else
                 {
                     if (ffrwmelement == 1)
@@ -526,6 +542,7 @@ namespace ffr_spellbinder
                     {
                         if (Program.ffrspellbinding == true) { ffrwmaccuracy += 2; }
                         //write - a14 WhiteSpell.txt Element: Earth
+                        Program.ffrspRmPerms = false;
                         ffrwmElemByte = 128;
                     }
                     else
@@ -577,48 +594,76 @@ namespace ffr_spellbinder
                                 else if (Program.ffrsplevel > 6) { ffrwmallies = 3; }
                             }
                             // write - a13 WhiteSpell.txt Effect: Refresh
+                            Program.ffrspRmPerms = false;
+                            if (ffrwmallies == 3) { Program.ffrspRwPerms = false; Program.ffrspWmPerms = false; }
                             ffrwmEffByte = 252; // "Refresh" excludes Death and Stone
                         }
-                        // Life must pass a 25% check
+                        // Life must pass a 75% check
                         else if (ffrwmafflict == 1)
                         {
-                            if ((Program.ffrspflags.IndexOf("h") == -1) && ((Program.ffrspellbinding == false) || (Program.ffrsplevel < 3)))
+                            if (ffrwmallies == 1) ffrwmallies += whiteDice.Next(1, 3);
+                            if ((!Program.ffrspflags.Contains("h")) && Program.ffrspellbinding == false)
                             {
-                                if (whiteDice.Next(1, 5) == 4)
+                                if (ffrwmstrength >= 40)
                                 {
                                     //write - a13 WhiteSpell.txt Effect: Revive
-                                    ffrwmEffByte = 1;
+                                    if (ffrwmstrength < 60) ffrwmallies = 2;
+                                    if (ffrwmstrength < 80) ffrwmEffByte = 1;
+                                    else
+                                    {
+                                        ffrwmEffByte = 255;
+                                        if (ffrwmstrength < 90) ffrwmallies = 2;
+                                    }
                                 }
-                                else { colors.echo(13, $"Debug: Bounced at LIFE({whiteDice} vs 4)"); goto whitemagic; }
+                                else { colors.echo(13, $"Debug: Bounced at LIFE"); goto whitemagic; }
                             }
                             else
                             {
-                                // write - al3 WhiteSpell.txt Effect: Revive
-                                if ((Program.ffrsplevel > 6) && (ffrwmallies == 3)) { ffrwmEffByte = 255; }
-                                else { ffrwmEffByte = 1; }
+                                if (Program.ffrspflags.Contains("h") || (whiteDice.Next(1, 5) < 4 && Program.ffrsplevel >= 4))
+                                {
+                                    // write - al3 WhiteSpell.txt Effect: Revive
+                                    if (ffrwmallies > 2 && Program.ffrsplevel < 6) ffrwmallies = 2;
+                                    if (((Program.ffrsplevel == 7) && (whiteDice.Next(1, 5) == 4)) || Program.ffrsplevel >= 8)
+                                    {
+                                        ffrwmEffByte = 255;
+                                        if (ffrwmallies > 2 && Program.ffrsplevel == 7) ffrwmallies = 2;
+                                    }
+                                    else { 
+                                        ffrwmEffByte = 1;
+                                        if (Program.ffrsplevel > 6) ffrwmallies = 3;
+                                    }
+                                }
+                                else { colors.echo(13, $"Debug: Bounced at LIFE"); goto whitemagic; }
                             }
-                            ffrwmallies = 2;
+                            Program.ffrspRmPerms = false;
+                            if (ffrwmallies == 3 || ffrwmEffByte == 255) Program.ffrspRwPerms = false;
+                            if (ffrwmEffByte == 255) Program.ffrspWmPerms = false;
                         }
-                        // Soft must win a coinflip
+                        // Soft must also pass
                         else if (ffrwmafflict == 2)
                         {
-                            if (ffrwmallies == 1) { ffrwmallies += whiteDice.Next(1, 3); }
-                            if ((Program.ffrspflags.IndexOf("h") == -1) && ((Program.ffrspellbinding == false) || (Program.ffrsplevel < 3)))
+                            if (ffrwmallies == 1) ffrwmallies += whiteDice.Next(1, 3);
+                            if ((!Program.ffrspflags.Contains("h")) && Program.ffrspellbinding == false)
                             {
-                                if (whiteDice.Next(0, 2) == 1)
+                                if (ffrwmstrength >= 40)
                                 {
-                                    //write - al3 WhiteSpell.txt Effect: Soften
-                                    ffrwmEffByte = 2;
-                                    ffrwmallies = 2;
+                                    if (ffrwmstrength < 70) ffrwmallies = 2;
                                 }
-                                else { colors.echo(13, $"Debug: Bounced at SOFT({whiteDice} vs 1)"); goto whitemagic; }
+                                else { colors.echo(13, $"Debug: Bounced at SOFT"); goto whitemagic; }
                             }
                             else
                             {
-                                // write - al3 WhiteSpell.txt Effect: Soften
-                                ffrwmEffByte = 2;
-                                if (Program.ffrsplevel < 7) { ffrwmallies = 2; }
+                                if (Program.ffrspflags.Contains("h") || (whiteDice.Next(1, 5) < 4 && Program.ffrsplevel >= 4))
+                                {
+                                    if (Program.ffrsplevel < 7) ffrwmallies = 2;
+                                    else ffrwmallies = 3;
+                                }
+                                else { colors.echo(13, $"Debug: Bounced at SOFT"); goto whitemagic; }
                             }
+                            Program.ffrspRwPerms = false;
+                            if (ffrwmallies == 3) Program.ffrspWmPerms = false;
+                            // write - al3 WhiteSpell.txt Effect: Soften
+                            ffrwmEffByte = 2;
                         }
                         else if (ffrwmafflict == 3)
                         {
@@ -630,6 +675,7 @@ namespace ffr_spellbinder
                                 ffrwmEffByte += 128;
                             }
                             // write - al3 WhiteSpell.txt Effect: Antidote
+                            if (ffrwmallies == 3) Program.ffrspRmPerms = false;
                             ffrwmEffByte += 4;
                         }
                         else if (ffrwmafflict == 4)
@@ -668,6 +714,7 @@ namespace ffr_spellbinder
                             }
                             else { ffrwmallies = whiteDice.Next(2, 4); }
                             // write - al3 WhiteSpell.txt Effect: Voice
+                            if (ffrwmallies == 3) Program.ffrspRmPerms = false;
                             ffrwmEffByte += 64;
                         }
                         else if (ffrwmafflict == 8)
@@ -675,6 +722,7 @@ namespace ffr_spellbinder
                             // write - al3 WhiteSpell.txt Effect: Clarify
                             ffrwmEffByte = 128;
                             ffrwmallies = whiteDice.Next(2, 4);
+                            if (ffrwmallies == 3) Program.ffrspRmPerms = false;
                         }
                         // You cannot heal yourself of anything
                         // but Poison and Dark, so other purifiers
@@ -694,7 +742,10 @@ namespace ffr_spellbinder
                             else { colors.echo(13, $"Debug: Spellbinding rejected CUR4 at Level {Program.ffrsplevel}"); goto whitemagic; }
                             if ((Program.ffrsplevel == 8) && (whiteDice.Next(1, 21) >= whiteDice.Next(1, 81))) { ffrwmallies = 3; }
                         }
+                        if (Program.ffrspellbinding == false && ffrwmstrength < 80) ffrwmallies = 2;
                         // write to file: "Effect: Full Restore"
+                        Program.ffrspRwPerms = false;
+                        Program.ffrspWmPerms = false;
                         ffrwmTypeByte = 15;
                     }
                     #endregion
@@ -736,6 +787,12 @@ namespace ffr_spellbinder
                         }
                         // write - a13 WhiteSpell.txt Effect: Resist All
                         ffrwmEffByte = 255;
+                        Program.ffrspRmPerms = false;
+                        if (ffrwmallies == 3)
+                        {
+                            Program.ffrspRwPerms = false;
+                            Program.ffrspWmPerms = false;
+                        }
                         Program.ffrspCurrentResist = Program.ffrspwall;
                         goto walljump;
                     }
@@ -985,9 +1042,9 @@ namespace ffr_spellbinder
                         case "Ice": ffrwmEffByte = 32;           Program.ffrspCurrentResist = Program.ffrspantiice; break;
                         case "Lit": ffrwmEffByte = 64;           Program.ffrspCurrentResist = Program.ffrspantilightning; break;
                         case "Earth": ffrwmEffByte = 128;        Program.ffrspCurrentResist = Program.ffrspantiquake; break;
-                        case "Magic": ffrwmEffByte = 137;        Program.ffrspCurrentResist = Program.ffrspantimagic; break;
-                        case "Decay": ffrwmEffByte = 14;         Program.ffrspCurrentResist = Program.ffrspantitoxin; break;
-                        case "Dragon": ffrwmEffByte = 112;       Program.ffrspCurrentResist = Program.ffrspantidamage; break;
+                        case "Magic": ffrwmEffByte = 137;        Program.ffrspCurrentResist = Program.ffrspantimagic; Program.ffrspRmPerms = false; break;
+                        case "Decay": ffrwmEffByte = 14;         Program.ffrspCurrentResist = Program.ffrspantitoxin; Program.ffrspRmPerms = false; break;
+                        case "Dragon": ffrwmEffByte = 112;       Program.ffrspCurrentResist = Program.ffrspantidamage; Program.ffrspRmPerms = false; break;
                         default: ffrwmEffByte = whiteDice.Next(0, 256); break;
                     }
                 }
@@ -1070,6 +1127,7 @@ namespace ffr_spellbinder
                     if (Program.ffrspellbinding == true) { ffrwmaccuracy += 2; }
                     // n782 = write - al4 WhiteSpell.txt Element: Stone
                     ffrwmElemByte = 2;
+                    Program.ffrspRmPerms = false;
                 }
                 else if (ffrwmelement == 3)
                 {
@@ -1082,12 +1140,14 @@ namespace ffr_spellbinder
                     if (Program.ffrspellbinding == true) { ffrwmaccuracy += 2; }
                     //n790 = write - al4 WhiteSpell.txt Element: Earth
                     ffrwmElemByte = 128;
+                    Program.ffrspRmPerms = false;
                 }
                 else if ((ffrwmelement == 0) && (whiteDice.Next(1, 21) >= whiteDice.Next(1, 21)))
                 {
                     //n793 = write - al4 WhiteSpell.txt Element: None
                     ffrwmElemByte = 0;
                     if (Program.ffrspellbinding == true) { ffrwmaccuracy++; }
+                    if (ffrwmenemies == 2) Program.ffrspRmPerms = false;
                 }
                 else { colors.echo(13, $"FADE failed saving roll. Rolling new spell."); goto whitemagic; }
             }
@@ -1178,6 +1238,12 @@ namespace ffr_spellbinder
                                 if (ffrwmstrength < 75) { Program.ffrsptier = 1; }
                             }
                         }
+                        if (ffrwmTypeByte != 12)
+                        {
+                            if (Program.ffrsptier == 4) Program.ffrspWmPerms = false;
+                            if (Program.ffrsptier >= 3) Program.ffrspRwPerms = false;
+                            if (Program.ffrsptier >= 2) Program.ffrspRmPerms = false;
+                        }
                     }
                     #endregion
                     if (ffrwmallies == 2)
@@ -1218,6 +1284,17 @@ namespace ffr_spellbinder
                                 else ffrwmstrength = Math.Floor(ffrwmstrength * 0.14);
                             }
                             #endregion
+                            if (ffrwmheal < 7 || ffrwmeffect == 5)
+                            {
+                                if (Program.ffrsptier == 4)
+                                {
+                                    Program.ffrspWmPerms = false;
+                                    Program.ffrspRwPerms = false;
+                                }
+                                if (Program.ffrsptier >= 3) Program.ffrspRmPerms = false;
+                                if (Program.ffrspellbinding == true && Program.ffrsplevel == 5) Program.ffrspRmPerms = true;
+                                else if (Program.ffrspellbinding == false && ((ffrwmheal < 7 && ffrwmstrength == 66) || (ffrwmeffect == 5 && ffrwmaccuracy == 24))) Program.ffrspRmPerms = true;
+                            }
                         }
                     }
                     if (ffrwmallies == 3)
@@ -1236,6 +1313,7 @@ namespace ffr_spellbinder
                             if (ffrwmstrength > 23) { Program.ffrsptier = 2; }
                             else { Program.ffrsptier = 1; }
                             if (ffrwmstrength > 47) { Program.ffrsptier = 3; }
+                            if (ffrwmheal < 7) Program.ffrspRwPerms = false;
                         }
                         #endregion
                         #region PartyBuffPower
@@ -1284,6 +1362,12 @@ namespace ffr_spellbinder
                                 if (ffrwmstrength < 50) { Program.ffrsptier = 2; }
                                 if (ffrwmstrength < 35) { Program.ffrsptier = 1; }
                             }
+                            if (Program.ffrsptier == 4) Program.ffrspWmPerms = false;
+                            if (ffrwmTypeByte != 10)
+                            {
+                                if (Program.ffrsptier >= 3) Program.ffrspRwPerms = false;
+                                if (Program.ffrsptier >= 2) Program.ffrspRmPerms = false;
+                            }
                         }
                         #endregion
                     }
@@ -1317,6 +1401,7 @@ namespace ffr_spellbinder
                     case 14: ffrwmaccsay = "210"; ffrwmaccuracy = 210; break;
                     default: ffrwmaccsay = "255"; ffrwmaccuracy = 255; break;
                 }
+                if (Program.ffrsplevel == 8) Program.ffrspWmPerms = false;
             }
             if ((ffrwmaccuracy == 255) || (ffrwmaccsay == "Auto-Hit")) { colors.echo(8, $"Debug: Assumed Accuracy was Auto-Hit"); }
             #endregion
@@ -1329,6 +1414,7 @@ namespace ffr_spellbinder
             // elseif(% ffrwmstrskip = 1) && (% ffrwmaccskip = 0) { write - a16 WhiteSpell.txt Acc Bonus: % ffrwmaccsay }
             if (ffrwmstrskip == false) { ffrwmEffByte = (int)ffrwmstrength; }
             if (ffrwmaccskip == false) { ffrwmAccByte = ffrwmaccuracy; }
+            if (ffrwmAccByte > 64) Program.ffrspRmPerms = false;
 
             // Doesn't open the file when Spellbinding
             // because that would open 64 files

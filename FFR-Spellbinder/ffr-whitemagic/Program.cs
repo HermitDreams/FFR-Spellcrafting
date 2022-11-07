@@ -246,6 +246,7 @@ namespace ffr_spellbinder
                         {
                             ffrspRmPerms = false;
                             ffrspBmPerms = false;
+                            ffrspRwPerms = true;
                         }
                         goto spwrite;
                     }
@@ -269,6 +270,7 @@ namespace ffr_spellbinder
                         {
                             ffrspRmPerms = false;
                             ffrspWmPerms = false;
+                            ffrspRwPerms = true;
                         }
                         goto spwrite;
                     }
