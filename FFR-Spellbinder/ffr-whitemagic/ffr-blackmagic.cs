@@ -863,8 +863,9 @@ namespace ffr_spellbinder
                             if (blackDice.Next(1, 21) > blackDice.Next(1, 51))
                             {
                                 ffrbmtarget = 3;
-                                if (Program.ffrspellbinding == true) { ffrbmstrength = (int)Math.Floor(ffrbmstrength / ((blackDice.Next(100, 121) / 10 - Program.ffrsplevel) / 2) + 5); }
-                                else { ffrbmstrength = (int)Math.Ceiling(ffrbmstrength * (blackDice.Next(75, 101) / 100)); }
+                                if (Program.ffrspellbinding == true) { ffrbmstrength = (int)Math.Floor(ffrbmstrength / ((blackDice.Next(100, 121) / 10 - Program.ffrsplevel) / 1.5) + 5); }
+                                else { ffrbmstrength = (int)Math.Ceiling(ffrbmstrength * (blackDice.Next(75, 101) / 75)); }
+                                if (ffrbmstrength == 0) ffrbmstrength++;
                             }
                             else { colors.echo(7, $"Debug: Failed RALY attempt"); }
                         }
@@ -1016,7 +1017,7 @@ namespace ffr_spellbinder
             // Accuracy Balance
             // Defines the appropriate tiers of Accuracy for Spellbooks
             // Accuracy no longer caps
-            if (Program.ffrspellbinding == true && (ffrbmTypeByte != 3 || (ffrbmEffByte & 4) > 0))
+            if (Program.ffrspellbinding == true && (ffrbmTypeByte != 3 || (ffrbmEffByte & 4) == 0))
             {
                 switch (ffrbmElemByte) // Set element penalties and bonuses
                 {

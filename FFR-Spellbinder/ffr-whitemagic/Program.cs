@@ -386,6 +386,7 @@ namespace ffr_spellbinder
 
                     #region Library
                     // Big case block of what to queue for array here
+                    if (ffrsptier > 4) ffrsptier = 4;
                     #region DamageSpells
                     if (ffrSpellType < 3)
                     {

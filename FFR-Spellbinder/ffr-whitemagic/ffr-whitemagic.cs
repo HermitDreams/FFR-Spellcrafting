@@ -391,7 +391,7 @@ namespace ffr_spellbinder
                     }
                     else
                     {
-                        ffrwmstrength = Math.Floor(ffrwmstrength * 0.75);
+                        if (ffrwmBecameStatus == false) ffrwmstrength = Math.Floor(ffrwmstrength * 0.75);
                         if (ffrwmstrength < 40) { Program.ffrsptier = 3; }
                         else Program.ffrsptier = 4;
                         if (ffrwmstrength < 30) { Program.ffrsptier = 2; }
@@ -414,8 +414,11 @@ namespace ffr_spellbinder
                     }
                     else
                     {
-                        ffrwmstrength = Math.Floor(ffrwmstrength * 2.5 - 5);
-                        Program.ffrsptier = (int)Math.Floor((ffrwmstrength + 20) / 40);
+                        if (ffrwmBecameStatus == false)
+                        {
+                            ffrwmstrength = Math.Floor(ffrwmstrength * 2.5 - 5);
+                            Program.ffrsptier = (int)Math.Floor((ffrwmstrength + 20) / 40);
+                        }
                     }
                     // write - al3 WhiteSpell.txt Effect: Locked
                     if (ffrwmstrength >= 160) Program.ffrspWmPerms = false;
@@ -595,7 +598,7 @@ namespace ffr_spellbinder
                             }
                             // write - a13 WhiteSpell.txt Effect: Refresh
                             Program.ffrspRmPerms = false;
-                            if (ffrwmallies == 3) { Program.ffrspRwPerms = false; Program.ffrspWmPerms = false; }
+                            if (ffrwmallies != 2) { Program.ffrspRwPerms = false; Program.ffrspWmPerms = false; }
                             ffrwmEffByte = 252; // "Refresh" excludes Death and Stone
                         }
                         // Life must pass a 75% check
@@ -1190,7 +1193,11 @@ namespace ffr_spellbinder
                 {
                     if (ffrwmallies == 1)
                     {
-                        if (ffrwmeffect == 4) { ffrwmallies += whiteDice.Next(1, 3); }
+                        if (ffrwmeffect == 4) 
+                        { 
+                            ffrwmallies += whiteDice.Next(1, 3);
+                            if (ffrwmallies == 2 && ffrwmheal < 10) { Program.ffrspRwPerms = true; Program.ffrspWmPerms = true; }
+                        }
                         else
                         {
                             //    n820 = write - al5 WhiteSpell.txt Target: Caster
