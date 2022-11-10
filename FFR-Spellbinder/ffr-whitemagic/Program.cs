@@ -113,6 +113,7 @@ namespace ffr_spellbinder
             colors.echo(0, "| - k: No Instakills below Level 5                     |", 2);
             colors.echo(0, "| - n: Hide the name of every spell                    |", 2);
             colors.echo(0, "|   - n2: Hide names and allow duplicate types         |", 2);
+            colors.echo(0, "| - r: Assign permissions based on spell contents      |", 2);
             colors.echo(0, "| - S: Complies with FFR's bugfixes to LOK2 and HEL2   |", 2);
             colors.echo(0, "| - x: Ignores magic level when generating spells      |", 2);
             colors.echo(0, " ====================================================== ", 2);

@@ -797,6 +797,7 @@ namespace ffr_spellbinder
                             Program.ffrspWmPerms = false;
                         }
                         Program.ffrspCurrentResist = Program.ffrspwall;
+                        ffrwmbuff = 0;
                         goto walljump;
                     }
                     else if (ffrwmbuff == 1)
@@ -1130,7 +1131,7 @@ namespace ffr_spellbinder
                     if (Program.ffrspellbinding == true) { ffrwmaccuracy += 2; }
                     // n782 = write - al4 WhiteSpell.txt Element: Stone
                     ffrwmElemByte = 2;
-                    Program.ffrspRmPerms = false;
+                    Program.ffrspRwPerms = false;
                 }
                 else if (ffrwmelement == 3)
                 {
@@ -1296,7 +1297,7 @@ namespace ffr_spellbinder
                                 if (Program.ffrsptier == 4)
                                 {
                                     Program.ffrspWmPerms = false;
-                                    Program.ffrspRwPerms = false;
+                                    if (ffrwmbuff != 0) Program.ffrspRwPerms = false;
                                 }
                                 if (Program.ffrsptier >= 3) Program.ffrspRmPerms = false;
                                 if (Program.ffrspellbinding == true && Program.ffrsplevel == 5) Program.ffrspRmPerms = true;
