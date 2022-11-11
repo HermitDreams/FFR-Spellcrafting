@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ffr_spellbinder
+﻿namespace ffr_spellbinder
 {
     public class FF1CharMap
     {
+        /// <summary>
+        /// Translates ASCII input to Final Fantasy (NES, USA)'s character index
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns>char/byte</returns>
         public static char Transmute(string input)
         {
             switch (input)

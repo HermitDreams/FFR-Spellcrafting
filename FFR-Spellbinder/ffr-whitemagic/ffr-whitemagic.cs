@@ -1,9 +1,4 @@
-﻿using Microsoft.VisualBasic;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System;
-
-namespace ffr_spellbinder
+﻿namespace ffr_spellbinder
 {
     internal class ffr_whitemagic
     {
@@ -271,7 +266,7 @@ namespace ffr_spellbinder
                 // write - al2 WhiteSpell.txt Type: Harm Undead
                 ffrwmTypeByte = 2;
                 Program.ffrspRwPerms = false;
-                    if (Program.ffrspellbinding == true)
+                if (Program.ffrspellbinding == true)
                 {
                     if (Program.ffrsplevel < 7) { ffrwmaccuracy = 5; }
                     else { ffrwmaccuracy++; }
@@ -511,7 +506,7 @@ namespace ffr_spellbinder
                 #endregion
                 else
                 {
-                    colors.echo(4, $"Value {ffrwmdebuff} out of range for Debuffs");return "Spell Failed";
+                    colors.echo(4, $"Value {ffrwmdebuff} out of range for Debuffs"); return "Spell Failed";
                 }
                 #region Elements
                 // Assigns an Element to the Debuff
@@ -631,7 +626,8 @@ namespace ffr_spellbinder
                                         ffrwmEffByte = 255;
                                         if (ffrwmallies > 2 && Program.ffrsplevel == 7) ffrwmallies = 2;
                                     }
-                                    else { 
+                                    else
+                                    {
                                         ffrwmEffByte = 1;
                                         if (Program.ffrsplevel > 6) ffrwmallies = 3;
                                     }
@@ -1038,17 +1034,17 @@ namespace ffr_spellbinder
                     //n750 = write - al3 WhiteSpell.txt Effect: Resist % ffrwmresist
                     switch (ffrwmresist)
                     {
-                        case "Status": ffrwmEffByte = 1;         Program.ffrspCurrentResist = Program.ffrspantiweak; break;
+                        case "Status": ffrwmEffByte = 1; Program.ffrspCurrentResist = Program.ffrspantiweak; break;
                         case "Poison / Stone": ffrwmEffByte = 2; Program.ffrspCurrentResist = Program.ffrspantibane; break;
-                        case "Time": ffrwmEffByte = 4;           Program.ffrspCurrentResist = Program.ffrspantizap; break;
-                        case "Death": ffrwmEffByte = 8;          Program.ffrspCurrentResist = Program.ffrspantinecro; break;
-                        case "Fire": ffrwmEffByte = 16;          Program.ffrspCurrentResist = Program.ffrspantifire; break;
-                        case "Ice": ffrwmEffByte = 32;           Program.ffrspCurrentResist = Program.ffrspantiice; break;
-                        case "Lit": ffrwmEffByte = 64;           Program.ffrspCurrentResist = Program.ffrspantilightning; break;
-                        case "Earth": ffrwmEffByte = 128;        Program.ffrspCurrentResist = Program.ffrspantiquake; break;
-                        case "Magic": ffrwmEffByte = 137;        Program.ffrspCurrentResist = Program.ffrspantimagic; Program.ffrspRmPerms = false; break;
-                        case "Decay": ffrwmEffByte = 14;         Program.ffrspCurrentResist = Program.ffrspantitoxin; Program.ffrspRmPerms = false; break;
-                        case "Dragon": ffrwmEffByte = 112;       Program.ffrspCurrentResist = Program.ffrspantidamage; Program.ffrspRmPerms = false; break;
+                        case "Time": ffrwmEffByte = 4; Program.ffrspCurrentResist = Program.ffrspantizap; break;
+                        case "Death": ffrwmEffByte = 8; Program.ffrspCurrentResist = Program.ffrspantinecro; break;
+                        case "Fire": ffrwmEffByte = 16; Program.ffrspCurrentResist = Program.ffrspantifire; break;
+                        case "Ice": ffrwmEffByte = 32; Program.ffrspCurrentResist = Program.ffrspantiice; break;
+                        case "Lit": ffrwmEffByte = 64; Program.ffrspCurrentResist = Program.ffrspantilightning; break;
+                        case "Earth": ffrwmEffByte = 128; Program.ffrspCurrentResist = Program.ffrspantiquake; break;
+                        case "Magic": ffrwmEffByte = 137; Program.ffrspCurrentResist = Program.ffrspantimagic; Program.ffrspRmPerms = false; break;
+                        case "Decay": ffrwmEffByte = 14; Program.ffrspCurrentResist = Program.ffrspantitoxin; Program.ffrspRmPerms = false; break;
+                        case "Dragon": ffrwmEffByte = 112; Program.ffrspCurrentResist = Program.ffrspantidamage; Program.ffrspRmPerms = false; break;
                         default: ffrwmEffByte = whiteDice.Next(0, 256); break;
                     }
                 }
@@ -1081,21 +1077,24 @@ namespace ffr_spellbinder
                     ffrwmaccskip = false;
                     if (Program.ffrspellbinding == false)
                     {
-                        if (ffrwmallies == 3) {
+                        if (ffrwmallies == 3)
+                        {
                             ffrwmaccuracy = (int)Math.Floor(ffrwmaccuracy * 0.2);
                             if (ffrwmaccuracy < 32) { Program.ffrsptier = 3; }
                             else Program.ffrsptier = 4;
                             if (ffrwmaccuracy < 16) { Program.ffrsptier = 2; }
                             if (ffrwmaccuracy < 8) { Program.ffrsptier = 1; }
                         }
-                        else if (ffrwmallies == 2) {
+                        else if (ffrwmallies == 2)
+                        {
                             ffrwmaccuracy = (int)Math.Floor(ffrwmaccuracy * 0.3);
                             if (ffrwmaccuracy < 48) { Program.ffrsptier = 3; }
                             else Program.ffrsptier = 4;
                             if (ffrwmaccuracy < 24) { Program.ffrsptier = 2; }
                             if (ffrwmaccuracy < 16) { Program.ffrsptier = 1; }
                         }
-                        else { 
+                        else
+                        {
                             ffrwmaccuracy = (int)Math.Floor(ffrwmaccuracy * 0.53);
                             if (ffrwmaccuracy < 64) { Program.ffrsptier = 3; }
                             else Program.ffrsptier = 4;
@@ -1194,8 +1193,8 @@ namespace ffr_spellbinder
                 {
                     if (ffrwmallies == 1)
                     {
-                        if (ffrwmeffect == 4) 
-                        { 
+                        if (ffrwmeffect == 4)
+                        {
                             ffrwmallies += whiteDice.Next(1, 3);
                             if (ffrwmallies == 2 && ffrwmheal < 10) { Program.ffrspRwPerms = true; Program.ffrspWmPerms = true; }
                         }

@@ -1,18 +1,8 @@
 ﻿// See https://aka.ms/new-console-template for more information
-using System;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
-using System.IO.Compression;
-using System.Linq.Expressions;
-using System.Net.Http.Headers;
-using System.Net.NetworkInformation;
-using System.Security.Cryptography;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Timers;
-using static System.Formats.Asn1.AsnWriter;
 // FF1 Spellbinder, for use with Final Fantasy Randomizer. IRC Script and C# port by Linkshot, 2018-2022
+using System.Diagnostics;
+using System.Text;
+
 namespace ffr_spellbinder
 {
     internal class Program
@@ -206,12 +196,12 @@ namespace ffr_spellbinder
                     var ffrspSpellPatch = new List<byte>();
                     var ffrspMsgTextPatch = new List<char>();
                     var ffrspSpellMsgPatch = new List<byte>();
-                        var ffrspRmPermsPatch = new List<byte>();
-                        var ffrspWmPermsPatch = new List<byte>();
-                        var ffrspBmPermsPatch = new List<byte>();
-                        var ffrspKnPermsPatch = new List<byte>();
-                        var ffrspNjPermsPatch = new List<byte>();
-                        var ffrspRwPermsPatch = new List<byte>();
+                    var ffrspRmPermsPatch = new List<byte>();
+                    var ffrspWmPermsPatch = new List<byte>();
+                    var ffrspBmPermsPatch = new List<byte>();
+                    var ffrspKnPermsPatch = new List<byte>();
+                    var ffrspNjPermsPatch = new List<byte>();
+                    var ffrspRwPermsPatch = new List<byte>();
                     var ffrPatchCount = 0;
                     etch.Write(Encoding.ASCII.GetBytes("PATCH"));
                     // while (ffrspbatmsgloop !>= 77)
@@ -229,7 +219,7 @@ namespace ffr_spellbinder
                     ffrspreroll = 0;
                     ffrspslot++;
                     if (ffrsplevel == 5 && ffrspslot == 3 && ffrspmagic == "black")
-                        #region WARP
+                    #region WARP
                     {
                         ffrsptype = "Travel back one floor. ";
                         ffrSpellAcc = 255;
@@ -253,7 +243,7 @@ namespace ffr_spellbinder
                     }
                     #endregion WARP
                     else if (ffrsplevel == 6 && ffrspslot == 2 && ffrspmagic == "white")
-                        #region EXIT
+                    #region EXIT
                     {
                         ffrsptype = "Return to World Map. ";
                         ffrSpellAcc = 255;
@@ -1985,7 +1975,7 @@ namespace ffr_spellbinder
                 #endregion ResistMessages
 
                 // Check for ffrspname in the array containing all results
-                spwrite:                    
+                spwrite:
                     if (ffrspflags.Contains("n2")) ffrspname = $"{ffrspmagic.Substring(0, 1).ToUpper()}{ffrsplevel}-{ffrspslot}";
                     if (ffrspTable.Contains(ffrspname))
                     {
@@ -2038,8 +2028,8 @@ namespace ffr_spellbinder
                                 case 3 or 4 or 5 or 14 or 17:
                                     if (ffrSpellType == 3 && (ffrSpellEff & 4) > 0)
                                     {
-                                        if (ffrBaneSwordLocked == false) 
-                                        { 
+                                        if (ffrBaneSwordLocked == false)
+                                        {
                                             ffrBaneSword = ffrspTable.Count;
                                             if (!itemCheck.Contains("Bane Sword")) itemCheck.Add("Bane Sword");
                                             if (ffrsplevel >= 5) ffrBaneSwordLocked = true;
@@ -2188,7 +2178,7 @@ namespace ffr_spellbinder
                                     var ffrNameCount = 0;
                                     ffrspTable.Clear();
                                     while (ffrNameCount <= 63)
-                                    { 
+                                    {
                                         ffrspTable.Add(ffrNameHide[ffrNameCount]);
                                         ffrNameCount++;
                                     }
@@ -2330,7 +2320,7 @@ namespace ffr_spellbinder
                                 }
                                 #endregion ItemMagicBytes
                                 /* Header for Spell Data */
-                                etch.Write((byte)0x03); etch.Write((byte)0x01); etch.Write((byte)0xF0); etch.Write((byte)0x01); etch.Write((byte)0xFF); 
+                                etch.Write((byte)0x03); etch.Write((byte)0x01); etch.Write((byte)0xF0); etch.Write((byte)0x01); etch.Write((byte)0xFF);
                                 ffrEtchCount = 0;
                                 while (ffrEtchCount <= 0x1FE)
                                 {
@@ -2339,7 +2329,7 @@ namespace ffr_spellbinder
                                 }
                                 etch.Flush();
                                 /* Header for Spell Message Pointers */
-                                etch.Write((byte)0x03); etch.Write((byte)0x04); etch.Write((byte)0xD0); etch.Write((byte)0x00); etch.Write((byte)0x40);    
+                                etch.Write((byte)0x03); etch.Write((byte)0x04); etch.Write((byte)0xD0); etch.Write((byte)0x00); etch.Write((byte)0x40);
                                 ffrEtchCount = 0;
                                 while (ffrEtchCount <= 0x3F)
                                 {
